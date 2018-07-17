@@ -19,35 +19,37 @@ public class PersonController extends Controller {
 
 
     @action
-    public void Adminlist(){
-        toHtml("tpl/admin_tpl/admin_list");
+    public void adminList(){
+        toHtml("admin_tpl/admin_list");
     }
 
     @action
-    public void Managerlist(){
-        toHtml("tpl/admin_tpl/manager_list");
+    public void managerList()
+    {
+        toHtml("admin_tpl/manager_list");
     }
 
     @action
-    public void Salesmanlist(){
-        toHtml("tpl/admin_tpl/salesman_list");
+    public void salesmanList()
+    {
+        toHtml("admin_tpl/salesman_list");
     }
 
     @action
-    public void getAdminlist() {
+    public void getAdminList() {
         PersonModel person = new PersonModel("person");
         success(person.list("status=1"));
     }
 
 
     @action
-    public void getManagerlist() {
+    public void getManagerList() {
         PersonModel person = new PersonModel("person");
         success(person.list("status=2"));
     }
 
     @action
-    public void getSalesmanlist() {
+    public void getSalesmanList() {
         PersonModel person = new PersonModel("person");
         success(person.list("status=3"));
     }

@@ -79,7 +79,12 @@ public class Controller {
 		if(I("is_debug") != null && "1".equals(I("is_debug").toString())){
 			success(assigns);
 		}else{
-			makeHttp(TplUtil.loadTpl(tpl,this));
+			try {
+				makeHttp(TplUtil.loadTpl(tpl,this));
+			}catch (Exception e){
+				e.printStackTrace();
+			}
+
 		}
 		
 	}

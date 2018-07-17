@@ -2,6 +2,7 @@ package com.cloudling.offer.server;
 
 
 import com.cloudling.offer.config.Config;
+import com.cloudling.offer.config.Entrance;
 import com.cloudling.offer.exception.RouteErrorException;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
@@ -16,6 +17,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class ServerHandler extends AbstractHandler {
+
+
 
 	@Override
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
@@ -34,7 +37,7 @@ public class ServerHandler extends AbstractHandler {
 	}
 	
 	void init(ControllerContext context) throws RouteErrorException {
-		String classname = "controller."+context.MOUDLE+"."+toUpperCaseFirstOne(context.CONTROLLER)+"Controller";
+		String classname = Entrance.PACKAGE_NAME + ".controller."+context.MOUDLE+"."+toUpperCaseFirstOne(context.CONTROLLER)+"Controller";
 		//获取指定的类
 		try {
 			Class<?> controller = Class.forName(classname);
@@ -46,7 +49,7 @@ public class ServerHandler extends AbstractHandler {
 				for(Annotation an : action.getAnnotations()){
 		            annotation=an.toString();
 		        }
-				if(!annotation.equals("@annotation.action()")){
+				if(!annotation.equals("@"+ Entrance.PACKAGE_NAME +".annotation.action()")){
 					throw new RouteErrorException("action not find");
 				}else{
 					action.invoke(controllerInstance, null);

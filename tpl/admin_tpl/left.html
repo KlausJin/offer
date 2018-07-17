@@ -11,8 +11,8 @@
                     <span class="caret pull-right"></span>
                 </a>
                 <ul>
-                     <li ><a  href="/v1/welcome"><i class="glyphicon glyphicon-list"></i>首页</a></li> <% }%>
-                    <li ><a href="/v1/log/list"><i class="glyphicon glyphicon-home"></i> 日志查看</a></li> <% }%>
+                     <li ><a  href="/v1/welcome"><i class="glyphicon glyphicon-list"></i>首页</a></li>
+                     <li ><a href="/v1/log/list"><i class="glyphicon glyphicon-home"></i> 日志查看</a></li>
                 </ul>
             </li>
             <li class="submenu">
@@ -26,28 +26,6 @@
                     <li ><a href="/v1/person/SalesmanList"><i class="glyphicon glyphicon-list"></i> 业务员管理</a></li>
                 </ul>
             </li>
-            <li class="submenu">
-                <% if(admin_type>=2){ %><a href="#">
-                <i class="glyphicon glyphicon-star"></i> 家长管理
-                <span class="caret pull-right"></span>
-            </a><% }%>
-                <ul>
-                    <% if(admin_type>=2){ %>  <li ${controller=="parent"?"class='current'":''}><a href="/v1/parent/list"><i class="glyphicon glyphicon-list"></i> 家长列表</a></li> <% }%>
-                </ul>
-            </li>
-            <li class="submenu">
-                <a href="#">
-                    <i class="glyphicon glyphicon-star-empty"></i> 教师管理
-                    <span class="caret pull-right"></span>
-                </a>
-                <ul>
-                    <% if(admin_type>=3){ %>  <li ${controller=="teacher"?"class='current'":''}><a href="/v1/teacher/list"><i class="glyphicon glyphicon-list"></i> 教师列表</a></li> <% }%>
-                    <% if(admin_type>=0){ %>  <li ${controller=="leave"?"class='current'":''}><a href="/v1/leave/list"><i class="glyphicon glyphicon-home"></i> 教师请假记录</a></li> <% }%>
-                    <% if(admin_type>=1){ %>  <li ${controller=="approval"?"class='current'":''}><a href="/v1/approval/list"><i class="glyphicon glyphicon-ok-circle"></i> 教师请假审核</a></li> <% }%>
-                </ul>
-            </li>
-            <% if(admin_type>=2){ %>  <li ${controller=="iorecord"?"class='current'":''}><a href="/v1/iorecord/list"><i class="glyphicon glyphicon-camera"></i> 进出记录</a></li> <% }%>
-            <% if(admin_type>=3){ %>  <li ${controller=="log"?"class='current'":''}><a href="/v1/log/list"><i class="glyphicon glyphicon-wrench"></i> 操作日志记录</a></li> <% }%>
         </ul>
     </div>
 </div>
