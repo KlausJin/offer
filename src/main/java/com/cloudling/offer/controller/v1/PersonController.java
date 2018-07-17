@@ -19,8 +19,18 @@ public class PersonController extends Controller {
 
 
     @action
-    public void list(){
-        toHtml("tpl/admin_tpl/list");
+    public void Adminlist(){
+        toHtml("tpl/admin_tpl/admin_list");
+    }
+
+    @action
+    public void Managerlist(){
+        toHtml("tpl/admin_tpl/manager_list");
+    }
+
+    @action
+    public void Salesmanlist(){
+        toHtml("tpl/admin_tpl/salesman_list");
     }
 
     @action
