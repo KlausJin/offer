@@ -17,7 +17,7 @@ public class PersonModel extends Model {
     }
 
     public ArrayList list(String condition){
-        return where("condition").select();
+        return where(condition).select();
     }
     public ArrayList list(){
         return select();
