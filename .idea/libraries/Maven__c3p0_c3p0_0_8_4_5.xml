@@ -5,7 +5,6 @@
     </CLASSES>
     <JAVADOC>
       <root url="jar://$MAVEN_REPOSITORY$/c3p0/c3p0/0.8.4.5/c3p0-0.8.4.5-javadoc.jar!/" />
-      <root url="https://mvnrepository.com/artifact/com.alibaba/fastjson" />
     </JAVADOC>
     <SOURCES>
       <root url="jar://$MAVEN_REPOSITORY$/c3p0/c3p0/0.8.4.5/c3p0-0.8.4.5-sources.jar!/" />
