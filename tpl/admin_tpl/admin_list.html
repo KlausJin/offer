@@ -155,7 +155,7 @@
 	  }
 
       function reset_pwd(id){
-
+		  window.location.href="reset_pwd?id="+id;
 	  }
 
       var key;
@@ -207,7 +207,7 @@
                           '\t\t\t\t\t\t\t  <td>'+data[i]['name']+'</td>\n' +
                           '\t\t\t\t\t\t\t  <td>'+data[i]['username']+'</td>\n' +
                           '\t\t\t\t\t\t\t  <td> '+data[i]['last_login_time']+'</td>' +
-                          '\t\t\t\t\t\t\t  <td class="center"> <button onclick="reset_pwd('+data[i]['id']+')">重置初始密码</button>' +
+                          '\t\t\t\t\t\t\t  <td class="center"> <button onclick="reset_pwd('+data[i]['id']+')">重置密码</button>' +
 						  '									<button onclick="del('+data[i]['id']+')">删除</button></td>' +
                           '\t\t\t\t\t\t  </tr>'
                   }

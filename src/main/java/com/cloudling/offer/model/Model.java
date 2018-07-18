@@ -1,5 +1,6 @@
 package com.cloudling.offer.model;
 
+import com.cloudling.offer.bean.Bean;
 import com.cloudling.offer.server.DbManager;
 import com.cloudling.offer.util.LogUtil;
 import com.cloudling.offer.util.StringUtil;
@@ -218,6 +219,10 @@ public class Model {
 		  pstmt.close();
 		  connection.close();
 
+	}
+
+	public long add(Bean bean) throws Exception {
+		return add(bean.getData());
 	}
 	
 	public long add(HashMap<String, String> data) throws Exception{

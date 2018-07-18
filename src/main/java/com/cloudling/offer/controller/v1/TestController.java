@@ -22,7 +22,7 @@ public class TestController extends Controller {
 
     @action
     public void list(){
-        PartsModel part = new PartsModel("parts");
+        PartsModel part = new PartsModel();
         ArrayList<HashMap<String, String>> list = part.list();
         success(list);
     }

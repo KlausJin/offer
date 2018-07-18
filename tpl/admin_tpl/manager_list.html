@@ -144,6 +144,10 @@
 	      tohtml();
 	  }
 
+      function reset_pwd(id){
+          window.location.href="reset_pwd?id="+id;
+      }
+
 
       function del(id){
 	      $.getJSON("remove?id="+id,{},function(res){

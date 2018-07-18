@@ -10,4 +10,5 @@ public class PartsCatModel extends Model {
     public PartsCatModel(String table) {
         super(table);
     }
+
 }

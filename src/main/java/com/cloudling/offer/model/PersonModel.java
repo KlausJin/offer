@@ -1,5 +1,6 @@
 package com.cloudling.offer.model;
 
+import com.cloudling.offer.bean.PersonBean;
 import com.cloudling.offer.util.TimeUtil;
 
 import java.util.ArrayList;
@@ -12,24 +13,31 @@ import java.util.HashMap;
  * @Version 1.0
  **/
 public class PersonModel extends Model {
-    public PersonModel(String table) {
-        super(table);
+    public PersonModel()
+    {
+        super("person");
     }
 
-    public ArrayList list(String condition){
+    public ArrayList list(String condition)
+    {
         return where(condition).select();
     }
-    public ArrayList list(){
+
+    public HashMap<String,String> listone(String condition)
+    {
+        return where(condition).find();
+    }
+
+    public ArrayList list()
+    {
         return select();
     }
 
-    public void add_person(HashMap<String, String> map){
-        try {
-            map.put("create_time",TimeUtil.getShortTimeStamp()+"");
-            add(map);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+
+    public void add_person(PersonBean bean) throws Exception {
+       bean.create_time = TimeUtil.getShortTimeStamp();
+       add(bean);
     }
 
     public void delete_person(int id){
