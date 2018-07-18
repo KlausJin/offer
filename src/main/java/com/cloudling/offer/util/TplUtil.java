@@ -1,5 +1,6 @@
 package com.cloudling.offer.util;
 
+import com.cloudling.offer.config.Entrance;
 import com.cloudling.offer.server.Controller;
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
@@ -20,14 +21,14 @@ public class TplUtil {
 		rootDir = System.getProperty("user.dir")+"/tpl/";
 		try {
 			cfg = Configuration.defaultConfiguration();
-			cfg.setErrorHandlerClass("error.WebErrorHandler");
+			cfg.setErrorHandlerClass(Entrance.PACKAGE_NAME+".error.WebErrorHandler");
 		
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static String loadTpl(String tpl,Controller controller){
+	public static String  loadTpl(String tpl,Controller controller){
 		FileResourceLoader resourceLoader = new FileResourceLoader(rootDir,"utf-8");
 			GroupTemplate gt = new GroupTemplate(resourceLoader, cfg);
 			String tname = tpl+prex;

@@ -143,14 +143,6 @@
 	      current_page = s;
 	      tohtml();
 	  }
-
-	  function change_info(id) {
-           window.location.href="edit_info?id="+id;
-	  }
-      function change_vena(id) {
-          window.location.href="edit_vena?id="+id;
-      }
-
       function del(id){
 	      $.getJSON("remove?id="+id,{},function(res){
 	          if(res.code=="success"){
@@ -162,13 +154,11 @@
 		  })
 	  }
 
-      var key;
-      function searchbytel(){
-          current_page=0;
-          key=$("#search").val();
-          tohtml();
-      }
+      function reset_pwd(id){
 
+	  }
+
+      var key;
       function searchbyname(){
           current_page=0;
           key=$("#search").val();
@@ -185,7 +175,7 @@
               d['key']=key;
           }
 
-          $.getJSON("getList",d,function(res){
+          $.getJSON("getAdminList",d,function(res){
               if(res.code=="success"){
                   var da=res.data,s='',data=da['list'],num=da['num'],pi="";
                   $("#example_info").html("共"+num+"条记录");
