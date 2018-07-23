@@ -16,34 +16,7 @@
 	<![endif]-->
 </head>
   <body>
-  	<div class="header">
-	     <div class="container">
-	        <div class="row">
-	           <div class="col-md-5">
-	              <!-- Logo -->
-	              <div class="logo">
-	                 <h1><a >后台系统</a></h1>
-	              </div>
-	           </div>
-	           <div class="col-md-2">
-	              <div class="navbar navbar-inverse" role="banner">
-	                  <nav class="collapse navbar-collapse bs-navbar-collapse navbar-right" role="navigation">
-	                    <!--<ul class="nav navbar-nav">-->
-	                      <!--<li class="dropdown">-->
-	                        <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account <b class="caret"></b></a>-->
-	                        <!--<ul class="dropdown-menu animated fadeInUp">-->
-	                          <!--<li><a href="profile.html">Profile</a></li>-->
-	                          <!--<li><a href="login.html">Logout</a></li>-->
-	                        <!--</ul>-->
-	                      <!--</li>-->
-	                    <!--</ul>-->
-	                  </nav>
-	              </div>
-	           </div>
-	        </div>
-	     </div>
-	</div>
-
+  	<%include("head.html"){}%>
     <div class="page-content">
     	<div class="row">
 			<%include("left.html"){}%>
@@ -124,7 +97,7 @@
 		    $("#sub").on("click",function () {
                 data['name']=$("#name").val();
                 data['username']=$("#username").val();
-                data['pwd']=$("#pwd").val();
+                data['password']=$("#pwd").val();
                 data['status']=$("#status").val();
                     if(!data['name']|| data['name']==" ") {
                         alert("员工姓名不能为空，请输入正确的员工姓名");
@@ -133,8 +106,8 @@
                     else  if(!data['username'] || data['username']==" ") {
                         alert("登录用户名不能为空，请输入正确的登录用户名");
                         return;
-                    }else  if(! data['pwd'] ||  data['pwd'] ==" ") {
-                        alert("手机栏不能为空，请输入正确的联系方式");
+                    }else  if(!data['password'] ||  data['password'] ==" ") {
+                        alert("登录密码不能为空，请输入正确的登录密码");
                         return;
                     }
 
@@ -144,7 +117,7 @@
 						if(window.confirm("录入成功，是否继续录入")){
                             window.location.reload()
                         }else {
-                            window.location.href("/v1/person/adminList");
+                            window.location.href="adminList";
                         }
                     }else{
                         alert(ret.msg)

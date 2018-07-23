@@ -17,17 +17,16 @@
   </head>
   <body>
   <%include("head.html"){}%>
-
     <div class="page-content">
     	<div class="row">
 			<%include("left.html"){}%>
 		  <div class="col-md-10">
 			  <div class="content-box-large">
 				  <div class="panel-heading">
-					  <div class="panel-title">业务员管理</div>
+					  <div class="panel-title">报价管理</div>
 					  <div>
 						  <button id="searchbyname" type="button" class="btn btn-primary" onclick="searchbyname()">
-							  按姓名查询
+							  按客户或业务员查询
 						  </button>
 						  <br>
 						  <div class="col-sm-6">
@@ -41,9 +40,10 @@
 						  <thead>
 						  <tr>
 							  <th>id</th>
-							  <th>姓名</th>
-							  <th>登录账号</th>
-							  <th>上次登录时间</th>
+							  <th>客户</th>
+							  <th>报价时间</th>
+							  <th>业务员</th>
+							  <th>状态</th>
 							  <th>操作</th>
 						  </tr>
 						  </thead>
@@ -105,10 +105,6 @@
 	      current_page = s;
 	      tohtml();
 	  }
-      function reset_pwd(id){
-          window.location.href="reset_pwd?id="+id;
-      }
-
       function del(id){
 	      $.getJSON("remove?id="+id,{},function(res){
 	          if(res.code=="success"){
@@ -118,6 +114,10 @@
 	              alert(res.msg);
 			  }
 		  })
+	  }
+
+      function reset_pwd(id){
+		  window.location.href="reset_pwd?id="+id;
 	  }
 
       var key;
@@ -137,7 +137,7 @@
               d['key']=key;
           }
 
-          $.getJSON("getSalesmanList",d,function(res){
+          $.getJSON("getAdminList",d,function(res){
               if(res.code=="success"){
                   var da=res.data,s='',data=da['list'],num=da['num'],pi="";
                   $("#example_info").html("共"+num+"条记录");
@@ -169,7 +169,7 @@
                           '\t\t\t\t\t\t\t  <td>'+data[i]['name']+'</td>\n' +
                           '\t\t\t\t\t\t\t  <td>'+data[i]['username']+'</td>\n' +
                           '\t\t\t\t\t\t\t  <td> '+data[i]['last_login_time']+'</td>' +
-                          '\t\t\t\t\t\t\t  <td class="center"> <button onclick="reset_pwd('+data[i]['id']+')">重置初始密码</button>' +
+                          '\t\t\t\t\t\t\t  <td class="center"> <button onclick="reset_pwd('+data[i]['id']+')">重置密码</button>' +
 						  '									<button onclick="del('+data[i]['id']+')">删除</button></td>' +
                           '\t\t\t\t\t\t  </tr>'
                   }

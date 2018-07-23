@@ -16,24 +16,12 @@
     <![endif]-->
   </head>
   <body>
-  <%include("head.html"){}%>
-
-    <div class="page-content">
+ <div class="page-content">
     	<div class="row">
-			<%include("left.html"){}%>
 		  <div class="col-md-10">
 			  <div class="content-box-large">
 				  <div class="panel-heading">
-					  <div class="panel-title">业务员管理</div>
-					  <div>
-						  <button id="searchbyname" type="button" class="btn btn-primary" onclick="searchbyname()">
-							  按姓名查询
-						  </button>
-						  <br>
-						  <div class="col-sm-6">
-						  	<input value="" type="text" class="form-control" id="search" name="search" placeholder="">
-						  </div>
-					  </div>
+					  <div class="panel-title">配件列表草稿</div>
 				  </div>
 
 				  <div class="panel-body">
@@ -41,10 +29,8 @@
 						  <thead>
 						  <tr>
 							  <th>id</th>
-							  <th>姓名</th>
-							  <th>登录账号</th>
-							  <th>上次登录时间</th>
-							  <th>操作</th>
+							  <th>配件内容</th>
+							  <th>创建时间</th>
 						  </tr>
 						  </thead>
 						  <tbody id="tlist">
@@ -105,39 +91,12 @@
 	      current_page = s;
 	      tohtml();
 	  }
-      function reset_pwd(id){
-          window.location.href="reset_pwd?id="+id;
-      }
-
-      function del(id){
-	      $.getJSON("remove?id="+id,{},function(res){
-	          if(res.code=="success"){
-	              alert("删除成功");
-	              $("#tr_"+id).remove();
-			  }else{
-	              alert(res.msg);
-			  }
-		  })
-	  }
-
-      var key;
-      function searchbyname(){
-          current_page=0;
-          key=$("#search").val();
-          tohtml();
-      }
-
 
 
 	  function tohtml(){
 
 	      var d = {"page":current_page}
-
-          if(key){
-              d['key']=key;
-          }
-
-          $.getJSON("getSalesmanList",d,function(res){
+          $.getJSON("/v1/draft/getList",d,function(res){
               if(res.code=="success"){
                   var da=res.data,s='',data=da['list'],num=da['num'],pi="";
                   $("#example_info").html("共"+num+"条记录");
@@ -166,11 +125,8 @@
                   for(i=0;i<data.length;i++){
                       s+=' <tr class="odd gradeX" id="tr_'+data[i]['id']+'">\n' +
                           '\t\t\t\t\t\t\t  <td>'+data[i]['id']+'</td>\n' +
-                          '\t\t\t\t\t\t\t  <td>'+data[i]['name']+'</td>\n' +
-                          '\t\t\t\t\t\t\t  <td>'+data[i]['username']+'</td>\n' +
-                          '\t\t\t\t\t\t\t  <td> '+data[i]['last_login_time']+'</td>' +
-                          '\t\t\t\t\t\t\t  <td class="center"> <button onclick="reset_pwd('+data[i]['id']+')">重置初始密码</button>' +
-						  '									<button onclick="del('+data[i]['id']+')">删除</button></td>' +
+                          '\t\t\t\t\t\t\t  <td>'+data[i]['content']+'</td>\n' +
+                          '\t\t\t\t\t\t\t  <td>'+data[i]['create_time']+'</td>\n' +
                           '\t\t\t\t\t\t  </tr>'
                   }
                   $("#tlist").html(s);

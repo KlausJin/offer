@@ -1,10 +1,9 @@
 package com.cloudling.offer.controller.v1;
 
 import com.cloudling.offer.annotation.action;
-import com.cloudling.offer.model.PartsModel;
+import com.cloudling.offer.model.PartModel;
 import com.cloudling.offer.server.Controller;
 import com.cloudling.offer.server.ControllerContext;
-import sun.security.krb5.internal.PAData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +21,7 @@ public class TestController extends Controller {
 
     @action
     public void list(){
-        PartsModel part = new PartsModel();
+        PartModel part = new PartModel();
         ArrayList<HashMap<String, String>> list = part.list();
         success(list);
     }
@@ -31,6 +30,8 @@ public class TestController extends Controller {
     public void add(){
 
     }
+
+
 
 
 

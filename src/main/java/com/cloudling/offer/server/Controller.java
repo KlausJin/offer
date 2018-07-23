@@ -7,6 +7,7 @@ import com.cloudling.offer.exception.ParamsErrorException;
 import com.cloudling.offer.model.Model;
 import com.cloudling.offer.util.FilterUtil;
 import com.cloudling.offer.util.StringUtil;
+import com.cloudling.offer.util.TimeUtil;
 import com.cloudling.offer.util.TplUtil;
 import org.eclipse.jetty.server.Request;
 
@@ -25,11 +26,26 @@ public class Controller {
 	
 	public ControllerContext context;
 	public String sessionID;
+	protected boolean pri= true;
 	
 	public Controller(ControllerContext context){
 		this.context = context;
 		assigns = new HashMap<>();
-		
+		sessionID =context.request.getSession().getId();
+	}
+
+	protected void session(Object object) throws Exception {
+		HashMap<String, String> res = new HashMap<>();
+		HashMap<String, String> map = M("session").where("sessionid='"+sessionID+"'").find();
+		if(map == null) {
+			res.put("sessionid",sessionID );
+			res.put("object",JSON.toJSONString(object));
+			res.put("create_time", TimeUtil.getShortTimeStamp()+"");
+			M("session").add(res);
+		}else {
+			res.put("sessionid",sessionID );
+			M("session").save_string(res);
+		}
 	}
 	
 	public boolean checkPri(){
