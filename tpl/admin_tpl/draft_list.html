@@ -16,34 +16,91 @@
     <![endif]-->
   </head>
   <body>
+  <style type="text/css">
+	  .template{
+		  display: none;}
+	  .sc .template{display: block}
+	  .subgrouop label{ font-weight: normal; color: #999}
+  </style>
+  <div class="form-group template t_input">
+	  <label class="col-md-2 control-label" for="text-field"></label>
+	  <div class="col-md-6">
+		  <input class="form-control" placeholder="" type="text">
+	  </div>
+  </div>
+
+  <div class="form-group template t_select">
+	  <label class="col-md-2 control-label" for="text-field"></label>
+	  <div class="col-md-6">
+		  <input class="form-control" placeholder="" type="text">
+	  </div>
+  </div>
+
+
+
+
  <div class="page-content">
     	<div class="row">
-		  <div class="col-md-10">
+		  <div class="col-md-8">
 			  <div class="content-box-large">
 				  <div class="panel-heading">
-					  <div class="panel-title">配件列表草稿</div>
+					  <div class="panel-title">配件草稿</div>
 				  </div>
-
 				  <div class="panel-body">
-					  <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="example">
-						  <thead>
-						  <tr>
-							  <th>id</th>
-							  <th>配件内容</th>
-							  <th>创建时间</th>
-						  </tr>
-						  </thead>
-						  <tbody id="tlist">
+					  <div class="form-horizontal" action="">
+						  <fieldset class="template sc">
+							  <div class="wrap" data-attr="func:id:todata">
+							  <legend>&nbsp;</legend>
 
-						  </tbody>
-					  </table>
+								  <div class="form-group template t_select">
+									  <label class="col-md-2 control-label" for="text-field">颜色</label>
+									  <div class=" subgrouop col-md-6 ">
+
+										  <label class="col-md-2 control-label" >编号</label>
+									  <div class="col-md-2">
+										  <input class="form-control" placeholder="" type="text">
+									  </div>
+										  <label class="col-md-2 control-label" >属性</label>
+										  <div class="col-md-2">
+											  <input class="form-control" placeholder="" type="text">
+										  </div>
+										  <label class="col-md-2 control-label" >价格</label>
+										  <div class="col-md-2">
+											  <input class="form-control" placeholder="" type="text">
+										  </div>
+									  </div>
+								  </div>
+
+
+
+
+							  </div>
+
+						  </fieldset>
+						  <div class="clist">
+						  </div>
+
+
+
+
+
+						  <div class="form-actions">
+							  <div class="row">
+								  <div class="col-md-12">
+									  <button class="btn btn-default" type="submit">
+										  Cancel
+									  </button>
+									  <button class="btn btn-primary" type="submit">
+										  <i class="fa fa-save"></i>
+										  Submit
+									  </button>
+								  </div>
+							  </div>
+						  </div>
+
+					  </div>
 				  </div>
-
-				  <div class="row"><div class="col-xs-6">
-					  <div class="dataTables_info" id="example_info"></div>
-				  </div><div class="col-xs-6"><div class="dataTables_paginate paging_bootstrap">
-					  <ul class="pagination">
-						 </ul></div></div></div>
+			  </div>
 			  </div>
 		  </div>
 		</div>
@@ -64,75 +121,49 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/bootstrap/js/bootstrap.min.js"></script>
     <script src="/js/custom.js"></script>
+    <script src="/js/lib.js"></script>
 
   <script>
-	  var current_page=0;
 
-		function add(){
-		    window.location.href="add";
-		}
+	  function todata(a,b,c) {
+          a.attr("data-id",b)
+          console.log(b)
+		  for(k in c){
+              delete c["id"];
+			if(c[k] instanceof Array){
 
-	  $(function(){
-	     tohtml();
-	  })
+			}
+			else if(typeof(c[k]) == "object"){
 
-	  function lastpage(){
-	      current_page--;
-	      tohtml();
-	  }
+			}
+			else{
+				console.log(c[k])
+			    var t = $(".t_input").clone();
+				t.find(".control-label").html(k)
+                t.find(".form-control").attr("value",c[k])
 
+				t.removeClass("t_input")
+			    a.append(t)
 
-	  function nextpage(){
-	      current_page++;
-	      tohtml();
-	  }
-
-	  function topage(s){
-	      current_page = s;
-	      tohtml();
-	  }
+			}
 
 
-	  function tohtml(){
+		  }
+      }
 
-	      var d = {"page":current_page}
-          $.getJSON("/v1/draft/getList",d,function(res){
-              if(res.code=="success"){
-                  var da=res.data,s='',data=da['list'],num=da['num'],pi="";
-                  $("#example_info").html("共"+num+"条记录");
-                  if(current_page==0)  pi+=' <li class="prev disabled"> <a href="#">上一页</a></li>';
-                  else pi+='<li class="prev"> <a href="#" onclick="lastpage()">上一页</a></li>'
-				  var max = num/10>5?5:Math.ceil(num/10)
-                  for(var i=current_page;i<max;i++){
-                      var p = i+1;
-                      if(i==0){
-                          pi+= '<li class="active"><a href="#">'+p+'</a></li>'
-					  }
+		var list=[];
+	  $(function () {
+		  $.getJSON("getList",{},function (res) {
+		      var data = res.data;
+			for(var i=0;i<data.length;i++){
+			    list[i]=JSON.parse(data[i]['content'])
+				list[i]['id']=data[i]['id']
+			}
+			console.log(list)
+			$.tolist($(".clist"),$(".sc"),list)
+		  })
+      })
 
-					  else{
-                          pi+= '<li><a href="#"  onclick="topage('+(p-1)+')">'+p+'</a></li>';
-					  }
-
-				  }
-					if(current_page+1>=num/10){
-                        pi+= '  <li class="next disabled"><a href="#" >下一页</a></li>'
-					}else{
-                        pi+= '  <li class="next"><a href="#" onclick="nextpage()">下一页</a></li>'
-					}
-
-					$(".pagination").html(pi)
-
-                  for(i=0;i<data.length;i++){
-                      s+=' <tr class="odd gradeX" id="tr_'+data[i]['id']+'">\n' +
-                          '\t\t\t\t\t\t\t  <td>'+data[i]['id']+'</td>\n' +
-                          '\t\t\t\t\t\t\t  <td>'+data[i]['content']+'</td>\n' +
-                          '\t\t\t\t\t\t\t  <td>'+data[i]['create_time']+'</td>\n' +
-                          '\t\t\t\t\t\t  </tr>'
-                  }
-                  $("#tlist").html(s);
-              }
-          })
-	  }
   </script>
   </body>
 </html>

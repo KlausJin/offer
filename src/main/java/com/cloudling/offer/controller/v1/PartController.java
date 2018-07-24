@@ -50,10 +50,7 @@ public class PartController extends Controller {
             e.printStackTrace();
             error(e.getMessage());
         }
-
-
     }
-
 
 
     @action
