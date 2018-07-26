@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URLDecoder;
+import java.util.Enumeration;
 import java.util.HashMap;
 
 
@@ -82,12 +83,18 @@ public class ControllerContext {
 	
 	//鑾峰彇post鍙傛暟
 	void initPost(){
-		setJsonPost();
-		
-		
-		
+		POST = new HashMap<>();
+		Enumeration<String> names = request.getParameterNames();
+
+		while (names.hasMoreElements()) {
+			String str = (String) names.nextElement();
+			POST.put(str, request.getParameter(str));
+		}
+		//if(POST.size()==0) setJsonPost();
+
+		LogUtil.log("post:"+POST.toString());
+
 	}
-	
 	void setJsonPost(){
 		BufferedReader br;
 		try {

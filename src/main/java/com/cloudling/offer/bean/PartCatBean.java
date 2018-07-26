@@ -6,18 +6,26 @@ import com.cloudling.offer.server.ControllerContext;
 /**
  * @Description TODO
  * @Author 小云网络jxl
- * @Date 2018-07-18  14:21
+ * @Date 2018-07-18  13:28
  * @Version 1.0
  **/
-public class PersonBean  extends Bean{
+public class PartCatBean extends Bean {
 
-    public PersonBean(ControllerContext context){
+    public PartCatBean(ControllerContext context)
+    {
         super(context);
     }
 
-    @required
-    public  String name,username,password,status;
 
-    public int create_time,last_login_time;
+
+    @required
+    public String name,parent_id,cat_id;
+
+    public int create_time;
+
+
+
+
+
 
 }

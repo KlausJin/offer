@@ -11,18 +11,17 @@ import com.cloudling.offer.server.ControllerContext;
  **/
 public class PartBean extends Bean {
 
-    public PartBean(ControllerContext context){
-        this.context = context;
+    public PartBean(ControllerContext context)
+    {
+        super(context);
     }
 
-    public PartBean(){
 
-    }
 
     @required
-    public String name,cat_id;
+    public String code,par_name,cat_id,model,unit,cons,unit_cost,type_id;
 
-    public String cost;
+    public int create_time,update_time;
 
 
 

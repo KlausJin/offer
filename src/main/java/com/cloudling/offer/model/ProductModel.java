@@ -11,9 +11,9 @@ import java.util.HashMap;
  * @Date 2018-07-13  10:59
  * @Version 1.0
  **/
-public class ProductsModel extends Model{
-    public ProductsModel(String table) {
-        super(table);
+public class ProductModel extends Model{
+    public ProductModel() {
+        super("product");
     }
 
     public void add_products(HashMap<String, String> map){

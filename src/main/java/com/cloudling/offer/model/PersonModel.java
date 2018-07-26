@@ -1,6 +1,7 @@
 package com.cloudling.offer.model;
 
 import com.cloudling.offer.bean.PersonBean;
+import com.cloudling.offer.util.Md5Util;
 import com.cloudling.offer.util.TimeUtil;
 
 import java.util.ArrayList;
@@ -18,26 +19,10 @@ public class PersonModel extends Model {
         super("person");
     }
 
-    public ArrayList list(String condition)
-    {
-        return where(condition).select();
-    }
-
-    public HashMap<String,String> listone(String condition)
-    {
-        return where(condition).find();
-    }
-
-    public ArrayList list()
-    {
-        return select();
-    }
-
-
-
     public void add_person(PersonBean bean) throws Exception {
-       bean.create_time = TimeUtil.getShortTimeStamp();
-       add(bean);
+        bean.create_time = TimeUtil.getShortTimeStamp();
+        bean.password=Md5Util.MD5(bean.password);
+        add(bean);
     }
 
     public void delete_person(int id){
@@ -53,4 +38,26 @@ public class PersonModel extends Model {
     public void update(int id,HashMap<String, String> map){
         where("id="+id).save_string(map);
     }
+
+    public ArrayList<HashMap<String, String>>  list(String condition,String limit)
+    {
+        return where(condition).limit(limit).select();
+    }
+
+    public ArrayList<HashMap<String, String>>  list(String condition)
+    {
+        return where(condition).select();
+    }
+
+    public HashMap<String,String> listone(String condition)
+    {
+        return where(condition).find();
+    }
+
+    public ArrayList<HashMap<String, String>>  list()
+    {
+        return select();
+    }
+
+
 }

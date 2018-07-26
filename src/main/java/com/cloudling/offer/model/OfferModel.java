@@ -32,14 +32,14 @@ public class OfferModel extends Model {
         HashMap<String,String> list=new HashMap<>();
         list.put("prod_name",bean.prod_name);
         list.put("part_name",bean.part_name);
-        list.put("num",bean.num);
+        list.put("num",bean.number);
         bean.content=JSON.toJSONString(list);
         bean.create_time= TimeUtil.getShortTimeStamp();
         add(bean);
     }
     public ArrayList<HashMap<String, String>> sear_offer(OfferBean bean) {
         String limit = 10 + ",10";
-        String sql = "select a.offer_code,a.id from offer where offer_code like %" + bean.search_name + "% or context ->  '$.prod_name'like %" + bean.search_name + "% limit " + limit;
+        String sql = "select a.offer_code,a.id from offer where offer_code like %" + bean.search_name + "% or content ->  '$.prod_name'like %" + bean.search_name + "% limit " + limit;
         return query(sql);
     }
 
