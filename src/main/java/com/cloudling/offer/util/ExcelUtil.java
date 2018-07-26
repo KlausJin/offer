@@ -37,42 +37,28 @@ public class ExcelUtil {
      * @return
      * @throws Exception
      */
-    public static List<Map<String, Object>> parseExcel(InputStream in, String fileName) throws Exception {
+    public static List<Sheet> getSheet(InputStream in, String fileName) throws Exception {
         // 根据文件名来创建Excel工作薄
         Workbook work = getWorkbook(in, fileName);
         if (null == work) {
             throw new Exception("创建Excel工作薄为空！");
         }
         Sheet sheet = null;
-        Row row = null;
-        Cell cell = null;
         // 返回数据
-        List<Map<String, Object>> ls = new ArrayList<Map<String, Object>>();
+        List<Sheet> ls = new ArrayList<Sheet>();
 
         // 遍历Excel中所有的sheet
         for (int i = 0; i < work.getNumberOfSheets(); i++) {
             sheet = work.getSheetAt(i);
             if (sheet == null)
                 continue;
-
-            Map<String, Object> p = new HashMap<String, Object>();
-            // 遍历当前sheet中的所有行
-            for (int j = 1; j < sheet.getLastRowNum() + 1; j++) {
-                row = sheet.getRow(j);
-                // 遍历所有的列
-                if (j<2) {
-                    p.put(row.getCell(0).toString(), row.getCell(1));
-                }
-                for (int y = row.getFirstCellNum(); y < row.getLastCellNum(); y++) {
-
-                }
-                ls.add(p);
-            }
-
+            ls.add(sheet);
         }
         work.close();
         return ls;
     }
+
+
 
     /**
      * 描述：根据文件后缀，自适应上传文件的版本

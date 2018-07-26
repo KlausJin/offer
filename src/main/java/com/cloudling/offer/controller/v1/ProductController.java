@@ -1,12 +1,15 @@
 package com.cloudling.offer.controller.v1;
 
-import com.alibaba.fastjson.JSON;
 import com.cloudling.offer.annotation.action;
-import com.cloudling.offer.bean.ProductBean;
+import com.cloudling.offer.model.PartExcelModel;
 import com.cloudling.offer.server.Controller;
 import com.cloudling.offer.server.ControllerContext;
+import com.cloudling.offer.util.ExcelUtil;
+import org.apache.poi.ss.usermodel.Sheet;
 
-
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 /**
@@ -31,11 +34,17 @@ public class ProductController extends Controller {
     }
 
     @action
-    public void do_add_product() {
+    public void do_add_product() throws FileNotFoundException {
         String url = I("url").toString();
         try {
-            List<ProductBean> ls =ExceltoBeanUtil.analysisExcel("assets/" + url + "");
-            System.out.println(JSON.toJSONString(ls));
+            File file = new File("assets/" + url + "");
+            FileInputStream fis = new FileInputStream(file);
+            List<Sheet> ls = ExcelUtil.getSheet(fis, file.getName());
+            for (int i=0;i<ls.size();i++){
+                 PartExcelModel pem=new PartExcelModel("spare",ls.get(i),"22");
+                 pem.init();
+            }
+            success("1");
         } catch (Exception e) {
             e.printStackTrace();
             error(e.getMessage());
