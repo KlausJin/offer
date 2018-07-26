@@ -1,31 +1,59 @@
 package com.cloudling.offer.model;
 
-import com.cloudling.offer.util.TimeUtil;
+import com.cloudling.offer.bean.ProductBean;
+import com.cloudling.offer.bean.SpareBean;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @Description TODO
  * @Author 小云网络jxl
- * @Date 2018-07-13  10:59
+ * @Date 2018-07-24  16:02
  * @Version 1.0
  **/
-public class ProductModel extends Model{
-    public ProductModel() {
+public class ProductModel extends Model {
+
+
+    public ProductModel(String table) {
         super("product");
     }
 
-    public void add_products(HashMap<String, String> map){
-        try {
-            map.put("create_time",TimeUtil.getShortTimeStamp()+"");
-            add(map);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+    /**
+     * @Description: 根据关键词搜索产品
+     * @param:
+     * @return:
+     * @auther: CodyLongo
+     * @modified:
+     */
+
+    public ArrayList<HashMap<String,String>> search(ProductBean productBean){
+        String limit = 10 + ",10";
+        String sql="select code,id from product where code  like %" + productBean.getCode()+ "% limit "+limit;
+        ArrayList<HashMap<String, String>> list = query(sql);
+        return list;
     }
 
-    public ArrayList<HashMap<String, String>> list() {
-        return select();
+    /**
+     * @Description:根据产品id获取产品bean
+     * @param: 产品id
+     * @return:
+     * @auther: CodyLongo
+     * @modified:
+     */
+    public ProductBean getBean(String id){
+
+        HashMap<String, String> map = where("id=" + id).find();
+        ProductBean bean = new ProductBean(map);
+
+        bean.spareBeans = new SpareModel().getBeansByProductId(bean.id);
+
+
+        return bean;
     }
+
+
+
 }
