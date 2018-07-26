@@ -33,20 +33,20 @@
                         margin-bottom: 20px
                     }
                 </style>
-                <div class="panel-body form-horizontal">
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">请选择一级分类</label>
-                        <div class="col-sm-4">
-                            <select id="firstCat" class="form-control"></select>
-                        </div>
-                    </div>
+                <!--<div class="panel-body form-horizontal">-->
+                    <!--<div class="form-group">-->
+                        <!--<label class="col-sm-2 control-label">请选择一级分类</label>-->
+                        <!--<div class="col-sm-4">-->
+                            <!--<select id="firstCat" class="form-control"></select>-->
+                        <!--</div>-->
+                    <!--</div>-->
 
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">请选择二级分类</label>
-                        <div class="col-sm-4">
-                            <select id="SecondCat" class="form-control"></select>
-                        </div>
-                    </div>
+                    <!--<div class="form-group">-->
+                        <!--<label class="col-sm-2 control-label">请选择二级分类</label>-->
+                        <!--<div class="col-sm-4">-->
+                            <!--<select id="SecondCat" class="form-control"></select>-->
+                        <!--</div>-->
+                    <!--</div>-->
 
 
                     <div class="form-group">
@@ -87,35 +87,35 @@
 
     var data = {};
     $(function () {
-        $.getJSON("getFirstInfo", {}, function (res) {
-            if (res.code == "success")
-                var da = res.data, s = '';
-            for (var i = 0; i < da.length; i++) {
-                s += '<option value="' + da[i].id + '">' + da[i].name + '</option>'
-            }
-            $("#firstCat").html(s);
-
-            $.getJSON("getSecondInfo", {"cat_id":da[0].id}, function (res) {
-                if (res.code == "success")
-                    var da = res.data, s = '';
-                for (var i = 0; i < da.length; i++) {
-                    s += '<option value="' + da[i].id + '">' + da[i].name + '</option>'
-                }
-                $("#SecondCat").html(s);
-            })
-
-            $("#firstCat").on("change",function () {
-                var v=$(this).val();
-                $.getJSON("getSecondInfo", {"cat_id":v}, function (res) {
-                    if (res.code == "success")
-                        var da = res.data, s = '';
-                    for (var i = 0; i < da.length; i++) {
-                        s += '<option value="' + da[i].id + '">' + da[i].name + '</option>'
-                    }
-                    $("#SecondCat").html(s);
-                })
-            })
-        })
+        // $.getJSON("getFirstInfo", {}, function (res) {
+        //     if (res.code == "success")
+        //         var da = res.data, s = '';
+        //     for (var i = 0; i < da.length; i++) {
+        //         s += '<option value="' + da[i].id + '">' + da[i].name + '</option>'
+        //     }
+        //     $("#firstCat").html(s);
+        //
+        //     $.getJSON("getSecondInfo", {"cat_id":da[0].id}, function (res) {
+        //         if (res.code == "success")
+        //             var da = res.data, s = '';
+        //         for (var i = 0; i < da.length; i++) {
+        //             s += '<option value="' + da[i].id + '">' + da[i].name + '</option>'
+        //         }
+        //         $("#SecondCat").html(s);
+        //     })
+        //
+        //     $("#firstCat").on("change",function () {
+        //         var v=$(this).val();
+        //         $.getJSON("getSecondInfo", {"cat_id":v}, function (res) {
+        //             if (res.code == "success")
+        //                 var da = res.data, s = '';
+        //             for (var i = 0; i < da.length; i++) {
+        //                 s += '<option value="' + da[i].id + '">' + da[i].name + '</option>'
+        //             }
+        //             $("#SecondCat").html(s);
+        //         })
+        //     })
+        // })
 
         $("#files").on("change",function () {
             var fd = new FormData();
@@ -139,14 +139,9 @@
         })
 
         $("#sub").on("click", function () {
-            $.post('/v1/part/do_add_part',data,function (res) {
-                var ret=JSON.parse(res);
-                if(ret.code == "success"){
-                    alert("获取Excel路径成功");
-                    window.location.href="/v1/draft/list"
-                }else{
-                    alert(ret.msg);
-                }
+            $.post('/v1/product/do_add_product',data,function (res) {
+
+
             })
         })
     })

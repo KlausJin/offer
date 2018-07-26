@@ -1,7 +1,5 @@
 package com.cloudling.offer.util;
 
-import com.alibaba.fastjson.JSON;
-
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -12,16 +10,20 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Description TODO
  * @Author 小云网络jxl
- * @Date 2018-07-20  9:13
+ * @Date 2018-07-26  9:23
  * @Version 1.0
  **/
-public class ImportExcelUtil {
+public class ExcelUtil {
+
+
     private final static String excel2003L = ".xls"; // 2003- 版本的excel
     private final static String excel2007U = ".xlsx"; // 2007+ 版本的excel
 
@@ -35,7 +37,7 @@ public class ImportExcelUtil {
      * @return
      * @throws Exception
      */
-    public static List<LinkedHashMap<String, Object>> parseExcel(InputStream in, String fileName) throws Exception {
+    public static List<Map<String, Object>> parseExcel(InputStream in, String fileName) throws Exception {
         // 根据文件名来创建Excel工作薄
         Workbook work = getWorkbook(in, fileName);
         if (null == work) {
@@ -45,28 +47,28 @@ public class ImportExcelUtil {
         Row row = null;
         Cell cell = null;
         // 返回数据
-        List<LinkedHashMap<String, Object>> ls = new ArrayList<LinkedHashMap<String, Object>>();
+        List<Map<String, Object>> ls = new ArrayList<Map<String, Object>>();
 
         // 遍历Excel中所有的sheet
         for (int i = 0; i < work.getNumberOfSheets(); i++) {
-
             sheet = work.getSheetAt(i);
-            if (sheet == null && sheet.getLastRowNum()>1)
+            if (sheet == null)
                 continue;
 
+            Map<String, Object> p = new HashMap<String, Object>();
             // 遍历当前sheet中的所有行
-            ls.add(new LinkedHashMap<>());
-
-            for (int j = 0; j < sheet.getLastRowNum()+1; j++) {
-
+            for (int j = 1; j < sheet.getLastRowNum() + 1; j++) {
                 row = sheet.getRow(j);
-                if(row == null){
-                    ls.add(new LinkedHashMap<>());
-                    continue;
+                // 遍历所有的列
+                if (j<2) {
+                    p.put(row.getCell(0).toString(), row.getCell(1));
                 }
-                ls.get(ls.size()-1).put(row.getCell(0)+"",row.getCell(1)+"");
+                for (int y = row.getFirstCellNum(); y < row.getLastCellNum(); y++) {
 
+                }
+                ls.add(p);
             }
+
         }
         work.close();
         return ls;
@@ -130,4 +132,14 @@ public class ImportExcelUtil {
         return value;
     }
 
+//    public static void main(String[] args) throws Exception {
+//        File file = new File("D:\\studn.xls");
+//        FileInputStream fis = new FileInputStream(file);
+//        Map<String, String> m = new HashMap<String, String>();
+//        m.put("id", "id");
+//        m.put("姓名", "name");
+//        m.put("年龄", "age");
+//        List<Map<String, Object>> ls = parseExcel(fis, file.getName(), m);
+//        System.out.println(JSON.toJSONString(ls));
+//    }
 }
