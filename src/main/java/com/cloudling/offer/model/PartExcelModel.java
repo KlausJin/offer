@@ -19,7 +19,7 @@ public class PartExcelModel extends Model {
 
     public static final String PRODUCT_CODE = "产品型号";
     public static final String PRODUCT_PRICE = "基础价格";
-    public static final String[] ATTR_FIELDS = new String[]{"code","name","price","num"};
+    public static final String[] ATTR_FIELDS = new String[]{"code","name","price","num","formula"};
 
     Model productModel;
     Model attrModel;
@@ -53,7 +53,7 @@ public class PartExcelModel extends Model {
             Row row = sheet.getRow(i);
             Object field = row.getCell(0);
 
-            String fname = field.toString();
+            String fname = field==null?"":field.toString();
             if("".equals(fname)) continue;
             if(!PRODUCT_CODE.equals(fname) && !PRODUCT_PRICE.equals(fname)){
                 HashMap<String,String> data = new HashMap<>();
@@ -89,7 +89,7 @@ public class PartExcelModel extends Model {
     private void getAttr(String spare_name,int spare_id,int col,int start_row,int end_row) throws ExcelImportException {
         for (int i = start_row; i <= end_row; i++) {
             Row row = sheet.getRow(i);
-            String field = row.getCell(col).toString();
+            String field = row.getCell(col)==null?"":row.getCell(col).toString();
             if(i==start_row && "".equals(field)){
                 field = spare_name;
             }
@@ -109,8 +109,9 @@ public class PartExcelModel extends Model {
 
 
             try {
-                int parent_id = (int)attrModel.add(data);
-                getSubAttr(parent_id,2,i,getNextFiledRowCount(1,i));
+                    int parent_id = (int) attrModel.add(data);
+                    getSubAttr(parent_id, 2, i, getNextFiledRowCount(1, i));
+
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new ExcelImportException(e.getMessage());
@@ -130,7 +131,7 @@ public class PartExcelModel extends Model {
      */
     private void getSubAttr(int parent_id,int col,int start_row,int end_row) throws ExcelImportException {
 
-        for (int i = start_row+1; i < end_row; i++) {
+        for (int i = start_row+1; i <= end_row; i++) {
             Row row = sheet.getRow(i);
             HashMap<String,String> data = new HashMap<>();
             for(int j=col;j<row.getLastCellNum();j++){
@@ -139,11 +140,15 @@ public class PartExcelModel extends Model {
                if(!filed.equals("") && index<ATTR_FIELDS.length)
                 data.put(ATTR_FIELDS[index],filed);
             }
+            if((!data.containsKey("price") || data.get("price").equals("")) && (!data.containsKey("name") || data.get("name").equals(""))){
+                continue;
+            }
             data.put("spare_id","0");
             data.put("parent_id",parent_id+"");
-            data.put("formula","0");
             try {
+
                 attrModel.add(data);
+
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new ExcelImportException(e.getMessage());
@@ -174,7 +179,7 @@ public class PartExcelModel extends Model {
 
         for (int i = 0; i < sheet.getLastRowNum(); i++) {
             Row row = sheet.getRow(i);
-            String filed= row.getCell(0).toString();
+            String filed= row.getCell(0)==null?"":row.getCell(0).toString();
             if(!"".equals(filed) && PRODUCT_CODE.equals(filed.toString())){
                 product_code = row.getCell(1).toString();
             }
@@ -223,14 +228,14 @@ public class PartExcelModel extends Model {
         int res = row;
         for (int i = row+1; i < sheet.getLastRowNum(); i++) {
             Row r = sheet.getRow(i);
-            String filed = r.getCell(col).toString();
+            String filed =r.getCell(col)==null?"": r.getCell(col).toString();
 
             if(!"".equals(filed)){
 
 
                 break;
             }else{
-                if(col>0 && !r.getCell(col-1).toString().equals("")) break;
+                if(col>0 && !(r.getCell(col-1)==null?"":r.getCell(col-1).toString()).equals("")) break;
                 else res++;
             }
 
