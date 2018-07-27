@@ -9,6 +9,7 @@ import com.cloudling.offer.model.ProductModel;
 import com.cloudling.offer.server.Controller;
 import com.cloudling.offer.server.ControllerContext;
 import com.cloudling.offer.util.BeanUtil;
+import com.cloudling.offer.util.TimeUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,9 +37,12 @@ public class TestController extends Controller {
     @action
     public void add_bean() {
 
+        long t = TimeUtil.getLongTimeStamp();
         ProductModel productModel = new ProductModel();
 
         ProductBean bean = productModel.getBean("47");
+        long ms = TimeUtil.getLongTimeStamp() - t;
+        System.out.println("ms:"+ms);
 
         success(bean.getData());
 
