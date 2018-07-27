@@ -1,6 +1,8 @@
 package com.cloudling.offer.bean;
 
 
+import com.cloudling.offer.annotation.required;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -48,7 +50,16 @@ public class ProductBean extends Bean {
 
     float price;
 
+    public int getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(int create_time) {
+        this.create_time = create_time;
+    }
+
     int create_time;
+
 
     public List<SpareBean> spareBeans;
 

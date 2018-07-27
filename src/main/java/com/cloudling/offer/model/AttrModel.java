@@ -22,10 +22,19 @@ public class AttrModel extends Model {
      */
 
     public List<AttrBean> getlistBySpareId(String spare_id){
+        List<AttrBean> list =new ArrayList<>();
+        ArrayList<HashMap<String, String>> map =getspareId(spare_id);
+        for (int i=0;i<map.size();i++){
+            HashMap<String,String> res =where("id ="+map.get(i).get("id")).find();
+            AttrBean bean =new AttrBean(res);
+
+            list.add(bean);}
 
 
 
-        return null;
+
+
+        return list;
     }
 
     public List<AttrBean> getBeanByParentId(String spare_id){
@@ -38,17 +47,17 @@ public class AttrModel extends Model {
         return list;
     }
 
-    /*public ArrayList<HashMap<String, String>> getspareId(String sapre_id) {
+    public ArrayList<HashMap<String, String>> getspareId(String sapre_id) {
         ArrayList<HashMap<String, String>> list = where("spare_id =" + sapre_id).select();
         return list;
-    }*/
+    }
 
     public ArrayList<HashMap<String, String>> getListByParentId(String spare_id){
        ArrayList<HashMap<String, String>> list = new ArrayList<>();
         ArrayList<HashMap<String, String>> map =  where("spare_id =" + spare_id).select();
         for (int i=0;i<map.size(); i++){
-           ;
-          list= where(("parent_id ="+  map.get(i).get("id"))+"and parent_id is not"+0).select();
+
+          list= where(("parent_id ="+  map.get(i).get("id"))).select();
         }
 
         return list ;

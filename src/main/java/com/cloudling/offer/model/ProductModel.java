@@ -16,7 +16,7 @@ import java.util.List;
 public class ProductModel extends Model {
 
 
-    public ProductModel(String table) {
+    public ProductModel(){
         super("product");
     }
 

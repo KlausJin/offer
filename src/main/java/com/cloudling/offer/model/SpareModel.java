@@ -39,7 +39,7 @@ public class SpareModel extends Model {
             HashMap<String,String> res =where("id ="+map.get(i).get("id")).find();
 
            SpareBean bean =new SpareBean( res);
-           bean.attrBeans= new AttrModel().getBeanByParentId(bean.id);
+           bean.attrBeans= new AttrModel().getlistBySpareId(bean.id);
           list.add(bean);
         }
         return list;

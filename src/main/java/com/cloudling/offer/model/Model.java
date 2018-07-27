@@ -222,7 +222,41 @@ public class Model {
 	}
 
 	public long add(Bean bean) throws Exception {
-		return add(bean.getData());
+		return addMap(bean.getData());
+	}
+
+	public long addMap(HashMap<String, Object> data) throws Exception{
+		ArrayList<String> fields = new ArrayList<>();
+		ArrayList<String> neg = new ArrayList<>();
+
+		ArrayList<Object> values = new ArrayList<>();
+
+		for(String key:data.keySet()){
+			fields.add(key);
+			neg.add("?");
+			values.add(data.get(key));
+		}
+		String sql = "INSERT INTO "+table+" ("+StringUtil.listToString(fields)+") VALUES ("+StringUtil.listToString(neg)+");";
+
+		LogUtil.log("mysql insert query--"+sql);
+
+		Connection connection=getConnection();
+		PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+
+		for(int j=0;j<values.size();j++){
+			pstmt.setString(j+1,(String) values.get(j));
+		}
+		pstmt.executeUpdate();
+		long autoInckey = -1;
+		ResultSet rs = pstmt.getGeneratedKeys();
+		if (rs.next()) {
+			autoInckey= rs.getLong(1);// 取得ID
+		}
+		rs.close();
+		pstmt.close();
+		connection.close();
+		return  autoInckey;
+
 	}
 	
 	public long add(HashMap<String, String> data) throws Exception{

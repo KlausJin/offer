@@ -11,7 +11,7 @@ import java.util.List;
  **/
 public class AttrBean extends Bean {
 
-    int id;
+    public int id;
 
     String name;
 
@@ -38,6 +38,8 @@ public class AttrBean extends Bean {
     int parent_id;
 
     String code;
+
+ 
 
     List<AttrBean> attrBeans;
 
