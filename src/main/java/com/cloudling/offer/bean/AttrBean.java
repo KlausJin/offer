@@ -11,7 +11,7 @@ import java.util.List;
  **/
 public class AttrBean extends Bean {
 
-    public int id;
+    public String id;
 
     String name;
 
@@ -39,9 +39,17 @@ public class AttrBean extends Bean {
 
     String code;
 
- 
 
-    List<AttrBean> attrBeans;
+
+   public List<AttrBean> f_attrBeans;
+
+    public List<AttrBean> getF_attrBeans() {
+        return f_attrBeans;
+    }
+
+    public void setF_attrBeans(List<AttrBean> f_attrBeans) {
+        this.f_attrBeans = f_attrBeans;
+    }
 
     public float getPrice() {
         return price;
@@ -51,14 +59,6 @@ public class AttrBean extends Bean {
         this.price = price;
     }
 
-    public List<AttrBean> getAttrBeans() {
-
-        return attrBeans;
-    }
-
-    public void setAttrBeans(List<AttrBean> attrBeans) {
-        this.attrBeans = attrBeans;
-    }
 
     public String getNum() {
         return num;
