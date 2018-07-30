@@ -16,8 +16,10 @@ public class ProductsContorller extends Controller {
         String id = I("post.id") == null ? "" : I("post.id").toString();
         String code = I("post.code") == null ? "" : I("post.code").toString();
         String price = I("post.price") == null ? "" : I("post.price").toString();
-        M("product").where("code")
-        if(code)
+        HashMap<String, String> map = M("attr").where("id =" + id).find();
+        if(map==null){
+            error("此产品不存在");
+        }
         HashMap<String, String> res = new HashMap<>();
         res.put("code", code);
         res.put("price", price);
