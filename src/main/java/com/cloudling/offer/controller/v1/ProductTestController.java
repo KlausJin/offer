@@ -15,4 +15,14 @@ public class ProductTestController extends Controller {
         toHtml("admin_tpl/jx");
     }
 
+    @action
+    public void testHtml(){
+        toHtml("admin_tpl/forms");
+    }
+
+    @action
+    public void testButton(){
+        toHtml("admin_tpl/buttons");
+    }
+
 }
