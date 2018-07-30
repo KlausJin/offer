@@ -52,6 +52,7 @@ public class ProductModel extends Model {
 
 
         return bean;
+
     }
 
 /**
