@@ -33,38 +33,38 @@
                         margin-bottom: 20px
                     }
                 </style>
-                <!--<div class="panel-body form-horizontal">-->
-                    <!--<div class="form-group">-->
-                        <!--<label class="col-sm-2 control-label">请选择一级分类</label>-->
-                        <!--<div class="col-sm-4">-->
-                            <!--<select id="firstCat" class="form-control"></select>-->
-                        <!--</div>-->
-                    <!--</div>-->
-
-                    <!--<div class="form-group">-->
-                        <!--<label class="col-sm-2 control-label">请选择二级分类</label>-->
-                        <!--<div class="col-sm-4">-->
-                            <!--<select id="SecondCat" class="form-control"></select>-->
-                        <!--</div>-->
-                    <!--</div>-->
-
-
+                <div class="panel-body form-horizontal">
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">模板导入</label>
+                        <label class="col-sm-2 control-label">请选择一级分类</label>
                         <div class="col-sm-4">
-                            <input type="file" id="files">
+                            <select id="firstCat" class="form-control"></select>
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <button id="sub" type="submit" class="btn btn-primary">提交</button>
-                        </div>
+                    <!--<div class="form-group">-->
+                    <!--<label class="col-sm-2 control-label">请选择二级分类</label>-->
+                    <!--<div class="col-sm-4">-->
+                    <!--<select id="SecondCat" class="form-control"></select>-->
+                    <!--</div>-->
+                </div>
+
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">模板导入</label>
+                    <div class="col-sm-4">
+                        <input type="file" id="files">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button id="sub" type="submit" class="btn btn-primary">提交</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 <footer>
@@ -87,14 +87,14 @@
 
     var data = {};
     $(function () {
-        // $.getJSON("getFirstInfo", {}, function (res) {
-        //     if (res.code == "success")
-        //         var da = res.data, s = '';
-        //     for (var i = 0; i < da.length; i++) {
-        //         s += '<option value="' + da[i].id + '">' + da[i].name + '</option>'
-        //     }
-        //     $("#firstCat").html(s);
-        //
+        $.getJSON("getFirstInfo", {}, function (res) {
+            if (res.code == "success")
+                var da = res.data, s = '';
+            for (var i = 0; i < da.length; i++) {
+                s += '<option value="' + da[i].id + '">' + da[i].name + '</option>'
+            }
+            $("#firstCat").html(s);
+
         //     $.getJSON("getSecondInfo", {"cat_id":da[0].id}, function (res) {
         //         if (res.code == "success")
         //             var da = res.data, s = '';
@@ -115,9 +115,9 @@
         //             $("#SecondCat").html(s);
         //         })
         //     })
-        // })
+        })
 
-        $("#files").on("change",function () {
+        $("#files").on("change", function () {
             var fd = new FormData();
             fd.append("data", $('#files')[0].files[0])
             $.ajax({
@@ -128,9 +128,9 @@
                 data: fd,
                 success: function (res) {
                     var ret = JSON.parse(res)
-                    if(ret.code=="success"){
-                         data['url']=ret.data[0];
-                    }else{
+                    if (ret.code == "success") {
+                        data['url'] = ret.data[0];
+                    } else {
                         alert("0");
                     }
                 }
@@ -139,9 +139,15 @@
         })
 
         $("#sub").on("click", function () {
-            $.post('/v1/product/do_add_product',data,function (res) {
-
-
+            data['cat_id']=$("#firstCat").val();
+            $.post('/v1/product/do_add_product', data, function (res) {
+                var ret = JSON.parse(res);
+                if(ret.code == "success"){
+                    alert("模板导入成功");
+                    window.location.href="list";
+                }else{
+                    alert(ret.msg);
+                }
             })
         })
     })

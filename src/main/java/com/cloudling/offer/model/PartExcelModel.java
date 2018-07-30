@@ -1,13 +1,13 @@
 package com.cloudling.offer.model;
 
 import com.cloudling.offer.exception.ExcelImportException;
+import com.cloudling.offer.util.StringUtil;
 import com.cloudling.offer.util.TimeUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @Description TODO
@@ -19,7 +19,7 @@ public class PartExcelModel extends Model {
 
     public static final String PRODUCT_CODE = "产品型号";
     public static final String PRODUCT_PRICE = "基础价格";
-    public static final String[] ATTR_FIELDS = new String[]{"code","name","price","num","formula"};
+    public static final String[] ATTR_FIELDS = new String[]{"code", "name", "price", "num", "formula"};
 
     Model productModel;
     Model attrModel;
@@ -30,8 +30,7 @@ public class PartExcelModel extends Model {
     String cat_id;
 
 
-
-    public PartExcelModel(String table,Sheet sheet,String cat_id) {
+    public PartExcelModel(String table, Sheet sheet, String cat_id) {
         super("spare");
         this.sheet = sheet;
         this.cat_id = cat_id;
@@ -41,10 +40,9 @@ public class PartExcelModel extends Model {
 
     public void init() throws ExcelImportException {
 
-            // 遍历所有的列
-            getProduct();
-            getSpare();
-
+        // 遍历所有的列
+        getProduct();
+        getSpare();
     }
 
     private void getSpare() throws ExcelImportException {
@@ -53,18 +51,18 @@ public class PartExcelModel extends Model {
             Row row = sheet.getRow(i);
             Object field = row.getCell(0);
 
-            String fname = field==null?"":field.toString();
-            if("".equals(fname)) continue;
-            if(!PRODUCT_CODE.equals(fname) && !PRODUCT_PRICE.equals(fname)){
-                HashMap<String,String> data = new HashMap<>();
-                data.put("product_id",product_id+"");
-                data.put("name",fname);
-                data.put("cat_id",cat_id);
-                data.put("create_time",TimeUtil.getShortTimeStamp()+"");
+            String fname = field == null ? "" : field.toString();
+            if ("".equals(fname)) continue;
+            if (!PRODUCT_CODE.equals(fname) && !PRODUCT_PRICE.equals(fname)) {
+                HashMap<String, String> data = new HashMap<>();
+                data.put("product_id", product_id + "");
+                data.put("name", fname);
+                data.put("cat_id", cat_id);
+                data.put("create_time", TimeUtil.getShortTimeStamp() + "");
                 try {
-                    int spare_id = (int)add(data);
-                    int row_c = getNextFiledRowCount(0,i);
-                    getAttr(fname,spare_id,1,i,row_c);
+                    int spare_id = (int) add(data);
+                    int row_c = getNextFiledRowCount(0, i);
+                    getAttr(fname, spare_id, 1, i, row_c);
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw new ExcelImportException(e.getMessage());
@@ -86,31 +84,35 @@ public class PartExcelModel extends Model {
      * @modified:
      */
 
-    private void getAttr(String spare_name,int spare_id,int col,int start_row,int end_row) throws ExcelImportException {
+    private void getAttr(String spare_name, int spare_id, int col, int start_row, int end_row) throws ExcelImportException {
         for (int i = start_row; i <= end_row; i++) {
             Row row = sheet.getRow(i);
-            String field = row.getCell(col)==null?"":row.getCell(col).toString();
-            if(i==start_row && "".equals(field)){
+            String field = row.getCell(col) == null ? "" : row.getCell(col).toString();
+            if (i == start_row && "".equals(field)) {
                 field = spare_name;
             }
-            if("".equals(field)){
+            if ("".equals(field)) {
                 continue;
             }
 
             String fname = field.toString();
-            HashMap<String,String> data = new HashMap<>();
-            data.put("name",fname);
-            data.put("parent_id","0");
-            data.put("spare_id",spare_id+"");
-            data.put("price","-1");
-            data.put("num","-1");
-            data.put("formula","0");
-            data.put("relate_id",getRelateId(spare_id,fname)+"");
+            HashMap<String, String> data = new HashMap<>();
 
-
+            data.put("parent_id", "0");
+            data.put("spare_id", spare_id + "");
+            data.put("price", "-1");
+            data.put("num", "-1");
+            data.put("formula", "0");
+            data.put("relate_id", getRelateId(fname) + "");
+            data.put("or_id", getOrId(spare_id,fname)== null ? "0" : getOrId(spare_id,fname).get("or_Id"));
+            if(getOrId(spare_id,fname) !=null){
+                data.put("name",getOrId(spare_id,fname).get("name"));
+            }else{
+                data.put("name", fname);
+            }
             try {
-                    int parent_id = (int) attrModel.add(data);
-                    getSubAttr(parent_id, 2, i, getNextFiledRowCount(1, i));
+                int parent_id = (int) attrModel.add(data);
+                getSubAttr(parent_id, 2, i, getNextFiledRowCount(1, i));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -129,22 +131,22 @@ public class PartExcelModel extends Model {
      * @auther: CodyLongo
      * @modified:
      */
-    private void getSubAttr(int parent_id,int col,int start_row,int end_row) throws ExcelImportException {
+    private void getSubAttr(int parent_id, int col, int start_row, int end_row) throws ExcelImportException {
 
-        for (int i = start_row+1; i <= end_row; i++) {
+        for (int i = start_row + 1; i <= end_row; i++) {
             Row row = sheet.getRow(i);
-            HashMap<String,String> data = new HashMap<>();
-            for(int j=col;j<row.getLastCellNum();j++){
-               int index = j-col;
-               String filed = row.getCell(j)==null?"":row.getCell(j).toString();
-               if(!filed.equals("") && index<ATTR_FIELDS.length)
-                data.put(ATTR_FIELDS[index],filed);
+            HashMap<String, String> data = new HashMap<>();
+            for (int j = col; j < row.getLastCellNum(); j++) {
+                int index = j - col;
+                String filed = row.getCell(j) == null ? "" : row.getCell(j).toString();
+                if (!filed.equals("") && index < ATTR_FIELDS.length)
+                    data.put(ATTR_FIELDS[index], filed);
             }
-            if((!data.containsKey("price") || data.get("price").equals("")) && (!data.containsKey("name") || data.get("name").equals(""))){
+            if ((!data.containsKey("price") || data.get("price").equals("")) && (!data.containsKey("name") || data.get("name").equals(""))) {
                 continue;
             }
-            data.put("spare_id","0");
-            data.put("parent_id",parent_id+"");
+            data.put("spare_id", "0");
+            data.put("parent_id", parent_id + "");
             try {
 
                 attrModel.add(data);
@@ -158,8 +160,25 @@ public class PartExcelModel extends Model {
 
     }
 
+    public HashMap<String,String> getOrId(int spare_id, String fname){
+        HashMap map=new HashMap();
+        if(fname.contains("{")){
+            String a[]=fname.split("\\{");
+            String newName=a[0];
+            String attr_name=a[1].substring(0,a[1].length()-1);
+            String sql="select id from attr where name='"+attr_name+"' and spare_id="+spare_id;
+            ArrayList<HashMap<String, String>> list = attrModel.query(sql);
+            String x = list.get(0).get("id");
+            map.put("or_Id",x+"");
+            map.put("name",newName);
+            return  map;
+        }else {
+            return null;
+        }
+    }
 
-    int getRelateId(int spare_id,String fname){
+
+    int getRelateId(String fname){
         int t=0;
         if(fname.contains("[")){
             String a[]=fname.split("\\[");
@@ -179,35 +198,37 @@ public class PartExcelModel extends Model {
 
         for (int i = 0; i < sheet.getLastRowNum(); i++) {
             Row row = sheet.getRow(i);
-            String filed= row.getCell(0)==null?"":row.getCell(0).toString();
-            if(!"".equals(filed) && PRODUCT_CODE.equals(filed.toString())){
+            String filed = row.getCell(0) == null ? "" : row.getCell(0).toString();
+            if (!"".equals(filed) && PRODUCT_CODE.equals(filed.toString())) {
                 product_code = row.getCell(1).toString();
             }
-            if(!"".equals(filed) && PRODUCT_PRICE.equals(filed.toString())){
+            if (!"".equals(filed) && PRODUCT_PRICE.equals(filed.toString())) {
                 product_price = row.getCell(1).toString();
             }
 
         }
 
-        if(product_code==null){
+        if (product_code == null) {
             //说明这个sheet没有产品
             return;
         }
 
-        if(product_price==null) product_price="0";
-
-        HashMap<String, String> product = productModel.where("code = '" + product_code + "'").find();
-        if(product!=null){
-            throw new ExcelImportException("已存在该产品名:"+product_code);
+        if (product_price == null || product_price.equals("")) {
+            product_price = "0";
         }
 
-        HashMap<String,String> data = new HashMap<>();
-        data.put("code",product_code);
-        data.put("cat_id",cat_id);
-        data.put("price",product_price);
-        data.put("create_time",TimeUtil.getShortTimeStamp()+"");
+        HashMap<String, String> product = productModel.where("code = '" + product_code + "'").find();
+        if (product != null) {
+            throw new ExcelImportException("已存在该产品名:" + product_code);
+        }
+
+        HashMap<String, String> data = new HashMap<>();
+        data.put("code", product_code);
+        data.put("cat_id", cat_id);
+        data.put("price", product_price);
+        data.put("create_time", TimeUtil.getShortTimeStamp() + "");
         try {
-            product_id =(int) productModel.add(data);
+            product_id = (int) productModel.add(data);
         } catch (Exception e) {
             e.printStackTrace();
             throw new ExcelImportException(e.getMessage());
@@ -224,18 +245,18 @@ public class PartExcelModel extends Model {
      * @auther: CodyLongo
      * @modified:
      */
-    int getNextFiledRowCount(int col,int row){
+    int getNextFiledRowCount(int col, int row) {
         int res = row;
-        for (int i = row+1; i < sheet.getLastRowNum(); i++) {
+        for (int i = row + 1; i <= sheet.getLastRowNum(); i++) {
             Row r = sheet.getRow(i);
-            String filed =r.getCell(col)==null?"": r.getCell(col).toString();
+            String filed = r.getCell(col) == null ? "" : r.getCell(col).toString();
 
-            if(!"".equals(filed)){
+            if (!"".equals(filed)) {
 
 
                 break;
-            }else{
-                if(col>0 && !(r.getCell(col-1)==null?"":r.getCell(col-1).toString()).equals("")) break;
+            } else {
+                if (col > 0 && !(r.getCell(col - 1) == null ? "" : r.getCell(col - 1).toString()).equals("")) break;
                 else res++;
             }
 

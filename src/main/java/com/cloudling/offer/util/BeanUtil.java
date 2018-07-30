@@ -94,28 +94,5 @@ public class BeanUtil {
             return (new StringBuilder()).append(Character.toUpperCase(s.charAt(0))).append(s.substring(1)).toString();
     }
 
-    static Bean getBean(String bean_name,HashMap<String,Object> data){
-        String classname = Entrance.PACKAGE_NAME+".bean."+toUpperCaseFirstOne(bean_name)+"Bean";
-        Class<?> BeanClass = null;
-        try {
-            BeanClass = Class.forName(classname);
-            Constructor<?> c = BeanClass.getConstructor(new HashMap<String,Object>().getClass());
-            Bean bean = (Bean) c.newInstance(data);
-            return bean;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        return null;
-
-    }
-
 
 }
