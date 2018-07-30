@@ -37,7 +37,7 @@ public class ProductController extends Controller {
     }
 
     @action
-    public void do_add_product() throws FileNotFoundException {
+    public void do_add_product(){
         PartCatModel pm=new PartCatModel();
         String url = I("url").toString();
         String cat_id=I("cat_id").toString();
