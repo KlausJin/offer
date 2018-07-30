@@ -74,7 +74,7 @@ public class SpareModel extends Model {
         List<SpareBean> list =new ArrayList<>();
         ArrayList<HashMap<String, String>> map = getSparesByProductId_real(product_id);
         for (int i=0;i<map.size();i++){
-            HashMap<String,String> res =where("id ="+map.get(i).get("id")).find();
+            HashMap<String,String> res =map.get(i);
 
             SpareBean bean =new SpareBean( res);
             bean.attrBeans= new AttrModel().getlistBySpareId(bean.id);

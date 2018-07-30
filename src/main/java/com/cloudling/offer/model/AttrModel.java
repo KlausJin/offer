@@ -25,7 +25,7 @@ public class AttrModel extends Model {
         List<AttrBean> list =new ArrayList<>();
         ArrayList<HashMap<String, String>> map =getspareId(spare_id);
         for (int i=0;i<map.size();i++){
-            HashMap<String,String> res =where("id ="+map.get(i).get("id")).find();
+            HashMap<String,String> res= map.get(i);
             AttrBean bean =new AttrBean(res);
             bean.f_attrBeans=new AttrModel().getBeanByParentId(bean.id);
             list.add(bean);}
@@ -36,7 +36,7 @@ public class AttrModel extends Model {
         List<AttrBean> list =new ArrayList<>();
         ArrayList<HashMap<String, String>> map = getListByParentId(spare_id);
         for (int i=0;i<map.size(); i++){
-            HashMap<String,String>  res=where("id ="+map.get(i).get("id")).find();
+            HashMap<String,String>  res=map.get(i);
             AttrBean bean = new AttrBean(res);
             list.add(bean);}
         return list;
