@@ -13,15 +13,14 @@ public class AttrBean extends Bean {
 
     public String id;
 
-    String name;
+    public String name;
 
-    int spare_id;
+    public int spare_id;
 
-    float price;
+    public   float price;
 
-    String num;
-
-    String attr;
+   String attr;
+  public  String num;
 
     public AttrBean(HashMap<String,String> data) {
         super(data);
@@ -35,9 +34,9 @@ public class AttrBean extends Bean {
         this.attr = attr;
     }
 
-    int parent_id;
+    public int parent_id;
 
-    String code;
+    public String code;
 
 
 

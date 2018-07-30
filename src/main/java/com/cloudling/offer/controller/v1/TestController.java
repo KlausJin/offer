@@ -3,9 +3,11 @@ package com.cloudling.offer.controller.v1;
 import com.cloudling.offer.annotation.action;
 import com.cloudling.offer.bean.OfferBean;
 import com.cloudling.offer.bean.ProductBean;
+import com.cloudling.offer.bean.SpareBean;
 import com.cloudling.offer.exception.ParamsErrorException;
 import com.cloudling.offer.model.PartModel;
 import com.cloudling.offer.model.ProductModel;
+import com.cloudling.offer.model.SpareModel;
 import com.cloudling.offer.server.Controller;
 import com.cloudling.offer.server.ControllerContext;
 import com.cloudling.offer.util.BeanUtil;
@@ -38,12 +40,44 @@ public class TestController extends Controller {
 
         ProductModel productModel = new ProductModel();
 
-        ProductBean bean = productModel.getBean("47");
+        ProductBean bean = productModel.getBean_real("47");
 
         success(bean.getData());
 
     }
+@action
+    public void do_add_spare(){
+        SpareBean bean;
+        SpareModel sparetModel = new SpareModel();
+        try {
+            bean= (SpareBean) BeanUtil.getBean("spare",context,BeanUtil.POST);
+        } catch (ParamsErrorException e) {
+            e.printStackTrace();
+            error(e.getMessage());
+            return;
+        }
+        try{
+
+
+            success("1");
+        }catch (Exception e){
+            e.printStackTrace();
+            error("录入模版失败");
+        }
     }
+@action
+public  void remove_spare(){
+    SpareModel sparetModel = new SpareModel();
+
+
+     sparetModel.removeSpareById("4263");
+        success("1");
+
+    }
+}
+
+
+
 
 
 

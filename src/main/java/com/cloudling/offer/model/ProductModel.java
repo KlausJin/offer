@@ -37,7 +37,7 @@ public class ProductModel extends Model {
     }
 
     /**
-     * @Description:根据产品id获取产品bean
+     * @Description:根据产品id获取产品bean(固定配件)
      * @param: 产品id
      * @return:
      * @auther: CodyLongo
@@ -54,6 +54,21 @@ public class ProductModel extends Model {
         return bean;
     }
 
+/**
+ * @Description:根据产品id获取产品bean（实时配件)
+ * @param: 产品id
+ * @return:
+ * @auther: CodyLongo
+ * @modified:
+ */
+
+public ProductBean getBean_real(String id){
+    HashMap<String, String> map = where("id=" + id).find();
+    ProductBean bean = new ProductBean(map);
+
+    bean.spareBeans = new SpareModel().getBeansByProductId_real(bean.id);
 
 
+    return bean;
+}
 }
