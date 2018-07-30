@@ -4,9 +4,9 @@
     <title>后台系统</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- styles -->
-    <link href="css/styles.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -60,6 +60,53 @@
     	<div class="row">
 			<include file="admin_tpl/left.html"/>
 		  <div class="col-md-10">
+			  <div class="panel-body">
+				  <form enctype="multipart/form-data" class="form-horizontal" role="form" action="{:U('do_jx')}" method="post">
+					  <input type="hidden" value="{$api[id]}" name="id">
+					  <!--<div class="form-group">-->
+					  <!--<label  class="col-sm-2 control-label">图片</label>-->
+					  <!--<div class="col-sm-10">-->
+					  <!--<input type="file" name="img" class="form-control" id="img" placeholder="">-->
+					  <!--</div>-->
+					  <!--</div>-->
+					  <div class="form-group">
+						  <label  class="col-sm-2 control-label">备注</label>
+						  <div class="col-sm-10">
+							  <input value="{$api[name]}" type="text" class="form-control" id="s_name" name="s_name" placeholder="">
+						  </div>
+					  </div>
+
+					  <div class="form-group">
+						  <label  class="col-sm-2 control-label">名称</label>
+						  <div class="col-sm-10">
+							  <input value="{$api[s_name]}" type="text" class="form-control" id="name" name="name" placeholder="">
+						  </div>
+					  </div>
+
+					  <div class="form-group">
+						  <label  class="col-sm-2 control-label">网址</label>
+						  <div class="col-sm-10">
+							  <input value="{$api[url]}" type="text" class="form-control" id="url" name="url" placeholder="">
+						  </div>
+					  </div>
+
+
+
+
+
+
+
+
+
+
+
+					  <div class="form-group">
+						  <div class="col-sm-offset-2 col-sm-10">
+							  <button id="sub" type="submit"  class="btn btn-primary">提交</button>
+						  </div>
+					  </div>
+				  </form>
+			  </div>
 			  <div class="content-box-large">
 				  <div class="panel-heading">
 					  <div class="panel-title">解析管理</div>
@@ -107,115 +154,45 @@
          </div>
       </footer>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://code.jquery.com/jquery.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="bootstrap/js/bootstrap.min.js"></script>
-    <script src="js/custom.js"></script>
+
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.js"></script>
 
   <script>
-	  var current_page=0;
+      (function (_w,$) {
 
-		function add(){
-		    window.location.href="{:U('jx')}&o=add"
-		}
+          _w['Attr'] = function(){
 
-	  $(function(){
-	     tohtml();
-	  })
-
-	  function lastpage(){
-	      current_page--;
-	      tohtml();
-	  }
-
-      function search(){
-          current_page=0;
-          tohtml();
-      }
-
-	  function nextpage(){
-	      current_page++;
-	      tohtml();
-	  }
-
-	  function topage(s){
-	      current_page = s;
-	      tohtml();
-	  }
-
-	  function reset(id){
-	      var str=window.prompt("请输入新密码")
-		  if(str.length<6){
-	          alert("至少6位")
-			  return;
-		  }else{
-		      $.getJSON("{:U('reset_password')}",{"id":id,"password":str},function(res){
-		          if(res.code=="success"){
-		              alert("重置成功")
-				  }else{
-		              alert(res.msg);
-				  }
-			  })
 		  }
-	  }
 
-	  function  change(id) {
-		  window.location.href="{:U('jx')}&id="+id;
-      }
-
-      function del(id){
-	      $.getJSON("{:U('del_jx')}&id="+id,{},function(res){
-	          if(res.code=="success"){
-	              alert("删除成功，为了正常使用，请重新修改视频默认解析线路");
-	              $("#tr_"+id).remove();
-			  }else{
-	              alert(res.msg);
-			  }
-		  })
-	  }
-
-	  function tohtml(){
-
-	      var d = {"page":current_page}
+		  _w['Spare'] = function(){
 
 
-          $.getJSON("{:U('get_jx')}",d,function(res){
-              if(res.code=="success"){
-                  var da=res.data,s='',data=da['list'],num=da['num'],pi="";
-                  $("#example_info").html("共"+num+"条记录");
-                  if(current_page==0)  pi+=' <li class="prev disabled"> <a href="#">上一页</a></li>';
-                  else pi+='<li class="prev"> <a href="#" onclick="lastpage()">上一页</a></li>'
-                  for(i=0;i<5;i++){
-                      var p = current_page+1+i;
-                      if(i==0){
-                          pi+= '<li class="active"><a href="#">'+p+'</a></li>'
-					  }else{
-                          pi+= '<li><a href="#"  onclick="topage('+(p-1)+')">'+p+'</a></li>';
-					  }
+		  }
 
-				  }
-					if(current_page+1>=num/10){
-                        pi+= '  <li class="next disabled"><a href="#" onclick="nextpage()">下一页</a></li>'
-					}else{
-                        pi+= '  <li class="next"><a href="#" onclick="nextpage()">下一页</a></li>'
-					}
+          _w['Product'] = function (data) {
+              this.data = data;
 
-					$(".pagination").html(pi)
 
-                  for(i=0;i<data.length;i++){
-                      s+=' <tr class="odd gradeX" id="tr_'+data[i]['id']+'">\n' +
-                          '\t\t\t\t\t\t\t  <td>'+data[i]['id']+'</td>\n' +
-                          '\t\t\t\t\t\t\t\t  </td><td>'+data[i]['name']+'</td>\n' +
-                          '\t\t\t\t\t\t\t\t  </td><td>'+data[i]['s_name']+'</td>\n' +
-                          '\t\t\t\t\t\t\t  <td class="center"> '+data[i]['url']+'</td>' +
-                          '\t\t\t\t\t\t\t  <td class="center"> <button onclick="change('+data[i]['id']+')">修改</button><button onclick="del('+data[i]['id']+')">删除</button></td>' +
-                          '\t\t\t\t\t\t  </tr>'
-                  }
-                  $("#tlist").html(s);
-              }
-          })
-	  }
+          }
+
+
+
+
+
+
+      })(window,jQuery);
+
+
+
+
+	  $.getJSON("/v1/test/add_bean",{},function (res) {
+		  var data = res.data;
+
+          var product = new Product(data);
+          alert(product.a)
+      })
+
   </script>
   </body>
 </html>
