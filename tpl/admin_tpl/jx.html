@@ -399,6 +399,17 @@
           var t_spare = $(".t_spare");
           var t_attr = $(".t_attr");
 
+          $.extend({
+              "postJSON":function (a, b, c) {
+                  $.post(a,b,function(res){
+                      c(JSON.parse(res))
+                  })
+              },
+              "warn":function (s) {
+                  alert(s)
+              }
+          })
+
 
 
           _w['changev']=function (t) {
@@ -406,7 +417,25 @@
 			 var div_loading = $('<div class="status s-loading"></div>')
               t.parent().find(".status").remove();
 			  t.parent().append(div_loading)
+             var t1 = name.split("-");
+			  var data = {};
 
+
+			  $.extend(data,JSON.parse(t1[2]))
+              var k = t1[1];data[k] = t.val()
+
+
+			   $.postJSON("/v1/products/"+t1[0],data,function (res) {
+                   if(res.code=="success"){
+                       div_loading.removeClass("s-loading").addClass("s-ok")
+                       setTimeout(function () {
+                           div_loading.remove();
+                       },1000)
+                   }else{
+                       $.warn(res.msg)
+                       div_loading.remove();
+                   }
+               })
 
           }
 
@@ -535,7 +564,7 @@
                   var product_wrap=$('<div class="product_wrap form-horizontal"></div>');
                   product_wrap.attr("data-id",this.id)
                   product_wrap.append('  <legend>产品</legend>');
-                  to_input(product_wrap,"产品编码",this.data['code'],"product_code_"+"{'id':"+data.id+"}")
+                  to_input(product_wrap,"产品编码",this.data['code'],'edit_product-code-'+'{"id":'+data.id+'}')
                   to_input(product_wrap,"基础价格",this.data['price'],"product_price")
 				  t.append(product_wrap)
                   var spare_wrap = $('<div class="spare_wrap form-horizontal"></div>');
@@ -565,7 +594,7 @@
 
 
 	  $.getJSON("/v1/test/add_bean",{},function (res) {
-		  var data = res;
+		  var data = res.data;
 
           var product = new Product(data);
 
