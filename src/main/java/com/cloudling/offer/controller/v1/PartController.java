@@ -64,10 +64,11 @@ public class PartController extends Controller {
 
     /**
      * 根据id删除配件以及属性
+     *
      * @param
      */
     @action
-    public  void remove_spare(){
+    public void remove_spare() {
         String id;
         try {
             id = I("post.id").toString();
@@ -82,18 +83,21 @@ public class PartController extends Controller {
         success("1");
 
     }
+
     /**
      * 增加配件
+     *
      * @param
      */
 
     @action
-    public void add_spare(){
+    public void add_spare() {
         toHtml("");
     }
+
     @action
-    public void do_add_spare(){
-        String product_id,name,is_float,cat_id;
+    public void do_add_spare() {
+        String product_id, name, is_float, cat_id;
         try {
             product_id = I("post.product_id").toString();
             name = I("post.name").toString();
@@ -105,10 +109,10 @@ public class PartController extends Controller {
             return;
         }
         HashMap<String, String> res = new HashMap<>();
-        res.put("product_id",product_id);
-        res.put("name",name);
-        res.put("is_float",is_float);
-        res.put("cat_id",cat_id);
+        res.put("product_id", product_id);
+        res.put("name", name);
+        res.put("is_float", is_float);
+        res.put("cat_id", cat_id);
         res.put("create_time", TimeUtil.getShortTimeStamp() + "");
         try {
             M("spare").add(res);
@@ -120,20 +124,22 @@ public class PartController extends Controller {
         }
 
     }
+
     /**
-     *
      * 修改配件
+     *
      * @param
      */
 
     @action
-    public void edit_spare(){
+    public void edit_spare() {
         String id = I("id").toString();
-        assign("spare", JSON.toJSON(M("spare").where("id="+id).find()));
+        assign("spare", JSON.toJSON(M("spare").where("id=" + id).find()));
         toHtml("");
     }
+
     @action
-    public void do_edit_spare(){
+    public void do_edit_spare() {
         String id = I("post.id") == null ? "" : I("post.id").toString();
         String product_id = I("post.product_id") == null ? "" : I("post.product_id").toString();
         String name = I("post.name") == null ? "" : I("post.name").toString();
@@ -144,10 +150,10 @@ public class PartController extends Controller {
             return;
         }
         HashMap<String, String> res = new HashMap<>();
-        res.put("product_id",product_id);
-        res.put("name",name);
-        res.put("is_float",is_float);
-        res.put("cat_id",cat_id);
+        res.put("product_id", product_id);
+        res.put("name", name);
+        res.put("is_float", is_float);
+        res.put("cat_id", cat_id);
         try {
             M("spare").where("id=" + id).save(res);
             success("数据库更新成功");
@@ -156,22 +162,71 @@ public class PartController extends Controller {
             error("参数修改错误");
         }
     }
+
     /**
      * 增加属性
+     *
      * @param
      */
-    public void add_attr(){
-
-        ArrayList<HashMap<String,String>> list = M("product").field("id,name").select();
-       for (int i =0;i<list.size();i++){
-           ArrayList<HashMap<String,String>> map =M("sapre").where("product_id="+list.get(i).get("id")).field("id,name").select();
-
-       }
-
-
+    public void add_attr() {
         toHtml("");
     }
 
+    public void do_add_attr() {
+        String spare_id, price, parent_id;
+        try {
+            spare_id = I("post.spare_id").toString();
+
+            price = I("post.price").toString();
+            parent_id = I("post.parent_id").toString();
+        } catch (Exception e) {
+            // TODO: handle exception
+            error("参数不能为空");
+            return;
+        }
+        String name = I("post.name") == null ? "" : I("post.name").toString();
+        String num = I("post.num") == null ? "" : I("post.num").toString();
+        String code = I("post.code") == null ? "" : I("post.code").toString();
+        String formula = I("post.formula") == null ? "" : I("post.formula").toString();
+        String relate_id = I("post.relate_id") == null ? "" : I("post.relate_id").toString();
+        String or_id = I("post.or_id") == null ? "" : I("post.or_id").toString();
+        HashMap<String, String> res = new HashMap<>();
+        res.put("name", name);
+        res.put("spare_id", spare_id);
+        res.put("price", price);
+        res.put("parent_id", parent_id);
+        res.put("num", num);
+        res.put("code", code);
+        res.put("formula", formula);
+        res.put("relate_id", relate_id);
+        res.put("or_id", or_id);
+        try {
+            M("attr").add(res);
+            success("数据库更新成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            // TODO: handle exception
+            error("数据加载到数据库失败");
+        }
+
+
+    }
+
+    /**
+     * 修改属性
+     *
+     * @param
+     */
+    public void edit_attr() {
+        String name = I("post.name") == null ? "" : I("post.name").toString();
+        String num = I("post.num") == null ? "" : I("post.num").toString();
+        String code = I("post.code") == null ? "" : I("post.code").toString();
+        String formula = I("post.formula") == null ? "" : I("post.formula").toString();
+        String relate_id = I("post.relate_id") == null ? "" : I("post.relate_id").toString();
+        String or_id = I("post.or_id") == null ? "" : I("post.or_id").toString();
+        String spare_id = I("post.spare_id") == null ? "" : I("post.spare_id").toString();
+
+
+    }
 
 }
-
