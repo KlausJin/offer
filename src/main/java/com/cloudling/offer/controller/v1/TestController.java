@@ -65,15 +65,7 @@ public class TestController extends Controller {
             error("录入模版失败");
         }
     }
-@action
-public  void remove_spare(){
-    SpareModel sparetModel = new SpareModel();
 
-
-     sparetModel.removeSpareById("4263");
-        success("1");
-
-    }
 }
 
 
