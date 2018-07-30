@@ -1,5 +1,7 @@
 package com.cloudling.offer.bean;
 
+import com.cloudling.offer.server.ControllerContext;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,20 +14,21 @@ import java.util.List;
  **/
 public class SpareBean extends Bean {
 
+
     public SpareBean(HashMap<String,String> data){
         super(data);
     }
 
-    public String id;
-    int product_id;
+     public String id;
+     public  int product_id;
 
-    String name;
+     public String name;
 
-    boolean is_float;
+     public boolean is_float;
 
-    int cat_id;
+     public  int cat_id;
 
-    int create_time;
+     public int create_time;
 
     public SpareBean(String sparesByProductId) {
     }

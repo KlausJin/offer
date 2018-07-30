@@ -14,7 +14,7 @@ public class AttrModel extends Model {
 
 
     /**
-     * @Description:根据spre_id获取配件属性
+     * @Description:根据spre_id获取配件属性(固定配件)
      * @param:
      * @return:
      * @auther: CodyLongo
@@ -55,6 +55,33 @@ public class AttrModel extends Model {
 
 
         return list ;
+    }
+
+
+
+    /**
+     * 根据配件id删除属性
+     * @param spare_id
+     */
+    public void removeAttrBySpareId(String spare_id){
+        ArrayList<HashMap<String, String>> map = where("spare_id =" + spare_id).select();
+        for (int i=0;i<map.size();i++){
+            where("id="+map.get(i).get("id")).delete();
+
+            removeAttrByParentId(map.get(i).get("id"));
+        }
+    }
+
+    /**
+     * 根据父类id删除子手续ing
+     * @param parent_id
+     */
+    public void removeAttrByParentId(String parent_id){
+        ArrayList<HashMap<String, String>> map = where("parent_id=" + parent_id).select();
+        for ( int i=0;i<map.size();i++){
+            where("id=" + map.get(i).get("id")).delete();
+        }
+
     }
 
 }

@@ -14,7 +14,7 @@ public class OfferBean extends Bean {
 
 
     @required
-    public String sale_id,man_id,offer_code,status,client_id,prod_name,part_name,number,content;
+    public String sale_id,man_id,status;
 
 
 

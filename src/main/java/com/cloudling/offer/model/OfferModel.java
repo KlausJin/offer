@@ -29,11 +29,7 @@ public class OfferModel extends Model {
     }
 
     public void add_offer(OfferBean bean) throws Exception {
-        HashMap<String,String> list=new HashMap<>();
-        list.put("prod_name",bean.prod_name);
-        list.put("part_name",bean.part_name);
-        list.put("num",bean.number);
-        bean.content=JSON.toJSONString(list);
+
         bean.create_time= TimeUtil.getShortTimeStamp();
         add(bean);
     }

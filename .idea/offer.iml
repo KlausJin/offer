@@ -38,5 +38,6 @@
     <orderEntry type="library" name="Maven: org.apache.poi:poi-excelant:3.14" level="project" />
     <orderEntry type="library" name="Maven: org.apache.ant:ant:1.8.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.ant:ant-launcher:1.8.2" level="project" />
+    <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
   </component>
 </module>

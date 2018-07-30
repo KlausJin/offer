@@ -1,6 +1,8 @@
 package com.cloudling.offer.model;
 
 import com.cloudling.offer.bean.SpareBean;
+import com.cloudling.offer.server.Controller;
+import com.cloudling.offer.util.TimeUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +21,7 @@ public class SpareModel extends Model {
     }
 
     /**
-     * @Description:根据分类id获取所有的通用配件（product_id = 0）
+     * @Description:根据分类id获取所有的通用配件（product_id ！= 0）
      * @param:
      * @return:
      * @auther: CodyLongo
@@ -60,5 +62,43 @@ public class SpareModel extends Model {
         return where("product_id="+product_id).select();
     }
 
+    /**
+     * @Description:根据分类id获取所有的实时配件（product_id = 0）
+     * @param:
+     * @return:
+     * @auther: CodyLongo
+     * @modified:
+     */
+    public List<SpareBean> getBeansByProductId_real(String product_id){
 
-}
+        List<SpareBean> list =new ArrayList<>();
+        ArrayList<HashMap<String, String>> map = getSparesByProductId_real(product_id);
+        for (int i=0;i<map.size();i++){
+            HashMap<String,String> res =where("id ="+map.get(i).get("id")).find();
+
+            SpareBean bean =new SpareBean( res);
+            bean.attrBeans= new AttrModel().getlistBySpareId(bean.id);
+            list.add(bean);
+        }
+        return list;
+    }
+    public ArrayList<HashMap<String, String>> getSparesByProductId_real(String product_id){
+
+        return where("product_id="+0).select();
+    }
+
+    /**
+     * 删除指定的配件
+     * @param id
+     */
+    public void removeSpareById(String id){
+
+      where("id ="+id).delete();
+      AttrModel attrModel = new AttrModel();
+
+      attrModel.removeAttrBySpareId(id);
+
+        }
+    }
+
+
