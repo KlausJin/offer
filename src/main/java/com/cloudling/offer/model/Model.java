@@ -293,7 +293,7 @@ public class Model {
 		
 	}
 
-	public boolean save(HashMap<String, String> bean){
+	public boolean save(HashMap<String, Object> data){
 		String sql = "update "+table+" set ";
 		for ( String key: data.keySet()) {
 			sql+=key+"='"+data.get(key).toString()+"',";
