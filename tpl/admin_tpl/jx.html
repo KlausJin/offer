@@ -269,6 +269,7 @@
 
                       var v = data[an];
                       if(v || v==0) $(this).val(v) && $(this).attr("value",v)
+                      $(this).find("option[value='"+v+"']").attr("selected", "selected");
                       $(this).attr('name','edit_attr-'+an+'-'+'{"id":'+data.id+'}')
                       $(this).attr("onchange",'changev($(this))')
 
