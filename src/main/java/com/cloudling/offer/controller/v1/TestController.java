@@ -40,7 +40,7 @@ public class TestController extends Controller {
         long t = TimeUtil.getLongTimeStamp();
         ProductModel productModel = new ProductModel();
 
-        ProductBean bean = productModel.getBean("67");
+        ProductBean bean = productModel.getBean("79");
         long ms = TimeUtil.getLongTimeStamp() - t;
         System.out.println("ms:"+ms);
 

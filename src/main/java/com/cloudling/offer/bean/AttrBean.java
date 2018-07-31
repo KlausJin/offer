@@ -19,8 +19,10 @@ public class AttrBean extends Bean {
 
     public   float price;
 
-   String attr;
-  public  String num;
+    String attr;
+
+
+    public  String num;
 
     public AttrBean(HashMap<String,String> data) {
         super(data);
@@ -37,6 +39,12 @@ public class AttrBean extends Bean {
     public int parent_id;
 
     public String code;
+
+    public int formula;
+
+    public int relate_id;
+
+    public int or_id;
 
 
 

@@ -36,6 +36,9 @@
 	  .form-group:hover .xclose{ display: block}
 	  .template{
 		  display: none;}
+      .s_add{ display: block; width: 18px; height: 18px; background-image: url("/images/add.png"); background-size: 16px 16px; margin-top: 5px; cursor: pointer}
+      .s_cut{ display: block; width: 18px; height: 18px; background-image: url("/images/cut.png"); background-size: 16px 16px; margin-top: 5px; cursor: pointer}
+
   </style>
   <body>
   	<div class="header">
@@ -85,235 +88,6 @@
 			  <div class="panel-body product_edit">
 
 			  </div>
-			  <div class="panel-body form-horizontal">
-
-				  <legend>产品</legend>
-					  <div class="form-group">
-						  <label  class="col-sm-1 control-label">产品编码</label>
-						  <div class="col-sm-1">
-							  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-						  </div>
-					  </div>
-
-				  <div class="form-group">
-					  <label  class="col-sm-1 control-label">基础价格</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-				  </div>
-				  <legend>配件</legend>
-				  <div class="form-group">
-					  <div class="xclose"><span class="glyphicon glyphicon-remove-circle"></span></div>
-					  <label  class="col-sm-1 control-label">配件名称</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control input-sm" id="" name="" placeholder="">
-					  </div>
-
-				  </div>
-
-				  <div class="form-group">
-					  <label  class="col-sm-2 control-label">分类名称：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-					  <label  class="col-sm-1 control-label">关联分类：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-					  <label  class="col-sm-1 control-label">抑或分类：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-				  </div>
-
-				  <div class="form-group">
-					  <label  class="col-sm-3 control-label">编号：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-					  <label  class="col-sm-1 control-label">属性：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-					  <label  class="col-sm-1 control-label">价格：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-					  <label  class="col-sm-1 control-label">数量：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-					  <label  class="col-sm-1 control-label">计算方式：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-				  </div>
-
-				  <div class="form-group">
-					  <label  class="col-sm-3 control-label">编号：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-					  <label  class="col-sm-1 control-label">属性：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-					  <label  class="col-sm-1 control-label">价格：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-					  <label  class="col-sm-1 control-label">数量：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-					  <label  class="col-sm-1 control-label">计算方式：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-				  </div>
-
-
-				  <div class="form-group">
-					  <label  class="col-sm-2 control-label"></label>
-					  <div class="col-sm-1"> <button class="btn btn-default btn-xs">+添加属性</button></div></div>
-
-
-				  <div class="form-group">
-					  <label  class="col-sm-2 control-label">分类名称：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-					  <label  class="col-sm-1 control-label">关联分类：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-				  </div>
-
-				  <div class="form-group">
-					  <label  class="col-sm-3 control-label">编号：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-					  <label  class="col-sm-1 control-label">属性：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-					  <label  class="col-sm-1 control-label">价格：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-					  <label  class="col-sm-1 control-label">数量：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-					  <label  class="col-sm-1 control-label">计算方式：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-				  </div>
-
-				  <div class="form-group">
-					  <label  class="col-sm-3 control-label">编号编号编号编号编号编号：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-						  <div class="s-ok"></div>
-					  </div>
-					  <label  class="col-sm-1 control-label">属性：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-					  <label  class="col-sm-1 control-label">价格：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-					  <label  class="col-sm-1 control-label">数量：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-					  <label  class="col-sm-1 control-label">计算方式：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-				  </div>
-
-
-				  <div class="form-group">
-					  <label  class="col-sm-2 control-label"></label>
-					  <div class="col-sm-1"> <button class="btn btn-default btn-xs">+添加属性</button></div></div>
-
-				  <div class="form-group">
-					  <label  class="col-sm-1 control-label"></label>
-					  <div class="col-sm-1"> <button class="btn btn-default btn-sm">+添加分类</button></div></div>
-
-				  <div class="form-group">
-					  <label  class="col-sm-1 control-label">配件名称</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-				  </div>
-
-				  <div class="form-group">
-					  <label  class="col-sm-2 control-label">分类名称：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-				  </div>
-
-				  <div class="form-group">
-					  <label  class="col-sm-3 control-label">编号：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-					  <label  class="col-sm-1 control-label">属性：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-					  <label  class="col-sm-1 control-label">价格：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-					  <label  class="col-sm-1 control-label">数量：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-					  <label  class="col-sm-1 control-label">计算方式：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-				  </div>
-
-				  <div class="form-group">
-					  <label  class="col-sm-3 control-label">编号：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-					  <label  class="col-sm-1 control-label">属性：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-					  <label  class="col-sm-1 control-label">价格：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-					  <label  class="col-sm-1 control-label">数量：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-					  <label  class="col-sm-1 control-label">计算方式：</label>
-					  <div class="col-sm-1">
-						  <input value="" type="text" class="form-control" id="" name="" placeholder="">
-					  </div>
-				  </div>
-
-				  <p><button class="btn btn-default">+添加配件</button></p>
-
-				  <div class="form-group">
-						  <div class="col-sm-offset-2 col-sm-10">
-							  <button id="sub" type="submit"  class="btn btn-primary">提交</button>
-						  </div>
-					  </div>
-
-			  </div>
 
 		  </div>
 		</div>
@@ -336,6 +110,15 @@
   <script>
       (function (_w,$) {
 
+          var formulas =
+              [{"value":0,"name":"不参与计算"},
+                  {"value":1,"name":"数量*单价"},
+                  {"value":2,"name":"长*宽*高*单价"},
+                  {"value":3,"name":"圆形面积*单价"},
+                  {"value":4,"name":"体积*单价"},
+
+              ];
+
           var t_input_str = '<div class="form-group t_input template">\n' +
               '\t\t\t\t\t\t  <label  class="col-sm-1 control-label"></label>\n' +
               '\t\t\t\t\t\t  <div class="col-sm-1">\n' +
@@ -353,39 +136,42 @@
           var t_spare_str = '<div class="form-group template t_spare">\n' +
               '\t\t\t\t\t  <label  class="col-sm-2 control-label">分类名称：</label>\n' +
               '\t\t\t\t\t  <div class="col-sm-1">\n' +
-              '\t\t\t\t\t\t  <input value="" type="text" class="form-control" id="" name="" placeholder="">\n' +
+              '\t\t\t\t\t\t  <input value="" type="text" class="form-control" data-attr="name"  placeholder="">\n' +
               '\t\t\t\t\t  </div>\n' +
               '\t\t\t\t\t  <label  class="col-sm-1 control-label">关联分类：</label>\n' +
               '\t\t\t\t\t  <div class="col-sm-1">\n' +
-              '\t\t\t\t\t\t  <input value="" type="text" class="form-control" id="" name="" placeholder="">\n' +
+              '\t\t\t\t\t\t  <select value="" type="text" class="form-control" data-attr="relate_id"></select>\n' +
               '\t\t\t\t\t  </div>\n' +
               '\t\t\t\t\t  <label  class="col-sm-1 control-label">抑或分类：</label>\n' +
               '\t\t\t\t\t  <div class="col-sm-1">\n' +
-              '\t\t\t\t\t\t  <input value="" type="text" class="form-control" id="" name="" placeholder="">\n' +
+              '\t\t\t\t\t\t  <select value="" type="text" class="form-control" data-attr="or_id" ></select>\n' +
+              '\t\t\t\t\t  </div>\n' +
+              '\t\t\t\t\t  <div class="col-sm-1">\n' +
+              '\t\t\t\t\t\t  <span class="s_add" onclick="to_pop($(this))"></span>' +
               '\t\t\t\t\t  </div>\n' +
               '\t\t\t\t  </div>';
 
           var t_attr_str = '\n' +
-              '\t\t\t\t  <div class="form-group  template t_attr">\n' +
+              '\t\t\t\t  <div class="form-group template t_attr">\n' +
               '\t\t\t\t\t  <label  class="col-sm-3 control-label">编号：</label>\n' +
               '\t\t\t\t\t  <div class="col-sm-1">\n' +
-              '\t\t\t\t\t\t  <input value="" type="text" class="form-control" id="" name="" placeholder="">\n' +
+              '\t\t\t\t\t\t  <input value="" type="text" class="form-control"  data-attr="code" name="" placeholder="">\n' +
               '\t\t\t\t\t  </div>\n' +
               '\t\t\t\t\t  <label  class="col-sm-1 control-label">属性：</label>\n' +
               '\t\t\t\t\t  <div class="col-sm-1">\n' +
-              '\t\t\t\t\t\t  <input value="" type="text" class="form-control" id="" name="" placeholder="">\n' +
+              '\t\t\t\t\t\t  <input value="" type="text" class="form-control" data-attr="name" name="" placeholder="">\n' +
               '\t\t\t\t\t  </div>\n' +
               '\t\t\t\t\t  <label  class="col-sm-1 control-label">价格：</label>\n' +
               '\t\t\t\t\t  <div class="col-sm-1">\n' +
-              '\t\t\t\t\t\t  <input value="" type="text" class="form-control" id="" name="" placeholder="">\n' +
+              '\t\t\t\t\t\t  <input value="" type="text" class="form-control" data-attr="price"  name="" placeholder="">\n' +
               '\t\t\t\t\t  </div>\n' +
               '\t\t\t\t\t  <label  class="col-sm-1 control-label">数量：</label>\n' +
               '\t\t\t\t\t  <div class="col-sm-1">\n' +
-              '\t\t\t\t\t\t  <input value="" type="text" class="form-control" id="" name="" placeholder="">\n' +
+              '\t\t\t\t\t\t  <input value="" type="text" class="form-control" data-attr="num"   name="" placeholder="">\n' +
               '\t\t\t\t\t  </div>\n' +
               '\t\t\t\t\t  <label  class="col-sm-1 control-label">计算方式：</label>\n' +
               '\t\t\t\t\t  <div class="col-sm-1">\n' +
-              '\t\t\t\t\t\t  <input value="" type="text" class="form-control" id="" name="" placeholder="">\n' +
+              '\t\t\t\t\t\t  <select value="" type="text" class="form-control"  data-attr="formula"  name="" placeholder=""></select>\n' +
               '\t\t\t\t\t  </div>\n' +
               '\t\t\t\t  </div>'
 
@@ -410,7 +196,15 @@
               }
           })
 
-
+          _w['to_pop']=function(t){
+              if(t.hasClass("s_add")){
+                  t.parent().parent().parent().find(".sub_attr").show()
+                  t.removeClass("s_add").addClass("s_cut")
+              }else{
+                  t.parent().parent().parent().find(".sub_attr").hide()
+                  t.removeClass("s_cut").addClass("s_add")
+              }
+          }
 
           _w['changev']=function (t) {
 			 var name = t.attr("name");
@@ -458,12 +252,29 @@
           _w['SubAttr'] = function(data){
               this.data = data;
 
-              var to_attr=function(a,b,c){
+              var to_attr=function(a){
                   var t = t_attr.clone();
                   t.removeClass("template")
                   t.removeClass("t_attr")
+                  t.find("input,select").each(function () {
+                      var an = $(this).attr("data-attr");
+                      if(an=="formula") {
 
+                          var s = ''
+                          for(var i=0;i<formulas.length;i++){
+                              s+='<option value="'+formulas[i].value+'">'+formulas[i].name+'</option>'
+                          }
+                          $(this).html(s)
+                      }
+
+                      var v = data[an];
+                      if(v || v==0) $(this).val(v) && $(this).attr("value",v)
+                      $(this).attr('name','edit_attr-'+an+'-'+'{"id":'+data.id+'}')
+                      $(this).attr("onchange",'changev($(this))')
+
+                  })
                   a.append(t.prop('outerHTML'))
+
 
               }
 
@@ -491,21 +302,46 @@
 				  }
 				  return sub_attr;
               }
-              var to_attr=function(a,b,c){
+              var to_attr=function(a,b){
                   var t = t_spare.clone();
                   t.removeClass("template")
                   t.removeClass("t_spare")
+                  t.find("input,select").each(function () {
+                      var an = $(this).attr("data-attr");
+                      var v = data[an];
+                      if(an=="relate_id" || an =="or_id") {
+                          var all = b.getAllParent(),s='<option value="0">无</option>';
 
+                          for(var i=0;i<all.length;i++){
+                              s+='<option value="'+all[i].id+'">'+all[i].name+'</option>'
+                          }
+                          $(this).html(s)
+                          $(this).find("option[value='"+v+"']").attr("selected", "selected");
+
+
+
+                      }
+
+
+                      if(v || v==0) {
+                          $(this).attr("value",v)
+                          $(this).val(v)
+                      }
+                      $(this).attr('name','edit_attr-'+an+'-'+'{"id":'+data.id+'}')
+                      $(this).attr("onchange",'changev($(this))')
+                  })
                   a.append(t.prop('outerHTML'))
 
               }
-              this.setHtml=function(a){
+              this.setHtml=function(a,b){
                   var attr_div=$('<div class="attr"></div>');
-			      to_attr(attr_div)
+			      to_attr(attr_div,b)
+                  var sub_attr_div=$('<div class="sub_attr" style="display: none"></div>');
 				  var attr = this.getAttr();
 			      for(var i=0;i<attr.length;i++){
-						attr[i].setHtml(attr_div)
+						attr[i].setHtml(sub_attr_div)
 				  }
+                  attr_div.append(sub_attr_div)
 				  a.append(attr_div)
 			  }
 
@@ -529,12 +365,13 @@
 
 
 
-			  this.setHtml = function (a) {
+			  this.setHtml = function (a,b) {
                   var spare_div=$('<div class="spare"></div>');
-                  to_input(spare_div,"配件名称");
-				  var attrs = this.getAttr();
+                  to_input(spare_div,"配件名称",this.data['name'],'do_edit_spare-name-'+'{"id":'+data.id+'}')
+
+                  var attrs = this.getAttr();
 				  for(var i=0;i<attrs.length;i++){
-				      attrs[i].setHtml(spare_div)
+				      attrs[i].setHtml(spare_div,b)
 				  }
 
                   a.append(spare_div)
@@ -560,12 +397,14 @@
 
               }
 
+
+
               this.setHtml=function (t) {
                   var product_wrap=$('<div class="product_wrap form-horizontal"></div>');
                   product_wrap.attr("data-id",this.id)
                   product_wrap.append('  <legend>产品</legend>');
                   to_input(product_wrap,"产品编码",this.data['code'],'edit_product-code-'+'{"id":'+data.id+'}')
-                  to_input(product_wrap,"基础价格",this.data['price'],"product_price")
+                  to_input(product_wrap,"基础价格",this.data['price'],'edit_product-price-'+'{"id":'+data.id+'}')
 				  t.append(product_wrap)
                   var spare_wrap = $('<div class="spare_wrap form-horizontal"></div>');
                   spare_wrap.attr("data-id",this.id)
@@ -573,13 +412,32 @@
 
                   var spares =  this.getSpare();
                   for(var i=0;i<spares.length;i++){
-                      spares[i].setHtml(spare_wrap)
+                      spares[i].setHtml(spare_wrap,this)
 				  }
 
                   t.append(spare_wrap)
 
               }
 
+              var all_parent;
+              this.getAllParent=function(){
+                  if(!all_parent){
+                      all_parent = [];
+                      var d = this.data.spareBeans;
+                      for(var i=0;i<d.length;i++){
+                          var attrs = d[i].attrBeans;
+                          for(var j=0;j<attrs.length;j++){
+                              var item = {};
+                              item['name'] = d[i].name+"-"+attrs[j].name;
+                              item['id'] = attrs[j].id;
+                              all_parent.push(item)
+                          }
+                      }
+
+
+                  }
+                  return all_parent;
+              }
 
 
 
