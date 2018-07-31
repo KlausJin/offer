@@ -32,10 +32,10 @@ public class ProductsController extends Controller {
         if (code.equals("")){
             res.put("price", price);
         }
-     else if (price.equals("")) {
+       else if (price.equals("")) {
            res.put("code", code);
         }
-       else{
+        else{
            res.put("price", price);
            res.put("code", code);
         }
@@ -67,7 +67,7 @@ public class ProductsController extends Controller {
         SpareModel sparetModel = new SpareModel();
 
 
-        sparetModel.removeSpareById("4263");
+        sparetModel.removeSpareById(id);
         success("1");
 
     }
@@ -138,10 +138,11 @@ public class ProductsController extends Controller {
             return;
         }
         HashMap<String, Object> res = new HashMap<>();
-        res.put("product_id", product_id);
-        res.put("name", name);
-        res.put("is_float", is_float);
-        res.put("cat_id", cat_id);
+        if (product_id != null  && product_id.length() != 0){ res.put("product_id", product_id);}
+        if (name !=null && name.length() != 0){ res.put("name", name);}
+        if (is_float !=null && is_float.length() != 0){ res.put("is_float", is_float);}
+        if (cat_id !=null && cat_id.length() != 0){ res.put("cat_id", cat_id);}
+
         try {
             M("spare").where("id=" + id).save(res);
             success("数据库更新成功");
@@ -159,7 +160,7 @@ public class ProductsController extends Controller {
     public void add_attr() {
         toHtml("");
     }
-
+@action
     public void do_add_attr() {
         String spare_id, price, parent_id;
         try {
@@ -179,15 +180,15 @@ public class ProductsController extends Controller {
         String relate_id = I("post.relate_id") == null ? "" : I("post.relate_id").toString();
         String or_id = I("post.or_id") == null ? "" : I("post.or_id").toString();
         HashMap<String, String> res = new HashMap<>();
-        res.put("name", name);
+    if (name != null  && name.length() != 0) {res.put("name", name);}
         res.put("spare_id", spare_id);
         res.put("price", price);
         res.put("parent_id", parent_id);
-        res.put("num", num);
-        res.put("code", code);
-        res.put("formula", formula);
-        res.put("relate_id", relate_id);
-        res.put("or_id", or_id);
+      if (num != null  && num.length() != 0) { res.put("num", num);}
+      if (code != null  && code.length() != 0)   {res.put("code", code);}
+      if (formula != null  && formula.length() != 0){ res.put("formula", formula);}
+      if (relate_id != null  && relate_id.length() != 0){ res.put("relate_id", relate_id);}
+      if (or_id != null  && or_id.length() != 0){ res.put("or_id", or_id);}
         try {
             M("attr").add(res);
             success("数据库更新成功");
@@ -205,6 +206,7 @@ public class ProductsController extends Controller {
      *
      * @param
      */
+    @action
     public void edit_attr() {
         String id = I("post.id") == null ? "" : I("post.id").toString();
         String name = I("post.name") == null ? "" : I("post.name").toString();
@@ -221,15 +223,16 @@ public class ProductsController extends Controller {
             return;
         }
         HashMap<String, Object> res = new HashMap<>();
-        res.put("name", name);
-        res.put("spare_id", spare_id);
-        res.put("price", price);
-        res.put("parent_id", parent_id);
-        res.put("num", num);
-        res.put("code", code);
-        res.put("formula", formula);
-        res.put("relate_id", relate_id);
-        res.put("or_id", or_id);
+
+        if (name != null  && name.length() != 0){ res.put("name", name);}
+        if (spare_id != null  && spare_id.length() != 0)  {res.put("spare_id", spare_id);}
+        if (price != null  && price.length() != 0){res.put("price", price);}
+        if (parent_id != null  && parent_id.length() != 0){ res.put("parent_id", parent_id);}
+        if (num != null  && num.length() != 0){res.put("num", num);}
+        if (num != null  && num.length() != 0){res.put("code", code);}
+        if (formula != null  && formula.length() != 0)  {res.put("formula", formula);}
+        if (relate_id != null  && relate_id.length() != 0){res.put("relate_id", relate_id);}
+        if (or_id != null  && or_id.length() != 0) {res.put("or_id", or_id);}
         try {
             M("attr").where("id=" + id).save(res);
             success("数据库更新成功");
