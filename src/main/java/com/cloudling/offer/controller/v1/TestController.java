@@ -34,6 +34,12 @@ public class TestController extends Controller {
 
     }
 
+
+    @action
+    public void ttt(){
+        success("99999");
+    }
+
     @action
     public void add_bean() {
 

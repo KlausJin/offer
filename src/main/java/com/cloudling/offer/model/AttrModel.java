@@ -73,7 +73,7 @@ public class AttrModel extends Model {
     }
 
     /**
-     * 根据父类id删除子手续ing
+     * 根据父类id删除子属性
      * @param parent_id
      */
     public void removeAttrByParentId(String parent_id){

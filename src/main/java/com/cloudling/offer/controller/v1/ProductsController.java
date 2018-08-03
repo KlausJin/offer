@@ -165,7 +165,6 @@ public class ProductsController extends Controller {
         String spare_id, price, parent_id;
         try {
             spare_id = I("post.spare_id").toString();
-
             price = I("post.price").toString();
             parent_id = I("post.parent_id").toString();
         } catch (Exception e) {
@@ -180,10 +179,10 @@ public class ProductsController extends Controller {
         String relate_id = I("post.relate_id") == null ? "" : I("post.relate_id").toString();
         String or_id = I("post.or_id") == null ? "" : I("post.or_id").toString();
         HashMap<String, String> res = new HashMap<>();
-    if (name != null  && name.length() != 0) {res.put("name", name);}
         res.put("spare_id", spare_id);
         res.put("price", price);
         res.put("parent_id", parent_id);
+      if (name != null  && name.length() != 0) {res.put("name", name);}
       if (num != null  && num.length() != 0) { res.put("num", num);}
       if (code != null  && code.length() != 0)   {res.put("code", code);}
       if (formula != null  && formula.length() != 0){ res.put("formula", formula);}
@@ -224,12 +223,12 @@ public class ProductsController extends Controller {
         }
         HashMap<String, Object> res = new HashMap<>();
 
-        if (name != null  && name.length() != 0){ res.put("name", name);}
+        if (name != null && name.length() != 0){ res.put("name", name);}
         if (spare_id != null  && spare_id.length() != 0)  {res.put("spare_id", spare_id);}
         if (price != null  && price.length() != 0){res.put("price", price);}
         if (parent_id != null  && parent_id.length() != 0){ res.put("parent_id", parent_id);}
         if (num != null  && num.length() != 0){res.put("num", num);}
-        if (num != null  && num.length() != 0){res.put("code", code);}
+        if (code != null  && code.length() != 0){res.put("code", code);}
         if (formula != null  && formula.length() != 0)  {res.put("formula", formula);}
         if (relate_id != null  && relate_id.length() != 0){res.put("relate_id", relate_id);}
         if (or_id != null  && or_id.length() != 0) {res.put("or_id", or_id);}

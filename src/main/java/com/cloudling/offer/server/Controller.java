@@ -170,6 +170,15 @@ public class Controller {
 	 * @param res
 	 * @return
 	 */
+	protected boolean isempty(String  str){
+		if (str != null  && str.length() != 0){
+
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 	protected  Object I(String res) {
 		 
 		String[] rs = res.split("\\.");
@@ -320,4 +329,5 @@ public class Controller {
 		cookie.setPath("/");
 		context.response.addCookie(cookie);
 	}
+
 }
