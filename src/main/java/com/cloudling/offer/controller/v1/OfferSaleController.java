@@ -20,26 +20,55 @@ public class OfferSaleController extends Controller {
     public OfferSaleController(ControllerContext context) {
         super(context);
     }
+    /**
+     * 报价列表
+     *
+     * @param
+     */
     @action
     public void list(){
         toHtml("admin_tpl/sale_product_list");
     }
+    @action
+    public void get_list(){
 
+    }
 
+    /**
+     * 添加到报价表
+     *
+     * @param
+     */
 
     @action
     public void add_offer(){
-           HashMap<String,String> res =new HashMap<>();
-           res.put("create_time",TimeUtil.getShortTimeStamp() + "");
+        String sale_id, m_id;
+        try{
+            sale_id= I("post.sale_id").toString();
+            m_id=I("post.m_id").toString();
+
+        }
+
+        catch (Exception e){
+            // TODO: handle exception
+            error("参数提交错误");
+            return;
+        }
+        HashMap<String,String> res=new HashMap<>();
+        res.put("sale_id",sale_id);
+        res.put("m_id",m_id);
+        res.put("create_time",TimeUtil.getShortTimeStamp() + "");
         try {
             M("offer").add(res);
             success("数据库更新成功");
         } catch (Exception e) {
-
             // TODO: handle exception
             error("数据加载到数据库失败");
+
         }
+
     }
+
     /**
      * 搜索产品
      *
@@ -50,8 +79,9 @@ public class OfferSaleController extends Controller {
     String page = I("page") == null ? "0" : I("page").toString();
     String limit = Integer.parseInt(page) * 10 + ",10";
     String pro = I("post.pro") == null ? "" : I("post.pro").toString();
-    String sql ="select * from product where code like %" + pro+"%  limit" +limit;
+    String sql ="select * from product where code like '%"+pro+"%'  limit "+limit;
     ArrayList<HashMap<String, String>> list = M("product").query(sql);
+    success(list);
     assign("list",JSON.toJSON(list));
 
 }
@@ -77,13 +107,14 @@ public class OfferSaleController extends Controller {
         String id = I("post.id") == null ? "" : I("post.id").toString();
         ArrayList<HashMap<String, String>> list = M("spare").where("product_id =" + id).select();
         for (int i =0; i<list.size();i++){
-            ArrayList<HashMap<String, String>> map = M("sttr").where("spare_id =" + list.get(i).get("id")).select();
+            ArrayList<HashMap<String, String>> map = M("attr").where("spare_id =" + list.get(i).get("id")).select();
             list.addAll(map);
             for(int j=0;j<map.size();j++){
-                ArrayList<HashMap<String, String>> res = M("sttr").where("parent_id =" + map.get(j).get("id")).select();
+                ArrayList<HashMap<String, String>> res = M("attr").where("parent_id =" + map.get(j).get("id")).select();
                 list.addAll(res);
             }
             }
+            success(list);
             assign("list",JSON.toJSON(list));
             toHtml("");
 
@@ -97,31 +128,37 @@ public class OfferSaleController extends Controller {
     @action
     public void com_spare(){
         String cat_id = I("post.cat_id") == null ? "" : I("post.cat_id").toString();
-        ArrayList<HashMap<String, String>> list = M("spare").where("cat_id =" + cat_id +"and product_id="+0).select();
+        ArrayList<HashMap<String, String>> list = M("spare").where("cat_id =" + cat_id +" and product_id="+0).select();
         for (int i =0; i<list.size();i++) {
-            ArrayList<HashMap<String, String>> map = M("sttr").where("spare_id =" + list.get(i).get("id")).select();
+            ArrayList<HashMap<String, String>> map = M("attr").where("spare_id =" + list.get(i).get("id")).select();
             list.addAll(map);
             for (int j = 0; j < map.size(); j++) {
-                ArrayList<HashMap<String, String>> res = M("sttr").where("parent_id =" + map.get(j).get("id")).select();
+                ArrayList<HashMap<String, String>> res = M("attr").where("parent_id =" + map.get(j).get("id")).select();
                 list.addAll(res);
             }
         }
+        success(list);
         assign("list",JSON.toJSON(list));
         toHtml("");
     }
+    /**
+     *增加配件
+     *
+     * @param
+     */
 @action
 public void add_spare(){
-    String product_id = I("post.product_id") == null ? "" : I("post.product_id").toString();
+    String offer_id = I("post.offer_id") == null ? "" : I("post.offer_id").toString();
     String spare_id = I("post.spare_id") == null ? "" : I("post.spare_id").toString();
     String attr_id = I("post.attr_id") == null ? "" : I("post.attr_id").toString();
     String num = I("post.num") == null ? "" : I("post.num").toString();
     String spare_count = I("post.spare_count") == null ? "" : I("post.spare_count").toString();
     HashMap<String,String> res =new HashMap<>();
-    res.put("product_id",product_id);
+    res.put("offer_id",offer_id);
     res.put("spare_id",spare_id);
     res.put("attr_id",attr_id);
-    res.put("num",num);
-    res.put("spare_count",spare_count);
+    if (isempty(num)){res.put("num",num);}
+    if (isempty(spare_count)){res.put("spare_count",spare_count);}
 
     try {
         M("offer_spare").add(res);
@@ -153,39 +190,7 @@ public void add_spare(){
 
 
     }
-    /**
-     * 添加到报价表
-     *
-     * @param
-     */
 
-    @action
-    public void update_offer(){
-        String sale_id, m_id,client_id;
-
-        try{
-            sale_id= I("post.sale_id").toString();
-            m_id=I("post.m_id").toString();
-            client_id=I("post.client_id").toString();
-        }
-        catch (Exception e){
-            // TODO: handle exception
-            error("参数提交错误");
-            return;
-        }
-        HashMap<String,String> res=new HashMap<>();
-        res.put("sale_id",sale_id);
-        res.put("m_id",m_id);
-        res.put("m_id",m_id);
-        try {
-            M("offer").add(res);
-            success("数据库更新成功");
-        } catch (Exception e) {
-            // TODO: handle exception
-            error("数据加载到数据库失败");
-
-        }
-    }
     /**
      * 添加到报价的产品表
      *
@@ -202,6 +207,14 @@ public void add_spare(){
     res.put("product_id",product_id);
     res.put("num",num);
     res.put("attr_id",attr_id);
+    try {
+        M("offer_product").add(res);
+        success("数据库更新成功");
+    } catch (Exception e) {
+        // TODO: handle exception
+        error("数据加载到数据库失败");
+
+    }
 }
 
 /**
@@ -218,6 +231,7 @@ public void add_spare(){
     for(int i=0;i<list.size();i++) {
         list.get(i).put("create_time", TimeUtil.stampToDate(list.get(i).get("create_time"), "yyyy年 MM月 dd日"));
     }
+    success(list);
     assign("list",JSON.toJSON(list));
     toHtml("");
 }
@@ -225,12 +239,13 @@ public void add_spare(){
     public void sear_client(){
     String page = I("page") == null ? "0" : I("page").toString();
     String limit = Integer.parseInt(page) * 10 + ",10";
-    String sesr_name = I("post.sesr_name") == null ? "" : I("post.sesr_name").toString();
-    String sql="select * from client where name like %" + sesr_name+"%  order by create_time desc limit" +limit;
+    String sear_name = I("post.sear_name") == null ? "" : I("post.sear_name").toString();
+    String sql="select * from client where name like '%" + sear_name+"%'  order by create_time desc limit " +limit;
     ArrayList<HashMap<String, String>> list = M("client").query(sql);
     for(int i=0;i<list.size();i++) {
         list.get(i).put("create_time", TimeUtil.stampToDate(list.get(i).get("create_time"), "yyyy年 MM月 dd日"));
     }
+    success(list);
     assign("list",JSON.toJSON(list));
 }
 
@@ -240,6 +255,28 @@ public void add_spare(){
     HashMap<String, String> map = M("client").where("id ="+id).find();
     success(map);
 }
+
+    /**
+     * 添加到报价表
+     *
+     * @param
+     */
+    @action
+    public void update(){
+        String client_id=I("client_id") == null ? "" : I("client_id").toString();
+        String id = I("id") == null ? "" : I("id").toString();
+        HashMap<String,Object> res=new HashMap<>();
+        res.put("client_id",client_id);
+        try {
+            M("offer").where("id="+id).save(res);
+            success("数据库更新成功");
+        } catch (Exception e) {
+            // TODO: handle exception
+            error("数据加载到数据库失败");
+
+        }
+    }
+
     /**
      * 选择备注图片
      *
@@ -250,24 +287,30 @@ public void add_spare(){
         String page = I("page") == null ? "0" : I("page").toString();
         String limit = Integer.parseInt(page) * 10 + ",10";
         String sql="select * from picture  order by create_time desc limit " + limit;
-        ArrayList<HashMap<String, String>> list = M("client").query(sql);
+        ArrayList<HashMap<String, String>> list = M("picture").query(sql);
         for(int i=0;i<list.size();i++) {
             list.get(i).put("create_time", TimeUtil.stampToDate(list.get(i).get("create_time"), "yyyy年 MM月 dd日"));
         }
+        success(list);
         assign("list",JSON.toJSON(list));
         toHtml("");
     }
-
+    /**
+     * 搜索备注图片
+     *
+     * @param
+     */
     @action
     public void sear_picture(){
         String page = I("page") == null ? "0" : I("page").toString();
         String limit = Integer.parseInt(page) * 10 + ",10";
-        String sesr_name = I("post.sesr_name") == null ? "" : I("post.sesr_name").toString();
-        String sql="select * from client where name like %" + sesr_name+"%  order by create_time desc limit" +limit;
-        ArrayList<HashMap<String, String>> list = M("client").query(sql);
+        String sear_name = I("post.sear_name") == null ? "" : I("post.sear_name").toString();
+        String sql="select * from picture where name like '%" + sear_name+"%'  order by create_time desc limit " +limit;
+        ArrayList<HashMap<String, String>> list = M("picture").query(sql);
         for(int i=0;i<list.size();i++) {
             list.get(i).put("create_time", TimeUtil.stampToDate(list.get(i).get("create_time"), "yyyy年 MM月 dd日"));
         }
+        success(list);
         assign("list",JSON.toJSON(list));
     }
 
@@ -303,6 +346,32 @@ public void upload_pic(){
     assign("res",JSON.toJSON(res));
 }
 
+
+    /**
+     * 添加到报价备注图片表
+     *
+     * @param
+     */
+    @action
+    public void add_pic(){
+        String offer_id = I("post.offer_id") == null ? "" : I("post.offer_id").toString();
+        String pic_id = I("post.pic_id") == null ? "" : I("post.pic_id").toString();
+        HashMap<String,String> res =new HashMap<>();
+        res.put("offer_id",offer_id);
+        res.put("pic_id",pic_id);
+        try {
+            M("offer_picture").add(res);
+            success("数据库更新成功");
+        } catch (Exception e) {
+
+            // TODO: handle exception
+            error("数据加载到数据库失败");
+        }
+
+
+    }
+
+
     /**
      * 删除备注图片
      *
@@ -312,7 +381,7 @@ public void upload_pic(){
     public void  remove_pic(){
     String id = I("id") == null ? "" : I("id").toString();
     try {
-        M("offer_picture").where("picture_id =" + id).delete();
+        M("offer_picture").where("pic_id =" + id).delete();
         success("删除成功");
     } catch (Exception e) {
         // TODO: handle exception
