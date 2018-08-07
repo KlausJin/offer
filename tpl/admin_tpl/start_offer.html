@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>后台系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- styles -->
+    <link href="/css/styles.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<style type="text/css">
+    .form-control{ padding: 0px 5px; height: 28px}
+    .brs{ width: 100px; display: inline; border-radius: 0px}
+    .btn_pro{ padding-bottom: 20px}
+</style>
+<%include("head.html"){}%>
+<div class="page-content">
+    <div class="row">
+        <%include("left.html"){}%>
+        <div class="col-md-10">
+            <div class="content-box-large">
+                <div class="panel-heading">
+                    <div class="panel-title">新建报价</div>
+                </div>
+
+                <div class="panel-body form-horizontal">
+                    <legend>报价产品</legend>
+                    <div class="row choose_type">
+                        <div class="col-md-3">
+                            <div class="form-group" style=" width: 200px; height: 60px;background-color: #95B8E7;"
+                                 align="center">从模板中选择
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group" style=" width: 200px; height: 60px;background-color: #95B8E7;"
+                                 align="center" onclick="new_offer()">+新建报价
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row btn_pro" style="display: none">
+                        <div class="col-md-10">
+                            <span class="btn_pro_list">
+                                </span>
+                        <button class="btn-default form-control brs" onclick="new_offer()">+添加产品</button>
+                        </div>
+                    </div>
+
+
+                        <legend>固定配件</legend>
+                    <div class="spare_list">
+                    <!--配件内容-->
+                    </div>
+
+                    <legend>常用配件</legend>
+
+                    <div class="s_spare_list">
+                        <!--配件内容-->
+                    </div>
+
+
+
+
+
+                    <h4>客户资料</h4>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group" style=" width: 200px; height: 60px;background-color: #95B8E7;"
+                                 align="center">从老客户选择
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div id="new" class="form-group"
+                                 style=" width: 200px; height: 60px;background-color: #95B8E7;"
+                                 align="center">+新建客户
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group" style=" width: 200px; height: 60px;background-color: #95B8E7;"
+                                 align="center">提交报价需求
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+
+        <!--<div class="copy text-center">-->
+        <!--Copyright 2014 <a href='#'>Website</a>-->
+        <!--</div>-->
+
+    </div>
+</footer>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="/js/jquery.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+
+
+<script>
+var list = [];
+var index = 0;
+    (function (_w, $) {
+
+        $.extend({
+            "open": function (html, cb) {
+                window.open(html, 'newwindow', 'height=400, width=600, top=300,left=600, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no');
+                _w['open_cb'] = cb;
+            },
+            "warn": function (msg) {
+                alert(msg)
+            },
+            "getdata": function (a, b, c) {
+                $.getJSON(a, b, function (res) {
+                    if (res.code == "success") {
+                        c(res.data)
+                    } else {
+                        $.warn(res.msg)
+                    }
+                })
+            }
+
+
+        })
+
+
+        _w['Attr'] = function (data) {
+            this.data = data;
+            this.getHtml = function() {
+                var atts = this.data.f_attrBeans;
+                var s = '<div class="form-group">\n' +
+                    '                <label class="col-md-2 control-label" for="text-field">'+this.data.name+'</label>\n' +
+                    '            <div class="col-md-3">';
+
+                if(atts.length==1){
+                    var name = atts[0].name || this.data.name;
+                    s+='<label class="col-md-10 control-label" style="text-align: left">'+name+'</label>'
+                }else{
+                    s+='<select class="form-control">'
+                    for(var i=0;i<atts.length;i++){
+
+                        s+='<option value="">'+atts[i].name+'</option>'
+                    }
+                    s+='</select>'
+                }
+
+                s+=' </div>\n' +
+                    '                </div>';
+                return s;
+
+
+            }
+
+
+        }
+
+        _w['Offer'] ={
+            "show_pro_btn":function () {
+                $(".choose_type").hide()
+                $(".btn_pro").show();
+            },
+            "add_pro_btn":function (data) {
+                var s = '<button id="pro_btn_'+index+'" onclick="switch_pro('+index+')" class="btn-primary btn-default form-control brs">'+data.code+'</button>';
+                $(".btn_pro").find(".btn_pro_list").find("button").removeClass("btn-primary")
+                $(".btn_pro").find(".btn_pro_list").append(s)
+                index++;
+            },
+            "show_spare":function (data,t) {
+                var spares = data.spareBeans,s='';
+                for(var i=0;i<spares.length;i++){
+                    s+='<h5>'+spares[i].name+'</h5>'
+                    s+='<div class="product_attr">';
+                    var attrBeans = spares[i].attrBeans;
+                    for(var j=0;j<attrBeans.length;j++){
+                        var attr = new Attr(attrBeans[j]);
+                        s+=attr.getHtml();
+                    }
+                    s+='</div>'
+                }
+                t.append(s)
+
+            },
+            "clear_product":function () {
+
+                $(".spare_list").html("")
+            }
+        }
+
+        _w['add_pro'] = function (data) {
+            Offer.show_pro_btn();
+            Offer.add_pro_btn(data);
+            Offer.clear_product();
+            Offer.show_spare(data,$(".spare_list"));
+        }
+
+        _w['switch_pro']=function (pos) {
+            if(pos==index-1) return;
+            else {
+                $(".btn_pro_list").find("button").removeClass("btn-primary")
+                Offer.clear_product();
+                index = pos+1;
+                Offer.show_spare(list[pos]);
+                $("#pro_btn_"+pos).addClass("btn-primary")
+            }
+        }
+
+
+
+
+
+    })(window, jQuery);
+
+    function new_offer() {
+        $.open('/v1/product/dialog_search', function (id) {
+            $.getdata("/v1/product/getProduct", {"id": id}, function (res) {
+                list.push(res)
+                add_pro(res)
+            })
+        })
+    }
+
+    function new_client(){
+        $.open('/v1/product/dialog_search_client')
+    }
+
+
+
+
+
+
+</script>
+</div>
+</body>
+</html>

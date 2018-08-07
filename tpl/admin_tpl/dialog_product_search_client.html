@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新建报价</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- styles -->
+    <link href="/css/styles.css" rel="stylesheet">
+
+</head>
+<body>
+<div>
+    <div class="form-group">
+        <div class="col-md-3" style="margin-top: 100px">
+            <input class="form-control" id="client" placeholder="请输入客户名称" type="text" list="clientlist" >
+            <datalist id="clientlist">
+            </datalist>
+        </div>
+
+        <button class="btn-block btn btn-primary" onclick="do_add()" style="width: 50%; margin-left: 25%; margin-top: 20px">添加</button>
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/custom.js"></script>
+<script>
+  var da;
+
+  function do_add() {
+      var v = $('#product').val();
+      for (var i = 0; i < da.length; i++) {
+         if(da[i].code==v){
+            var cb = window.opener['open_cb'];
+             cb(da[i].id)
+             window.close();
+             return;
+         }
+      }
+      alert("不存在该型号，无法添加")
+  }
+
+    $(function() {
+        $.getJSON("/v1/product/getProductInfo", {}, function (res) {
+            if (res.code == "success")
+               da = res.data, s = '';
+            for (var i = 0; i < da.length; i++) {
+                s += '<option id="' + da[i].id + '" value="' + da[i].code + '"></option>'
+            }
+            $("#productlist").html(s);
+
+        })
+
+
+    })
+</script>
+</div>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>后台系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- styles -->
+    <link href="/css/styles.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div>
+    <%include("head.html"){}%>
+    <div class="page-content">
+        <div class="row">
+            <%include("left.html"){}%>
+            <div class="col-md-10">
+                <div class="col-md-6">
+                    <div class="content-box-large">
+                        <div class="panel-heading">
+                            <div class="panel-title">新建报价</div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-3 control-label">
+                                    <label>报价模板:</label>
+                                </div>
+                                <div class="col-md-4 control-label">
+                                    <p id="modelnum">BJ20055656</p>
+                                </div>
+                                <div class="col-md-4 control-label">
+                                    <button id="rechose" type="button" class="form-group">重新选择</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 control-label">
+                                    <label>产品型号:</label>
+                                </div>
+                                <div class="col-md-2 control-label">
+                                    <div class="form-group"
+                                         style=" width: 50px; height: 20px;background-color: #95B8E7;"
+                                         align="center">YJ6567
+                                    </div>
+                                </div>
+                                <div class="col-md-2 control-label">
+                                    <div class="form-group"
+                                         style=" width: 50px; height: 20px;background-color: #95B8E7;"
+                                         align="center">YJ0605
+                                    </div>
+                                </div>
+                                <div class="col-md-2 control-label">
+                                    <div class="form-group"
+                                         style=" width: 50px; height: 20px;background-color: #95B8E7;"
+                                         align="center">YJ6565
+                                    </div>
+                                </div>
+                                <div class="col-md-2 control-label">
+                                    <button id="add_product" type="button" class="form-group btn btn-default" onclick="add_product()">
+                                        +添加产品
+                                    </button>
+                                </div>
+                            </div>
+                            <hr style="height:3px;border:none;border-top:3px double darkslategrey;"/>
+                            <div class="row">
+                                <div class="col-md-3 control-label">
+                                    <label>常用配件:</label>
+                                </div>
+                                <div class="col-md-3 control-label">
+                                    <label>常更换配件1:</label>
+                                    <input type="text" class="form-control" value=""/>
+                                </div>
+                                <div class="col-md-3 control-label">
+                                    <label>常更换配件2:</label>
+                                    <input type="text" class="form-control" value=""/>
+                                </div>
+                                <div class="col-md-3 control-label">
+                                    <button id="add_common_part" type="button" class="form-group"
+                                            onclick="add_common_part()">
+                                        +添加常用配件
+                                    </button>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-3 control-label">
+                                    <label>固定配件:</label>
+                                </div>
+                                <div class="col-md-3 control-label">
+                                    <label>固定配件1:</label>
+                                    <input type="text" class="form-control" value=""/>
+                                </div>
+                                <div class="col-md-3 control-label">
+                                    <label>固定配件2:</label>
+                                    <input type="text" class="form-control" value=""/>
+                                </div>
+                                <div class="col-md-3 control-label">
+                                    <button id="add_fixed_part" type="button" class="form-group"
+                                            onclick="add_fixed_part()">
+                                        +添加固定配件
+                                    </button>
+                                </div>
+                            </div>
+                            <hr style="height:3px;border:none;border-top:3px double darkslategrey;"/>
+                            <div class="row">
+                                <div class="col-md-3 control-label">
+                                    <label>产品数量:</label>
+                                </div>
+                                <div class="col-md-3 control-label">
+                                    <p id="product_num">5</p>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-3 control-label">
+                                    <label>客户资料:</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 control-label">
+                                    <div class="form-group"
+                                         style=" width: 200px; height: 60px;background-color: #95B8E7;"
+                                         align="center">从老客户选择
+                                    </div>
+                                </div>
+                                <div class="col-md-4 control-label">
+                                    <div id="new" class="form-group"
+                                         style=" width: 200px; height: 60px;background-color: #95B8E7;"
+                                         align="center">+新建客户
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="display: none">
+                                <div class="col-md-4 control-label" >
+                                    <div class="col-md-4 control-label"
+                                         style=" width: 100px; height: 100px;background-color: #95B8E7;">
+                                        <img src="/images/5-121204193R5-50.gif" id="company_logo"><br>
+                                    </div>
+                                </div>
+                            </div><br>
+                            <p id="company_name" style="display: none">无锡小云网络科技有限公司</p>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-4 control-label">
+                                    <label>备注图片:</label>
+                                </div>
+                                <div class="col-md-4 control-label"
+                                     style=" width: 100px; height: 100px;background-color: #95B8E7;">
+                                    <img src="/images/5-121204193R5-50.gif" id="remark"><br>
+                                </div>
+                            </div>
+                            <br><br>
+                            <div class="form-group">
+                                <div class="col-sm-offset-4 col-sm-10">
+                                    <button id="sub" type="submit" class="btn btn-primary">提交报价需求</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="js/jquery.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+
+<script>
+
+    function add_product() {
+        window.open("")
+    }
+
+</script>
+</div>
+</div>
+</div>
+</body>
+
+</html>

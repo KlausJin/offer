@@ -103,13 +103,18 @@ public class PartExcelModel extends Model {
             data.put("price", "-1");
             data.put("num", "-1");
             data.put("formula", "0");
-            data.put("relate_id", getRelateId(fname) + "");
+            data.put("relate_id", getRelateId(fname)== null ? "0" :getRelateId(fname).get("relate_id"));
             data.put("or_id", getOrId(spare_id,fname)== null ? "0" : getOrId(spare_id,fname).get("or_Id"));
             if(getOrId(spare_id,fname) !=null){
                 data.put("name",getOrId(spare_id,fname).get("name"));
+            }else if (getRelateId(fname) !=null){
+                data.put("name",getRelateId(fname).get("name"));
             }else{
                 data.put("name", fname);
             }
+
+
+
             try {
                 int parent_id = (int) attrModel.add(data);
                 getSubAttr(parent_id, 2, i, getNextFiledRowCount(1, i));
@@ -161,7 +166,7 @@ public class PartExcelModel extends Model {
     }
 
     public HashMap<String,String> getOrId(int spare_id, String fname){
-        HashMap map=new HashMap();
+        HashMap<String,String> map=new HashMap();
         if(fname.contains("{")){
             String a[]=fname.split("\\{");
             String newName=a[0];
@@ -178,19 +183,22 @@ public class PartExcelModel extends Model {
     }
 
 
-    int getRelateId(String fname){
-        int t=0;
+    public HashMap<String,String>  getRelateId(String fname){
+        HashMap<String,String> map=new HashMap();
         if(fname.contains("[")){
             String a[]=fname.split("\\[");
+            String newName=a[0];
             String b[]=a[1].split(",");
             String spare_name=b[0];
             String attr_name=b[1].substring(0,b[1].length()-1);
             String sql="select id from attr where name='"+attr_name+"' and spare_id=(select id from spare where name='"+spare_name+"' and product_id="+product_id+")";
             ArrayList<HashMap<String, String>> list = attrModel.query(sql);
             String x = list.get(0).get("id");
-            return  Integer.parseInt(x);
+            map.put("relate_id",x+"");
+            map.put("name",newName);
+            return  map;
         }else{
-            return 0;
+            return null;
         }
     }
 

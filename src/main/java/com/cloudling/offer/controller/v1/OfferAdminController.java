@@ -14,8 +14,8 @@ import java.util.HashMap;
  * @Date 2018-07-18  17:15
  * @Version 1.0
  **/
-public class OffersController extends Controller {
-    public OffersController(ControllerContext context) {
+public class OfferAdminController extends Controller {
+    public OfferAdminController(ControllerContext context) {
         super(context);
     }
 

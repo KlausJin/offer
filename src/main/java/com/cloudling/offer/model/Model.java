@@ -244,7 +244,7 @@ public class Model {
 		PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 
 		for(int j=0;j<values.size();j++){
-			pstmt.setString(j+1,(String) values.get(j));
+			pstmt.setString(j+1,values.get(j)+"");
 		}
 		pstmt.executeUpdate();
 		long autoInckey = -1;

@@ -26,4 +26,9 @@ public class PartController extends Controller {
     public void add_part() {
         toHtml("admin_tpl/add_part");
     }
+
+    @action
+    public void list(){
+        toHtml("admin_tpl/part_list");
+    }
 }

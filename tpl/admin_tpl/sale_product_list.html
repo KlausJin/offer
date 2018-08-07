@@ -23,18 +23,11 @@
         <div class="col-md-10">
             <div class="content-box-large">
                 <div class="panel-heading">
-                    <div class="panel-title">配件管理</div>
-                    <td class="fc-header-right"><span
-                            class="fc-button fc-button-month ui-state-default ui-corner-left ui-state-active"><span
-                            class="fc-button-inner"><span class="fc-button-content">month</span><span
-                            class="fc-button-effect"><span></span></span></span></span><span
-                            class="fc-button fc-button-basicWeek ui-state-default"><span class="fc-button-inner"><span
-                            class="fc-button-content">week</span><span
-                            class="fc-button-effect"><span></span></span></span></span><span
-                            class="fc-button fc-button-basicDay ui-state-default ui-corner-right"><span
-                            class="fc-button-inner"><span class="fc-button-content">day</span><span
-                            class="fc-button-effect"><span></span></span></span></span></td>
-
+                    <div class="panel-title">报价管理</div>
+                    <button id="startoffer" class="form-group" onclick="startoffer()">发起报价</button>
+                    <div class="col-sm-6">
+                        <input value="" type="text" class="form-control" id="search" name="search" placeholder="搜索客户或者报价编号" />
+                    </div>
                 </div>
 
                 <div class="panel-body">
@@ -43,9 +36,9 @@
                         <thead>
                         <tr>
                             <th>id</th>
-                            <th>代码</th>
-                            <th>表面</th>
-                            <th>表带</th>
+                            <th>客户</th>
+                            <th>报价时间</th>
+                            <th>状态</th>
                             <th>操作</th>
                         </tr>
                         </thead>
@@ -113,40 +106,27 @@
         current_page = s;
         tohtml();
     }
-
-    function del(id) {
-        $.getJSON("remove?id=" + id, {}, function (res) {
-            if (res.code == "success") {
-                alert("删除成功");
-                $("#tr_" + id).remove();
-            } else {
-                alert(res.msg);
-            }
-        })
+    
+    function startoffer() {
+        window.location.href="start_offer";
     }
 
-    function reset_pwd(id) {
-        window.location.href = "reset_pwd?id=" + id;
-    }
 
     var key;
 
-    function searchbyname() {
-        current_page = 0;
-        key = $("#search").val();
-        tohtml();
-    }
 
 
     function tohtml() {
-
+        $("#search").change(function () {
+            key=$("#search").val();
+        })
         var d = {"page": current_page}
 
         if (key) {
             d['key'] = key;
         }
 
-        $.getJSON("getAdminList", d, function (res) {
+        $.getJSON("getSaleProductList", d, function (res) {
             if (res.code == "success") {
                 var da = res.data, s = '', data = da['list'], num = da['num'], pi = "";
                 $("#example_info").html("共" + num + "条记录");
@@ -176,10 +156,10 @@
                     s += ' <tr class="odd gradeX" id="tr_' + data[i]['id'] + '">\n' +
                         '\t\t\t\t\t\t\t  <td>' + data[i]['id'] + '</td>\n' +
                         '\t\t\t\t\t\t\t  <td>' + data[i]['name'] + '</td>\n' +
-                        '\t\t\t\t\t\t\t  <td>' + data[i]['username'] + '</td>\n' +
-                        '\t\t\t\t\t\t\t  <td> ' + data[i]['last_login_time'] + '</td>' +
-                        '\t\t\t\t\t\t\t  <td class="center"> <button onclick="reset_pwd(' + data[i]['id'] + ')">重置密码</button>' +
-                        '									<button onclick="del(' + data[i]['id'] + ')">删除</button></td>' +
+                        '\t\t\t\t\t\t\t  <td>' + data[i]['create_time'] + '</td>\n' +
+                        '\t\t\t\t\t\t\t  <td> ' + data[i]['status'] + '</td>' +
+                        '\t\t\t\t\t\t\t  <td class="center"> <button onclick="detail(' + data[i]['id'] + ')">查看详情</button>'+
+                        '									<button onclick="edit(' + data[i]['id'] + ')">编辑</button></td>' +
                         '\t\t\t\t\t\t  </tr>'
                 }
                 $("#tlist").html(s);

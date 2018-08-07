@@ -5,4 +5,8 @@ public class Dictionary {
 	//一级分类
 	public static final String WATCH="W3";
 	public static final String CLOCK="C4";
+
+	//公司分类
+	public static final int YINGZI=1;
+	public static final int WANGSIKE=2;
 }
