@@ -54,7 +54,8 @@ public class ServerHandler extends AbstractHandler {
 				}else{
 					action.invoke(controllerInstance, null);
 					controllerInstance.destruct();
-				    
+
+
 				}
 				
 			}
