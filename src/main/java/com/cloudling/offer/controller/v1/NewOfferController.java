@@ -39,14 +39,23 @@ public class NewOfferController extends Controller {
     public void do_man_offer(){
     String id = I("id") == null ? "" : I("id").toString();
     HashMap<String, String> map = M("offer").where("id=" + id).find();
-    ArrayList<HashMap<String, String>> list = M("offer_product").where("offer_id=" + map.get("id")).select();
-    for (int i =0;i<list.size();i++) {
-        HashMap<String, String> map1 = M("product").where("id=" + list.get(i).get("product_id")).field("code").find();
+    ArrayList<HashMap<String, String>> list = M("offer_spare").where("offer_id=" + id).select();
+    ArrayList<HashMap<String,String>> res=new ArrayList<>();
+    for (int j=0;j<list.size();j++){
+        HashMap<String, String> map_spare = M("spare").where("id=" + list.get(j).get("spare_id")).field("name").find();
+        HashMap<String, String> map_attr = M("attr").where("id=" + list .get(j).get("attr_id")).find();
+        map_attr.put("spare_name",map_spare.get("name"));
+        res.add(map_attr);
     }
-    ArrayList<HashMap<String, String>> list1 = M("offer").where("offer_id=" + map.get("id")).select();
-    for (int j=0;j<list1.size();j++){
-        M("attr").where("id="+list1.get(j).get("attr_id")).field("name").find();
+    HashMap<String, String> map_client = M("client").where("id=" + map.get("client_id")).find();
+    res.add(map_client);
+    ArrayList<HashMap<String, String>> list_picture = M("offer_picture").where("offer_id=" + id).select();
+    for (int j=0;j<list_picture.size();j++){
+        HashMap<String, String> map_picture = M("picture").where("id=" + list_picture.get(j).get("pic_id")).find();
+        res.add(map_picture);
     }
+    assign("list",JSON.toJSON(res));
+    success(res);
 }
 
 

@@ -14,9 +14,10 @@ public class OfferBean extends Bean {
 
 
     @required
-    public String sale_id,man_id,status;
-
-
+    int sale_id;
+    int m_id;
+    int status;
+    int client_id;
 
 
     public String requires;
@@ -24,6 +25,9 @@ public class OfferBean extends Bean {
     public String search_name;
     public String  search_pro;
     public String id;
+
+
+
 
 }
 

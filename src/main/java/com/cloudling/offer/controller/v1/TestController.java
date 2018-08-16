@@ -2,10 +2,13 @@ package com.cloudling.offer.controller.v1;
 
 import com.cloudling.offer.annotation.action;
 import com.cloudling.offer.bean.OfferBean;
+import com.cloudling.offer.bean.OfferProductBean;
 import com.cloudling.offer.bean.ProductBean;
 import com.cloudling.offer.exception.ParamsErrorException;
+import com.cloudling.offer.model.OfferProductModel;
 import com.cloudling.offer.model.PartModel;
 import com.cloudling.offer.model.ProductModel;
+import com.cloudling.offer.model.SpareModel;
 import com.cloudling.offer.server.Controller;
 import com.cloudling.offer.server.ControllerContext;
 import com.cloudling.offer.util.BeanUtil;
@@ -36,11 +39,11 @@ public class TestController extends Controller {
 
 
     @action
-    public void ttt(){
+    public void ttt() {
         success("99999");
     }
 
-    @action
+/*    @action
     public void add_bean() {
 
         long t = TimeUtil.getLongTimeStamp();
@@ -52,11 +55,30 @@ public class TestController extends Controller {
 
         success(bean.getData());
 
+    }*/
+
+
+    @action
+    public void add_bean() {
+        OfferProductModel offerProductModel = new OfferProductModel();
+        success(offerProductModel.getBean("1"));
     }
+
+
+    @action
+    public void getproduct() {
+        String id = I("id") == null ? "" : I("id").toString();
+        ProductModel productModel =new ProductModel();
+        success(productModel.getBean(id).getData());
     }
 
+    public void getproduct1(){
+
+        SpareModel spareModel=new SpareModel();
 
 
+    }
+}
 
 
 

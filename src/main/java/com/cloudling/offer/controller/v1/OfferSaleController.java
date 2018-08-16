@@ -14,6 +14,7 @@ import jdk.nashorn.internal.parser.JSONParser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.WeakHashMap;
 
 public class OfferSaleController extends Controller {
 
@@ -95,52 +96,7 @@ public class OfferSaleController extends Controller {
 
 
 
-    /**
-     *固定配件
-     *
-     * @param
-     */
 
-
-    @action
-    public void fix_spare(){
-        String id = I("post.id") == null ? "" : I("post.id").toString();
-        ArrayList<HashMap<String, String>> list = M("spare").where("product_id =" + id).select();
-        for (int i =0; i<list.size();i++){
-            ArrayList<HashMap<String, String>> map = M("attr").where("spare_id =" + list.get(i).get("id")).select();
-            list.addAll(map);
-            for(int j=0;j<map.size();j++){
-                ArrayList<HashMap<String, String>> res = M("attr").where("parent_id =" + map.get(j).get("id")).select();
-                list.addAll(res);
-            }
-            }
-            success(list);
-            assign("list",JSON.toJSON(list));
-            toHtml("");
-
-    }
-    /**
-     * 常用配件
-     *
-     *
-     * @param
-     */
-    @action
-    public void com_spare(){
-        String cat_id = I("post.cat_id") == null ? "" : I("post.cat_id").toString();
-        ArrayList<HashMap<String, String>> list = M("spare").where("cat_id =" + cat_id +" and product_id="+0).select();
-        for (int i =0; i<list.size();i++) {
-            ArrayList<HashMap<String, String>> map = M("attr").where("spare_id =" + list.get(i).get("id")).select();
-            list.addAll(map);
-            for (int j = 0; j < map.size(); j++) {
-                ArrayList<HashMap<String, String>> res = M("attr").where("parent_id =" + map.get(j).get("id")).select();
-                list.addAll(res);
-            }
-        }
-        success(list);
-        assign("list",JSON.toJSON(list));
-        toHtml("");
-    }
     /**
      *增加配件
      *
@@ -149,6 +105,7 @@ public class OfferSaleController extends Controller {
 @action
 public void add_spare(){
     String offer_id = I("post.offer_id") == null ? "" : I("post.offer_id").toString();
+    String product_id = I("post.product_id") == null ? "" : I("post.product_id").toString();
     String spare_id = I("post.spare_id") == null ? "" : I("post.spare_id").toString();
     String attr_id = I("post.attr_id") == null ? "" : I("post.attr_id").toString();
     String num = I("post.num") == null ? "" : I("post.num").toString();
@@ -157,6 +114,7 @@ public void add_spare(){
     res.put("offer_id",offer_id);
     res.put("spare_id",spare_id);
     res.put("attr_id",attr_id);
+    res.put("product_id",product_id);
     if (isempty(num)){res.put("num",num);}
     if (isempty(spare_count)){res.put("spare_count",spare_count);}
 
@@ -224,9 +182,10 @@ public void add_spare(){
  */
 @action
     public void sel_client(){
+    String sale_id=I("sale_id") == null ? "" : I("sale_id").toString();
     String page = I("page") == null ? "0" : I("page").toString();
     String limit = Integer.parseInt(page) * 10 + ",10";
-    String sql="select * from client order by create_time desc limit " + limit;
+    String sql="select * from client where sale_id= "+sale_id+" order by create_time desc limit " + limit;
     ArrayList<HashMap<String, String>> list = M("client").query(sql);
     for(int i=0;i<list.size();i++) {
         list.get(i).put("create_time", TimeUtil.stampToDate(list.get(i).get("create_time"), "yyyy年 MM月 dd日"));
@@ -237,10 +196,11 @@ public void add_spare(){
 }
 @action
     public void sear_client(){
+    String sale_id=I("sale_id") == null ? "" : I("sale_id").toString();
     String page = I("page") == null ? "0" : I("page").toString();
     String limit = Integer.parseInt(page) * 10 + ",10";
     String sear_name = I("post.sear_name") == null ? "" : I("post.sear_name").toString();
-    String sql="select * from client where name like '%" + sear_name+"%'  order by create_time desc limit " +limit;
+    String sql="select * from client where name like '%" + sear_name+"%' and sale_id ="+sale_id+" order by create_time desc limit " +limit;
     ArrayList<HashMap<String, String>> list = M("client").query(sql);
     for(int i=0;i<list.size();i++) {
         list.get(i).put("create_time", TimeUtil.stampToDate(list.get(i).get("create_time"), "yyyy年 MM月 dd日"));
@@ -264,9 +224,11 @@ public void add_spare(){
     @action
     public void update(){
         String client_id=I("client_id") == null ? "" : I("client_id").toString();
+        String way = I("post.way") == null ? "" : I("post.way").toString();
         String id = I("id") == null ? "" : I("id").toString();
         HashMap<String,Object> res=new HashMap<>();
         res.put("client_id",client_id);
+        res.put("way",way);
         try {
             M("offer").where("id="+id).save(res);
             success("数据库更新成功");

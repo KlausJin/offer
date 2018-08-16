@@ -1,5 +1,7 @@
 package com.cloudling.offer.model;
 
+import com.cloudling.offer.bean.OfferProductBean;
+import com.cloudling.offer.bean.OfferSpareBean;
 import com.cloudling.offer.bean.ProductBean;
 import com.cloudling.offer.bean.SpareBean;
 
@@ -76,4 +78,21 @@ public ProductBean getBean_real(String id){
      else{    return bean;}
 
 }
+
+    /**
+     * @Description:根据产品id获取产品（实时配件)
+     * @param: 产品id
+     * @return:
+     * @auther: CodyLongo
+     * @modified:
+     */
+public ArrayList<HashMap<String,String>> getProductByProductId(String product_id){
+   OfferSpareModel offerSpareModel =new OfferSpareModel();
+    ArrayList<HashMap<String,String>> list= where("id="+product_id).select();
+    for (int i=0;i<list.size();i++){
+        offerSpareModel.getSpareBean(list.get(i).get("id"));
+    }
+    return list;
+}
+
 }
