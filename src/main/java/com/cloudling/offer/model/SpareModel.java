@@ -68,11 +68,12 @@ public class SpareModel extends Model {
      * @return:
      * @auther: CodyLongo
      * @modified:
+     * @param cat_id
      */
-    public List<SpareBean> getBeansByProductId_real(String product_id){
+    public List<SpareBean> getBeansByCat_id_real(String cat_id){
 
         List<SpareBean> list =new ArrayList<>();
-        ArrayList<HashMap<String, String>> map = getSparesByProductId_real(product_id);
+        ArrayList<HashMap<String, String>> map = getSparesByProductId_real(cat_id);
         for (int i=0;i<map.size();i++){
             HashMap<String,String> res =map.get(i);
             SpareBean bean =new SpareBean( res);
@@ -81,9 +82,9 @@ public class SpareModel extends Model {
         }
         return list;
     }
-    public ArrayList<HashMap<String, String>> getSparesByProductId_real(String product_id){
+    public ArrayList<HashMap<String, String>> getSparesByProductId_real(String cat_id){
 
-        return where("product_id="+0).select();
+        return where("product_id="+0+" and cat_id="+cat_id).select();
     }
 
     /**

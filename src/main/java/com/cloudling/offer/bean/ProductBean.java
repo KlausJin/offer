@@ -17,7 +17,7 @@ public class ProductBean extends Bean {
     public ProductBean(HashMap<String,String> data){
         super(data);
     }
-    public int cat_id;
+    public String cat_id;
     public String id;
 
     String code;

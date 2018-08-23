@@ -47,6 +47,7 @@ public class NewOfferController extends Controller {
         map_attr.put("spare_name",map_spare.get("name"));
         res.add(map_attr);
     }
+
     HashMap<String, String> map_client = M("client").where("id=" + map.get("client_id")).find();
     res.add(map_client);
     ArrayList<HashMap<String, String>> list_picture = M("offer_picture").where("offer_id=" + id).select();

@@ -72,7 +72,7 @@ public ProductBean getBean_real(String id){
     HashMap<String, String> map = where("id=" + id).find();
     ProductBean bean = new ProductBean(map);
 
-    bean.spareBeans = new SpareModel().getBeansByProductId_real(bean.id);
+    bean.spareBeans = new SpareModel().getBeansByCat_id_real(bean.cat_id);
 
      if ( map ==null){ return null; }
      else{    return bean;}

@@ -22,23 +22,46 @@ public class OfferMangerController extends Controller {
     public void do_man_offer(){
         String id = I("id") == null ? "" : I("id").toString();
         HashMap<String, String> map = M("offer").where("id=" + id).find();
-        ArrayList<HashMap<String, String>> list = M("offer_spare").where("offer_id=" + id).select();
+        ArrayList<HashMap<String, String>> list = M("offer_attr").where("offer_id=" + id).select();
+        HashMap<String, String> map_product = M("offer_product").where("offer_id=" + id).find();
+        HashMap<String, String> map_cat = M("product").where("id=" + map_product.get("product_id")).find();
         ArrayList<HashMap<String,String>> res=new ArrayList<>();
-        for (int j=0;j<list.size();j++){
-            HashMap<String, String> map_spare = M("spare").where("id=" + list.get(j).get("spare_id")).field("name").find();
-            HashMap<String, String> map_attr = M("attr").where("id=" + list .get(j).get("attr_id")).find();
-            map_attr.put("spare_name",map_spare.get("name"));
-            res.add(map_attr);
+        for(int i=0;i<list.size();i++){
+            HashMap<String, String> map_spare = M("attr").where("id=" + list.get(i).get("spare_id")).field("name").find();
+            HashMap<String, String> map_attr = M("attr").where("id=" + list.get(i).get("attr_id")).find();
+            if (map_cat.get("cat_id").equals("22")){
+                if (map_attr.get("price").equals("-2")){
+
+                    map_attr.put("price",null);
+                }
+                else{
+                    HashMap<String, String> map_code = M("attr").where("spare_id=" + map_attr.get("spare_id") + " and code=" + 01).field("price").find();
+                    if (map_attr.get("code")!="01" && map_attr.get("code")!="0"){
+                        double a = Double.parseDouble(map_attr.get("price"));
+                        double b = Double.parseDouble(map_code.get("price"));
+                       map_attr.put("price",a+b+"");
+                    }
+                }
+                map_attr.put("spare_name",map_spare.get("name"));
+                res.add(map_attr);
+
+
+            }
+            else if (map_cat.get("cat_id").equals("32")){
+                if (map_attr.get("price").equals("-2")){
+                    HashMap<String, String> map_material = M("material").where("name=" + map_attr.get("name")).find();
+                    map_attr.put("price",map_material.get("price"));
+                }
+
+                map_attr.put("spare_name",map_spare.get("name"));
+                res.add(map_attr);
+                res.add(list.get(i));
+            }
+
         }
-        HashMap<String, String> map_client = M("client").where("id=" + map.get("client_id")).find();
-        res.add(map_client);
-        ArrayList<HashMap<String, String>> list_picture = M("offer_picture").where("offer_id=" + id).select();
-        for (int j=0;j<list_picture.size();j++){
-            HashMap<String, String> map_picture = M("picture").where("id=" + list_picture.get(j).get("pic_id")).find();
-            res.add(map_picture);
-        }
-        assign("list",JSON.toJSON(res));
+
         success(res);
+        assign("list",JSON.toJSON(res));
     }
     /**
      * 保存价格
@@ -56,17 +79,33 @@ public class OfferMangerController extends Controller {
             // TODO: handle exception
             error("参数提交错误");
             return;
-
         }
+        String cat_id = I("cat_id") == null ? "" : I("cat_id").toString();
+        String name = I("name") == null ? "" : I("name").toString();
         HashMap<String,Object> res =new HashMap<>();
-        res.put("price",price);
-        try {
-            M("offer_spare").save(res);
-            success("数据库更新成功");
-        } catch (Exception e) {
-            // TODO: handle exception
-            error("数据加载到数据库失败");
+        if (cat_id.equals("22")){
+            res.put("price",price);
+            try {
+                M("offer_attr").save(res);
+                success("数据库更新成功");
+            } catch (Exception e) {
+                // TODO: handle exception
+                error("数据加载到数据库失败");
 
+            }
+        }
+        else if (cat_id.equals("32")){
+              res.put("price",price);
+                    res.put("price",price);
+            try {
+                M("offer_attr").save(res);
+                M("material").where("name ="+name).save(res);
+                success("数据库更新成功");
+            } catch (Exception e) {
+                // TODO: handle exception
+                error("数据加载到数据库失败");
+
+            }
         }
 
     }
@@ -161,6 +200,7 @@ public class OfferMangerController extends Controller {
      */
     @action
     public  void get_freight(){
+
         String id = I("id") == null ? "" : I("id").toString();
         String freight_id = I("post.freight_id") == null ? "" : I("post.freight_id").toString();
         String fre_num = I("post.fre_num") == null ? "" : I("post.fre_num").toString();
@@ -180,10 +220,17 @@ public class OfferMangerController extends Controller {
             error("数据加载到数据库失败");
         }
     }
+
+
+    /**
+     * 成本6
+     *
+     * @param
+     */
     @action
     public void offer_price(){
         String id = I("id") == null ? "" : I("id").toString();
-        String assemble = I("post.assemble") == null ? "" : I("post.assemble").toString();
+     //   String assemble = I("post.assemble") == null ? "" : I("post.assemble").toString();//装配工资
         HashMap<String, String> map = M("offer").where("id=" + id).find();
         ArrayList<HashMap<String, String>> list = M("offer_spare").where("offer_id=" + id).select();
         ArrayList<HashMap<String,String>> res=new ArrayList<>();
@@ -191,24 +238,27 @@ public class OfferMangerController extends Controller {
             HashMap<String, String> map_spare = M("spare").where("id=" + list.get(i).get("spare_id")).field("name").find();
             HashMap<String, String> map_attr = M("attr").where("id=" + list .get(i).get("attr_id")).find();
             String map_price = list.get(i).get("price");
+            String attr_num=list.get(i).get("num");
             map_attr.put("attr_price",map_price);
             map_attr.put("spare_name",map_spare.get("name"));
+            map_attr.put("attr_num",attr_num);
             res.add(map_attr);
         }
         int spare_total=0;
-      for (int j=0;j<res.size();j++){
-       int price=Integer.parseInt(res.get(j).get("price"));
-       int attr_price=Integer.parseInt(res.get(1).get("price"));
-       if (res.get(j).get("formul").equals("0")){int attr_total=1; spare_total+=attr_total;}
+        for (int j=0;j<res.size();j++){
+       int attr_num=Integer.parseInt(res.get(j).get("attr_num"));
+       int attr_price=Integer.parseInt(res.get(1).get("attr_price"));
+
+       if (res.get(j).get("formul").equals("0")){int attr_total=attr_price; spare_total+=attr_total;}
        if (res.get(j).get("formul").equals("1")){int attr_total=1; spare_total+=attr_total;}
        if (res.get(j).get("formul").equals("3")){int attr_total=1; spare_total+=attr_total;}
        if (res.get(j).get("formul").equals("4")){int attr_total=1; spare_total+=attr_total;}
        if (res.get(j).get("formul").equals("5")){int attr_total=1; spare_total+=attr_total;}
-       if (res.get(j).get("formul").equals("6")){int attr_total=1; spare_total+=attr_total;}
-       if (res.get(j).get("formul").equals("7")){int attr_total=1; spare_total+=attr_total;}
-
+       if (res.get(j).get("formul").equals("6")){int attr_total=attr_num*attr_price; spare_total+=attr_total;}
+       if (res.get(j).get("formul").equals("7")){int attr_total=attr_price/attr_num; spare_total+=attr_total;}
+       if (res.get(j).get("formul").equals("8")){spare_total=spare_total;}
 }
-   int product_total=spare_total+Integer.parseInt(assemble);
+        int product_total=spare_total;
         HashMap<String, String> map_freight = M("offer_freight").where("id=" + id).find();
         product_total=product_total+Integer.parseInt(map_freight.get("num"))*Integer.parseInt(map_freight.get("price"));
 

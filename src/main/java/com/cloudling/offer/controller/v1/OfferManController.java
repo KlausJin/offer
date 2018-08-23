@@ -83,6 +83,10 @@ public class OfferManController extends Controller {
 @action
     public void do_select(){
     String id = I("id") == null ? "" : I("id").toString();
+    ArrayList<HashMap<String, String>> list = M("offer").where("sale_id=" + id).select();
+    ArrayList<HashMap<String, String>> list1 = M("offer").where("client_id=" + id).select();
+
+
 
 
 }

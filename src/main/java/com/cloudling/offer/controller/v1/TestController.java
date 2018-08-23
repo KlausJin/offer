@@ -71,11 +71,11 @@ public class TestController extends Controller {
         ProductModel productModel =new ProductModel();
         success(productModel.getBean(id).getData());
     }
-
+@action
     public void getproduct1(){
-
-        SpareModel spareModel=new SpareModel();
-
+        String id = I("id") == null ? "" : I("id").toString();
+        ProductModel productModel =new ProductModel();
+        success(productModel.getBean_real(id).getData());
 
     }
 }
