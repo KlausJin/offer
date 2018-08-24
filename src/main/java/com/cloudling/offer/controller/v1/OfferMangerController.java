@@ -3,16 +3,71 @@ package com.cloudling.offer.controller.v1;
 import com.alibaba.fastjson.JSON;
 import com.cloudling.offer.annotation.action;
 import com.cloudling.offer.config.Config;
+import com.cloudling.offer.model.OfferModel;
 import com.cloudling.offer.server.Controller;
 import com.cloudling.offer.server.ControllerContext;
+import com.cloudling.offer.util.TimeUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class OfferMangerController extends Controller {
        public OfferMangerController(ControllerContext context) {
         super(context);
     }
+
+
+
+
+    @action
+    public void start_offer() {
+        toHtml("admin_tpl/start_offer");
+    }
+
+    @action
+    public void get_offer() {
+        try {
+            String offer_info = I("data").toString();
+            HashMap<String, Object> d = JSON.parseObject(offer_info, new HashMap<String, Object>().getClass());
+            String custom_id = d.get("custom_id").toString();
+            String sale_id = d.get("sale_id").toString();
+            int create_time = TimeUtil.getShortTimeStamp();
+            HashMap<String, String> data = new HashMap<>();
+            data.put("sale_id", sale_id);
+            data.put("client_id", custom_id);
+            data.put("create_time", create_time + "");
+            OfferModel om = new OfferModel();
+            long offer_id = om.add(data);
+            List<HashMap<String, Object>> products =
+                    (List<HashMap<String, Object>>) JSON.parseArray(d.get("products").toString(), new HashMap<String, Object>().getClass());
+            HashMap<String, String> numdata = new HashMap<>();
+            for (int i = 0; i < products.size(); i++) {
+                HashMap<String, Object> product = products.get(i);
+                String product_id = product.get("id").toString();
+                String product_num=product.get("product_num").toString();
+                numdata.put("offer_id",offer_id+"");
+                numdata.put("product_id",product_id);
+                numdata.put("num",product_num);
+                M("offer_product").add(numdata);
+                HashMap<String, String> res = new HashMap<>();
+                HashMap<String, String> attrs = JSON.parseObject(product.get("attrs").toString(), new HashMap<String, Object>().getClass());
+                for (String key : attrs.keySet()) {
+                    res.put("spare_id", key);
+                    res.put("attr_id", attrs.get(key));
+                    res.put("product_id", product_id);
+                    res.put("offer_id", offer_id + "");
+                    long t = M("offer_attr").add(res);
+                }
+            }
+            success("1");
+        } catch (Exception e) {
+            e.printStackTrace();
+            error("提交报价信息失败");
+        }
+
+    }
+
     /**
      * 产品属性渲染到模板
      *

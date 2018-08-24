@@ -60,6 +60,26 @@ public class ProductModel extends Model {
 }
     }
 
+
+
+
+    public ProductBean getBean1(String offer_id){
+       OfferProductModel offerProductModel=new OfferProductModel();
+
+        HashMap<String, String> res = offerProductModel.getProductByOfferId(offer_id);
+        HashMap<String, String> map= where("id="+res.get("product_id")).find();
+        ProductBean bean = new ProductBean(map);
+        bean.spareBeans = new SpareModel().getBeansByProductId1(bean.id,offer_id);
+
+        if (map == null){
+            return null;
+        }
+        else{
+
+            return bean;
+        }
+    }
+
 /**
  * @Description:根据产品id获取产品bean（实时配件)
  * @param: 产品id
@@ -78,6 +98,23 @@ public ProductBean getBean_real(String id){
      else{    return bean;}
 
 }
+
+
+
+
+
+
+    public ProductBean getBean_real1(String offer_id){
+        HashMap<String, String> map = where("id=" + offer_id).find();
+        ProductBean bean = new ProductBean(map);
+
+        bean.spareBeans = new SpareModel().getBeansByCat_id_real1(bean.cat_id,offer_id);
+
+        if ( map ==null){ return null; }
+        else{    return bean;}
+
+    }
+
 
     /**
      * @Description:根据产品id获取产品（实时配件)

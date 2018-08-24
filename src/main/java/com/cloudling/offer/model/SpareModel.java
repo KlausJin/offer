@@ -47,7 +47,19 @@ public class SpareModel extends Model {
         return list;
     }
 
+    public List<SpareBean> getBeansByProductId1(String product_id,String offer_id){
 
+        List<SpareBean> list =new ArrayList<>();
+        ArrayList<HashMap<String, String>> map = getSparesByProductId(product_id);
+        for (int i=0;i<map.size();i++){
+            HashMap<String,String> res =map.get(i);
+
+            SpareBean bean =new SpareBean( res);
+            bean.attrBeans= new AttrModel().getlistBySpareId1(bean.id,offer_id);
+            list.add(bean);
+        }
+        return list;
+    }
     /**
      * @Description:根据产品id获取所有的配件
      * @param:
@@ -78,6 +90,18 @@ public class SpareModel extends Model {
             HashMap<String,String> res =map.get(i);
             SpareBean bean =new SpareBean( res);
             bean.attrBeans= new AttrModel().getlistBySpareId(bean.id);
+            list.add(bean);
+        }
+        return list;
+    }
+    public List<SpareBean> getBeansByCat_id_real1(String cat_id,String offer_id){
+
+        List<SpareBean> list =new ArrayList<>();
+        ArrayList<HashMap<String, String>> map = getSparesByProductId_real(cat_id);
+        for (int i=0;i<map.size();i++){
+            HashMap<String,String> res =map.get(i);
+            SpareBean bean =new SpareBean( res);
+            bean.attrBeans= new AttrModel().getlistBySpareId1(bean.id,offer_id);
             list.add(bean);
         }
         return list;

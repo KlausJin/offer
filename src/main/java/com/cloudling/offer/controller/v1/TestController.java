@@ -58,11 +58,7 @@ public class TestController extends Controller {
     }*/
 
 
-    @action
-    public void add_bean() {
-        OfferProductModel offerProductModel = new OfferProductModel();
-        success(offerProductModel.getBean("1"));
-    }
+
 
 
     @action
@@ -77,6 +73,13 @@ public class TestController extends Controller {
         ProductModel productModel =new ProductModel();
         success(productModel.getBean_real(id).getData());
 
+    }
+
+    @action
+    public void getproduct2(){
+        String id = I("id") == null ? "" : I("id").toString();
+        ProductModel productModel =new ProductModel();
+        success(productModel.getBean1(id).getData());
     }
 }
 
