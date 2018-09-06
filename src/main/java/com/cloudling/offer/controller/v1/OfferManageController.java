@@ -2,6 +2,7 @@ package com.cloudling.offer.controller.v1;
 
 import com.alibaba.fastjson.JSON;
 import com.cloudling.offer.annotation.action;
+import com.cloudling.offer.model.ProductModel;
 import com.cloudling.offer.server.Controller;
 import com.cloudling.offer.server.ControllerContext;
 
@@ -26,6 +27,18 @@ public class OfferManageController extends AdminController {
     @action
     public void list(){
 
+    }
+
+    /**
+     * 产品属性渲染到模板(固定配件)
+     *
+     * @param
+     */
+    @action
+    public void getproduct(){
+        String id = I("id") == null ? "" : I("id").toString();
+        ProductModel productModel =new ProductModel();
+        success(productModel.getBean1(id).getData());
     }
 
 }

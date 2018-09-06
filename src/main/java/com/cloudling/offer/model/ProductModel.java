@@ -1,5 +1,6 @@
 package com.cloudling.offer.model;
 
+
 import com.cloudling.offer.bean.ProductBean;
 import com.cloudling.offer.bean.SpareBean;
 
@@ -16,7 +17,7 @@ import java.util.List;
 public class ProductModel extends Model {
 
 
-    public ProductModel() {
+    public ProductModel(){
         super("product");
     }
 
@@ -29,9 +30,9 @@ public class ProductModel extends Model {
      * @modified:
      */
 
-    public ArrayList<HashMap<String, String>> search(ProductBean productBean) {
+    public ArrayList<HashMap<String,String>> search(ProductBean productBean){
         String limit = 10 + ",10";
-        String sql = "select code,id from product where code  like %" + productBean.getCode() + "% limit " + limit;
+        String sql="select code,id from product where code  like %" + productBean.getCode()+ "% limit "+limit;
         ArrayList<HashMap<String, String>> list = query(sql);
         return list;
     }
@@ -43,18 +44,40 @@ public class ProductModel extends Model {
      * @auther: CodyLongo
      * @modified:
      */
-    public ProductBean getBean(String id) {
+    public ProductBean getBean(String id){
 
         HashMap<String, String> map = where("id=" + id).find();
         ProductBean bean = new ProductBean(map);
         bean.spareBeans = new SpareModel().getBeansByProductId(bean.id);
 
-        if (map == null) {
+        if (map == null){
             return null;
-        } else {
+        }
+        else{
+
             return bean;
         }
     }
+
+    public ProductBean getBean1(String offer_id){
+        OfferProductModel offerProductModel=new OfferProductModel();
+
+        HashMap<String, String> res = offerProductModel.getProductByOfferId(offer_id);
+        HashMap<String, String> map= where("id="+res.get("product_id")).find();
+        ProductBean bean = new ProductBean(map);
+        bean.spareBeans = new SpareModel().getBeansByProductId1(bean.id,offer_id);
+
+        if (map == null){
+            return null;
+        }
+        else{
+
+            return bean;
+        }
+    }
+
+
+
 
 
     /**
@@ -77,5 +100,37 @@ public class ProductModel extends Model {
     }
 
 
+
+
+
+
+    public ProductBean getBean_real1(String offer_id){
+        OfferProductModel offerProductModel=new OfferProductModel();
+
+        HashMap<String, String> res = offerProductModel.getProductByOfferId(offer_id);
+        HashMap<String, String> map= where("id="+res.get("product_id")).find();
+        ProductBean bean = new ProductBean(map);
+
+        bean.spareBeans = new SpareModel().getBeansByCat_id_real1(bean.cat_id,offer_id);
+
+        if ( map ==null){ return null; }
+        else{    return bean;}
+
+    }
+
+
+
+    /**
+     * @Description:根据产品id获取产品（实时配件)
+     * @param: 产品id
+     * @return:
+     * @auther: CodyLongo
+     * @modified:
+     */
+
+
+    public HashMap<String,String> getCatId(String product_id){
+        return where("id="+product_id).find();
+    }
 
 }
