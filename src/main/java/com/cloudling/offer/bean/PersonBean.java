@@ -16,8 +16,10 @@ public class PersonBean  extends Bean{
     }
 
     @required
-    public  String name,username,status,password,email,tel;
+    public  String yz_name,wsk_name,name,status,tel,follow_id;
 
     public int create_time,last_login_time;
+
+    public  String password,yz_email,wsk_email;
 
 }

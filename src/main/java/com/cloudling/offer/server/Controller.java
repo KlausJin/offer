@@ -31,7 +31,7 @@ public class Controller {
 	public Controller(ControllerContext context){
 		this.context = context;
 		assigns = new HashMap<>();
-		sessionID =context.request.getSession().getId();
+		sessionID =context.request.getSession().getId();//"1b8nnnh5ooibu1qui4csxgwd8";
 	}
 
 	protected void session(Object object) throws Exception {
@@ -167,7 +167,7 @@ public class Controller {
 	 * 如果要获取某个post的参数post.key
 	 * 如果要获取某个get的参数get.key
 	 * 如果要获取全部的get参数get.*
-	 * @param res
+	 * @param
 	 * @return
 	 */
 	protected boolean isempty(String  str){

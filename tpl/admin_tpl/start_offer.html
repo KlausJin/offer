@@ -17,9 +17,24 @@
 </head>
 <body>
 <style type="text/css">
-    .form-control{ padding: 0px 5px; height: 28px}
-    .brs{ width: 100px; display: inline; border-radius: 0px}
-    .btn_pro{ padding-bottom: 20px}
+    .form-control {
+        padding: 0px 5px;
+        height: 28px
+    }
+
+    .brs {
+        width: 100px;
+        display: inline;
+        border-radius: 0px
+    }
+
+    .btn_pro {
+        padding-bottom: 20px
+    }
+
+    /*.attr_diabled{ position: relative}*/
+    /*.attr_diabled:after{ content: ''; position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 99; background-color: #dedede; opacity: 0.6}*/
+
 </style>
 <%include("head.html"){}%>
 <div class="page-content">
@@ -48,39 +63,45 @@
                     <div class="row btn_pro" style="display: none">
                         <div class="col-md-10">
                             <span class="btn_pro_list">
-                                </span>
-                        <button class="btn-default form-control brs" onclick="new_offer()">+添加产品</button>
+                            </span>
+                            <button class="btn-default form-control brs" onclick="new_offer()">+添加产品</button>
                         </div>
+                        <br>
+                        <!--<div class="col-md-3">-->
+                            <!--<h5>产品数量</h5>-->
+                            <!--<input type="number" class="form-control" id="product_num">-->
+                        <!--</div>-->
                     </div>
 
 
-                        <legend>固定配件</legend>
+                    <legend>固定配件</legend>
                     <div class="spare_list">
-                    <!--配件内容-->
+                        <!--配件内容-->
                     </div>
 
                     <legend>常用配件</legend>
-
                     <div class="s_spare_list">
                         <!--配件内容-->
                     </div>
 
 
-
-
-
                     <h4>客户资料</h4>
-                    <div class="row">
+                    <div class="row client_choose_type">
                         <div class="col-md-3">
                             <div class="form-group" style=" width: 200px; height: 60px;background-color: #95B8E7;"
-                                 align="center">从老客户选择
+                                 align="center" onclick="search_client()">从客户模板中选择
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div id="new" class="form-group"
-                                 style=" width: 200px; height: 60px;background-color: #95B8E7;"
-                                 align="center">+新建客户
+                            <div class="form-group" style=" width: 200px; height: 60px;background-color: #95B8E7;"
+                                 align="center" onclick="new_client()">+新建客户
                             </div>
+                        </div>
+                    </div>
+                    <div class="row btn_cli" style="display: none">
+                        <div class="col-md-10">
+                            <span class="btn_cli_list">
+                            </span>
                         </div>
                     </div>
                     <br>
@@ -88,7 +109,8 @@
                     <br>
                     <div class="row">
                         <div class="col-md-3">
-                            <div class="form-group" style=" width: 200px; height: 60px;background-color: #95B8E7;"
+                            <div onclick="sub()" class="form-group"
+                                 style=" width: 200px; height: 60px;background-color: #95B8E7;"
                                  align="center">提交报价需求
                             </div>
                         </div>
@@ -116,8 +138,11 @@
 
 
 <script>
-var list = [];
-var index = 0;
+    var list = [];
+    var index = 0;
+    var custom_id = 0;
+    var products = [];
+    var oids = {};
     (function (_w, $) {
 
         $.extend({
@@ -137,33 +162,110 @@ var index = 0;
                     }
                 })
             }
-
-
         })
 
+        _w['rids'] = {};
+
+        _w['bindAttr']=function(){
+            $("select").each(function () {
+                var t = $(this),id = t.attr("data-id"),v=$(this).find("option:selected").attr("data-code");
+                var child_ids = rids[id] || [];
+                for(var i=0;i<child_ids.length;i++){
+                    var child_id = child_ids[i];
+                    if(child_id>0){
+                        var child = $("[data-id='"+child_id+"']");
+                        child.find("option").each(function () {
+                            var tt = $(this),code = tt.attr("data-code");
+                            if(code!=v){
+                                tt.hide();
+                            }
+                        })
+                    }
+                }
+                var or_id = oids[id] || 0;
+                if(or_id>0){
+
+                    var child1 = $("[data-id='"+or_id+"']");
+                    var child2 = $("[data-id='"+id+"']");
+                    child1.attr("data-or-id",id)
+                    child2.attr("data-or-id",or_id)
+                    child1.prepend('<option value="-1">不启用</option>')
+                    child2.prepend('<option value="-1">不启用</option>')
+                    child1.val(-1)
+                    child2.val(-1)
+                }
+
+            })
+
+            $("select").on("change",function () {
+                var t = $(this),id = t.attr("data-id"),v=$(this).find("option:selected").attr("data-code");
+                var child_ids = rids[id] || 0;
+                for (var i=0;i<child_ids.length;i++){
+                    var child_id = child_ids[i];
+                    if(child_id>0){
+
+                        var child = $("[data-id='"+child_id+"']");
+                        child.find("option").each(function () {
+                            var tt = $(this),code = tt.attr("data-code");
+                            if(code!=v){
+                                tt.hide();
+                            }else{
+                                child.val(tt.val())
+                                tt.show();
+                            }
+                        })
+                    }
+                }
+
+                var or_id = t.attr('data-or-id');
+                if(or_id>0){
+                    var v = t.val();
+                    if(v!=-1){
+                        $("[data-id='"+or_id+"']").val(-1);
+                    }
+                }
+
+            })
+        }
 
         _w['Attr'] = function (data) {
             this.data = data;
-            this.getHtml = function() {
+            this.getHtml = function () {
                 var atts = this.data.f_attrBeans;
                 var s = '<div class="form-group">\n' +
-                    '                <label class="col-md-2 control-label" for="text-field">'+this.data.name+'</label>\n' +
+                    '                <label class="col-md-2 control-label" for="text-field">' + this.data.name + '</label>\n' +
                     '            <div class="col-md-3">';
 
-                if(atts.length==1){
+                if (atts.length == 1) {
                     var name = atts[0].name || this.data.name;
-                    s+='<label class="col-md-10 control-label" style="text-align: left">'+name+'</label>'
-                }else{
-                    s+='<select class="form-control">'
-                    for(var i=0;i<atts.length;i++){
-
-                        s+='<option value="">'+atts[i].name+'</option>'
+                    if (atts[0].num == -2) {
+                        s += '<input placeholder="请输入' + name + '的数量" type="number" data-id="' + atts[0].id + '"  class="form-control input-num">'
+                    } else {
+                        s += '<label class="col-md-10 control-label" style="text-align: left">' + name + '</label>'
                     }
-                    s+='</select>'
+
+                } else {
+
+                    var relate_id = data['relate_id'] || 0;
+                    if(relate_id>0){
+                        rids[relate_id] = rids[relate_id] || []
+                        rids[relate_id].push(data['id']);
+                    }
+
+                    var or_id = data['or_id'] || 0;
+                    oids[or_id] = data['id'];
+                    s += '<select data-or-id="'+or_id+'" data-relate-id="'+relate_id+'" data-id="' + data["id"] + '" class="form-control ">'
+                    for (var i = 0; i < atts.length; i++) {
+
+                        s += '<option data-code="'+atts[i].code+'" value="' + atts[i].id + '">' + atts[i].name + '</option>'
+                    }
+                    s += '</select>'
                 }
 
-                s+=' </div>\n' +
+                s += ' </div>\n' +
                     '                </div>';
+
+
                 return s;
 
 
@@ -172,61 +274,207 @@ var index = 0;
 
         }
 
-        _w['Offer'] ={
-            "show_pro_btn":function () {
+        _w['Offer'] = {
+            "show_pro_btn": function () {
                 $(".choose_type").hide()
                 $(".btn_pro").show();
             },
-            "add_pro_btn":function (data) {
-                var s = '<button id="pro_btn_'+index+'" onclick="switch_pro('+index+')" class="btn-primary btn-default form-control brs">'+data.code+'</button>';
+            "add_pro_btn": function (data) {
+                var s = '<button id="pro_btn_' + index + '" onclick="switch_pro(' + index + ')" class="btn-primary btn-default form-control brs">' + data.code + '</button>';
                 $(".btn_pro").find(".btn_pro_list").find("button").removeClass("btn-primary")
                 $(".btn_pro").find(".btn_pro_list").append(s)
                 index++;
             },
-            "show_spare":function (data,t) {
-                var spares = data.spareBeans,s='';
-                for(var i=0;i<spares.length;i++){
-                    s+='<h5>'+spares[i].name+'</h5>'
-                    s+='<div class="product_attr">';
-                    var attrBeans = spares[i].attrBeans;
-                    for(var j=0;j<attrBeans.length;j++){
-                        var attr = new Attr(attrBeans[j]);
-                        s+=attr.getHtml();
+            "show_spare": function (data, t) {
+                var spares = data.spareBeans, s = '';
+                for (var i = 0; i < spares.length; i++) {
+                    if(spares[i].name == "生耳" || spares[i].name == "装配" || spares[i].name == "包装" ){
+                        continue;
                     }
-                    s+='</div>'
+                    s += '<h5>' + spares[i].name + '</h5>'
+                    s += '<div class="product_attr">';
+                    var attrBeans = spares[i].attrBeans;
+                    for (var j = 0; j < attrBeans.length; j++) {
+                        if(attrBeans[j].name == "注塑费" || attrBeans[j].name == "材质(g)" || attrBeans[j].name == "材质(g/cm)" ){
+                            continue;
+                        }
+                        var attr = new Attr(attrBeans[j]);
+                        s += attr.getHtml();
+                    }
+                    s += '</div>'
+                }
+                t.append(s)
+                bindAttr();
+
+            },
+            "show_common_spare": function (data, t) {
+                var spares = data.spareBeans, s = '';
+                for (var i = 0; i < spares.length; i++) {
+
+
+                    s += ' <label class="checkbox-inline"><input class="cs" data-id="' + spares[i].id + '" type="checkbox">'
+                        + spares[i].name + '</label>'
+                    s += '<div id="product_attr_' + spares[i].id + '" class="product_attr attr_diabled">';
+                    var attrBeans = spares[i].attrBeans;
+                    for (var j = 0; j < attrBeans.length; j++) {
+                        var attr = new Attr(attrBeans[j]);
+                        s += attr.getHtml();
+                    }
+                    s += '</div>'
                 }
                 t.append(s)
 
-            },
-            "clear_product":function () {
+                bindAttr();
 
+                t.find(".cs").each(function () {
+                    var tt = $(this), id = tt.attr("data-id");
+                    $("#product_attr_" + id).find("select").attr("disabled", "disabled")
+                })
+
+                t.find(".input-num").each(function () {
+                    var tt = $(this)
+                    tt.attr("disabled", true)
+                })
+
+                t.find(".cs").on("change", function () {
+
+                    var tt = $(this), id = tt.attr("data-id");
+
+
+                    if (tt[0].checked) {
+
+                        $("#product_attr_" + id).removeClass("attr_diabled")
+                        $("#product_attr_" + id).find(".input-num").attr("disabled", false)
+                        $("#product_attr_" + id).find("select").attr("disabled", false)
+                    } else {
+                        $("#product_attr_" + id).find(".input-num").attr("disabled", true)
+
+                        $("#product_attr_" + id).addClass("attr_diabled")
+                        $("#product_attr_" + id).find("select").attr("disabled", true)
+
+                    }
+                })
+            },
+            "clear_product": function () {
                 $(".spare_list").html("")
+            },
+            "clear_common_spare": function () {
+                $(".cs").each(function () {
+                    var tt = $(this), id = tt.attr("data-id");
+                    tt.attr('checked', false)
+                    tt[0].checked = false;
+                    $("#product_attr_" + id).find("select").attr("disabled", "disabled")
+                    $("#product_attr_" + id).find("select").val("")
+                })
+                $(".input-num").each(function () {
+                    var tt = $(this)
+                    tt.attr("disabled", true)
+                    tt.val("")
+                })
             }
         }
 
+
+        _w['Clienter'] = {
+            "show_cli_btn": function () {
+                $(".client_choose_type").hide();
+                $(".btn_cli").show();
+            },
+            "show_client": function (data) {
+                var s = '<span>' + data.name + '</span>';
+                $(".btn_cli").find(".btn_cli_list").append(s);
+            },
+            "change_cli": function () {
+            }
+        }
+
+
         _w['add_pro'] = function (data) {
+            if (index >= 1) {
+                getCurrentProduct()
+            }
+            products[index] = {};
+            products[index]['id'] = data.id;
+            products[index]['product_num']=100;
             Offer.show_pro_btn();
             Offer.add_pro_btn(data);
             Offer.clear_product();
-            Offer.show_spare(data,$(".spare_list"));
+            Offer.show_spare(data, $(".spare_list"));
+            Offer.clear_common_spare();
         }
 
-        _w['switch_pro']=function (pos) {
-            if(pos==index-1) return;
+        _w['add_common_spare'] = function (data) {
+            Offer.show_common_spare(data, $(".s_spare_list"));
+        }
+
+        _w['switch_pro'] = function (pos) {
+            if (pos == index - 1) return;
             else {
+                getCurrentProduct()
+                Offer.clear_common_spare();
                 $(".btn_pro_list").find("button").removeClass("btn-primary")
                 Offer.clear_product();
-                index = pos+1;
-                Offer.show_spare(list[pos]);
-                $("#pro_btn_"+pos).addClass("btn-primary")
+                index = pos + 1;
+
+                Offer.show_spare(list[pos], $(".spare_list"));
+                $("#pro_btn_" + pos).addClass("btn-primary")
+
+                var has_data = products[pos] || false;
+                if (has_data) {
+                    tohtml(has_data)
+                }
+
             }
         }
 
+        _w['search_cli'] = function (data) {
+            Clienter.show_cli_btn();
+            Clienter.show_client(data);
+        }
+    })
+    (window, jQuery);
 
 
+    function tohtml(data) {
+        var pos = index - 1;
+        var product = products[pos] || false;
+        var attrs = product['attrs']
 
 
-    })(window, jQuery);
+        $("select").each(function () {
+
+            var t = $(this), attr_id = t.attr("data-id");
+            var v = attrs[attr_id] || false;
+            if (v) {
+                t.attr("disabled", false)
+                t.val(v)
+            } else {
+                t.attr("disabled", true)
+            }
+
+        })
+        //
+        $(".cs").each(function () {
+            var t = $(this), attr_id = t.attr("data-id");
+            var v = attrs[attr_id] || false;
+            if (v) {
+                t.attr('checked', true)
+                t[0].checked = true;
+            }
+
+        })
+        //
+        $(".input-num").each(function () {
+            var t = $(this), attr_id = t.attr("data-id");
+            var v = attrs[attr_id] || false;
+            if (v) {
+                t.attr("disabled", false)
+                t.val(v)
+            } else {
+                t.attr("disabled", true)
+            }
+        })
+    }
 
     function new_offer() {
         $.open('/v1/product/dialog_search', function (id) {
@@ -237,14 +485,94 @@ var index = 0;
         })
     }
 
-    function new_client(){
-        $.open('/v1/product/dialog_search_client')
+    function search_client() {
+        $.open('/v1/product/dialog_search_client', function (id) {
+            $.getdata("/v1/product/getClient", {"id": id}, function (res) {
+                search_cli(res);
+                custom_id = id;
+            })
+        })
     }
 
 
+    function new_client() {
+        $.open('/v1/product/dialog_new_client', function (id) {
+            $.getdata("/v1/product/getClient", {"id": id}, function (res) {
+                search_cli(res);
+            })
+        })
+    }
+
+    $(function () {
+        $.getdata("/v1/product/getCommonSpare", {"id":${cat_id}}, function (res) {
+            add_common_spare(res);
+        })
 
 
+    })
 
+    function getCurrentProduct() {
+        var pos = index - 1;
+        var product = products[pos] || false;
+        if (!product) {
+            return false;
+        }
+        products[pos]["attrs"] = {};
+
+        $("select").each(function () {
+
+            var t = $(this), attr_id = t.attr("data-id"), v = t.val();
+            if (!t.attr("disabled"))
+                products[pos]["attrs"][attr_id] = v;
+        })
+
+        $(".cs").each(function () {
+            var t = $(this), attr_id = t.attr("data-id");
+            if (t[0].checked) {
+                products[pos]["attrs"][attr_id] = t.val();
+            }
+        })
+
+        $(".input-num").each(function () {
+            var t = $(this), attr_id = t.attr("data-id");
+            if (!t.attr("disabled")) {
+                products[pos]["attrs"][attr_id] = t.val();
+            }
+        })
+
+        return true;
+
+
+    }
+
+
+    function sub() {
+        var data = {};
+
+
+        if (custom_id == 0) {
+            $.warn("请先选择客户")
+            return;
+        }
+
+        if (!getCurrentProduct()) {
+            $.warn("请先添加商品")
+            return;
+        }
+        data['products'] = products;
+        data['custom_id'] = custom_id;
+        data['sale_id']=${id};
+        console.log(JSON.stringify(data))
+        $.post("/v1/offerSale/get_offer",{"data":JSON.stringify(data)},function (res) {
+            var ret=JSON.parse(res);
+            if(ret.code  == "success"){
+                alert("提交报价信息成功")
+                window.location.href="list";
+            }else{
+                alert(ret.msg);
+            }
+        })
+    }
 
 </script>
 </div>

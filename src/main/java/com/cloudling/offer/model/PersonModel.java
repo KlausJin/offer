@@ -1,6 +1,7 @@
 package com.cloudling.offer.model;
 
 import com.cloudling.offer.bean.PersonBean;
+import com.cloudling.offer.config.Dictionary;
 import com.cloudling.offer.util.Md5Util;
 import com.cloudling.offer.util.TimeUtil;
 
@@ -21,7 +22,7 @@ public class PersonModel extends Model {
 
     public void add_person(PersonBean bean) throws Exception {
         bean.create_time = TimeUtil.getShortTimeStamp();
-        bean.password=Md5Util.MD5(bean.password);
+        bean.password=Md5Util.MD5(Dictionary.ORIGINALPWD);
         add(bean);
     }
 
@@ -58,6 +59,9 @@ public class PersonModel extends Model {
     {
         return select();
     }
+
+
+
 
 
 }

@@ -20,8 +20,14 @@
                 </div>
             </div>
             <div class="col-md-5" align="right">
-                <p><h4 style="color: white">欢迎您:</h4></p>
+                <p><h4 style="color: white">欢迎您:${user},${role} <button onclick="exit()" class="btn btn-info" style="color: black">退出登录</button></h4></p>
             </div>
         </div>
     </div>
 </div>
+<script>
+    var id=${id}
+    function exit() {
+        window.location.href="/v1/loginOut/exit?id="+id;
+    }
+</script>

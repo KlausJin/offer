@@ -153,18 +153,15 @@ public class PartExcelModel extends Model {
             data.put("spare_id", "0");
             data.put("parent_id", parent_id + "");
             try {
-
                 attrModel.add(data);
-
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new ExcelImportException(e.getMessage());
             }
-
         }
 
     }
-
+    //并列 只能选一个
     public HashMap<String,String> getOrId(int spare_id, String fname){
         HashMap<String,String> map=new HashMap();
         if(fname.contains("{")){
@@ -182,15 +179,15 @@ public class PartExcelModel extends Model {
         }
     }
 
-
+    //关联
     public HashMap<String,String>  getRelateId(String fname){
         HashMap<String,String> map=new HashMap();
         if(fname.contains("[")){
             String a[]=fname.split("\\[");
             String newName=a[0];
-            String b[]=a[1].split(",");
-            String spare_name=b[0];
-            String attr_name=b[1].substring(0,b[1].length()-1);
+            String b[]=a[1].replace("，",",").split(",");
+            String spare_name = b[0];
+            String attr_name = b[1].substring(0, b[1].length() - 1);
             String sql="select id from attr where name='"+attr_name+"' and spare_id=(select id from spare where name='"+spare_name+"' and product_id="+product_id+")";
             ArrayList<HashMap<String, String>> list = attrModel.query(sql);
             String x = list.get(0).get("id");
@@ -209,6 +206,9 @@ public class PartExcelModel extends Model {
             String filed = row.getCell(0) == null ? "" : row.getCell(0).toString();
             if (!"".equals(filed) && PRODUCT_CODE.equals(filed.toString())) {
                 product_code = row.getCell(1).toString();
+                if(product_code.contains(".")){
+                    product_code=product_code.split(".")[0];
+                }
             }
             if (!"".equals(filed) && PRODUCT_PRICE.equals(filed.toString())) {
                 product_price = row.getCell(1).toString();

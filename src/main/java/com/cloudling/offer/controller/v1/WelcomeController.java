@@ -10,7 +10,7 @@ import com.cloudling.offer.server.ControllerContext;
  * @Date 2018-08-06  10:22
  * @Version 1.0
  **/
-public class WelcomeController extends Controller {
+public class WelcomeController extends AdminController {
     public WelcomeController(ControllerContext context) {
         super(context);
     }

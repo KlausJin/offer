@@ -36,9 +36,6 @@ public class SetupController extends AdminController{
         }
     }
 
-    public void exit(){
-        redirect("/v1/access/login");
-    }
 
 
 }

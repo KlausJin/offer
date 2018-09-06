@@ -17,7 +17,7 @@ import java.util.*;
  * @Date 2018-07-18  12:15
  * @Version 1.0
  **/
-public class PartController extends Controller {
+public class PartController extends AdminController {
     public PartController(ControllerContext context) {
         super(context);
     }

@@ -23,13 +23,13 @@
         <div class="col-md-10">
             <div class="content-box-large">
                 <div class="panel-heading">
-                    <div class="panel-title">管理员管理</div>
+                    <div class="panel-title">客户管理</div>
                     <div>
                         <div class="col-sm-3">
-                            <input value="" type="text" class="form-control" id="search" name="search" placeholder="">
+                            <input value="" type="text" class="form-control" id="searchbyname" name="searchbyname" placeholder="按客户名称查询">
                         </div>
-                        <button id="searchbyname" type="button" class="btn btn-primary" onclick="searchbyname()">
-                            按姓名查询
+                        <button id="search" type="button" class="btn btn-primary" onclick="search()">
+                            查询
                         </button>
                     </div>
                 </div>
@@ -40,13 +40,11 @@
                         <thead>
                         <tr>
                             <th>id</th>
-                            <th>姓名</th>
-                            <th>yz_name</th>
-                            <th>wsk_name</th>
-                            <th>yz_email</th>
-                            <th>wsk_email</th>
-                            <th>联系方式</th>
-                            <th>上次登录时间</th>
+                            <th>客户名称</th>
+                            <th>客户所在地区</th>
+                            <th>客户来源</th>
+                            <th>业务员</th>
+                            <th>客户创建时间</th>
                             <th>操作</th>
                         </tr>
                         </thead>
@@ -116,7 +114,7 @@
     }
 
     function del(id) {
-        if(window.confirm("确认要删除该员工吗？")){
+        if(window.confirm("确认要删除该客户吗？")){
             $.getJSON("remove?id=" + id, {}, function (res) {
                 if (res.code == "success") {
                     alert("删除成功");
@@ -132,9 +130,9 @@
 
     var key;
 
-    function searchbyname() {
+    function search() {
         current_page = 0;
-        key = $("#search").val();
+        key = $("#searchbyname").val();
         tohtml();
     }
 
@@ -143,7 +141,7 @@
 
         var d = {"page": current_page}
         d['key'] = key;
-        $.getJSON("getAdminList", d, function (res) {
+        $.getJSON("getClientList", d, function (res) {
             if (res.code == "success") {
                 var da = res.data, s = '', data = da['list'], num = da['num'], pi = "";
                 $("#example_info").html("共" + num + "条记录");
@@ -174,12 +172,10 @@
                     s += ' <tr class="odd gradeX" id="tr_' + data[i]['id'] + '">\n' +
                         '\t\t\t\t\t\t\t  <td>' + data[i]['id'] + '</td>\n' +
                         '\t\t\t\t\t\t\t  <td>' + data[i]['name'] + '</td>\n' +
-                        '\t\t\t\t\t\t\t  <td>' + data[i]['yz_name'] + '</td>\n' +
-                        '\t\t\t\t\t\t\t  <td>' + data[i]['wsk_name'] + '</td>\n' +
-                        '\t\t\t\t\t\t\t  <td>' + data[i]['yz_email'] + '</td>\n' +
-                        '\t\t\t\t\t\t\t  <td>' + data[i]['wsk_email'] + '</td>\n' +
-                        '\t\t\t\t\t\t\t  <td>' + data[i]['tel'] + '</td>\n' +
-                        '\t\t\t\t\t\t\t  <td> ' + data[i]['last_login_time'] + '</td>' +
+                        '\t\t\t\t\t\t\t  <td>' + data[i]['area_name'] + '</td>\n' +
+                        '\t\t\t\t\t\t\t  <td>' + data[i]['client_from'] + '</td>\n' +
+                        '\t\t\t\t\t\t\t  <td>' + data[i]['sale_name'] + '</td>\n' +
+                        '\t\t\t\t\t\t\t  <td>' + data[i]['create_time'] + '</td>\n' +
                         '\t\t\t\t\t\t\t  <td class="center"><button onclick="del(' + data[i]['id'] + ')">删除</button></td>' +
                         '\t\t\t\t\t\t  </tr>'
                 }

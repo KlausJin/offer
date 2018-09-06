@@ -19,7 +19,7 @@ import java.util.HashMap;
  * @Date 2018-07-19  14:43
  * @Version 1.0
  **/
-public class PartCatController extends Controller {
+public class PartCatController extends AdminController {
     public PartCatController(ControllerContext context) {
         super(context);
     }

@@ -18,68 +18,73 @@ import java.util.HashMap;
  **/
 public class AdminController extends Controller {
 
-	public static final int NORMAL = 0;
-	public static final int ADMIN = 1;
-	public static final int MANAGER = 2;
-	public static final int SALESMAN = 3;
+    public static final int ADMIN = 1;
+    public static final int MANAGER = 2;
+    public static final int SALESMAN = 3;
+    public static final int FOLLOW = 4;
 
-	protected HashMap<String, String> user;
-	protected int admin_type = NORMAL;
+    protected HashMap<String, String> user;
+    protected int admin_type = FOLLOW;
 
-	@SuppressWarnings("unchecked")
-	public AdminController(ControllerContext context) {
-		super(context);
-		assign("controller", context.CONTROLLER);
-		HashMap<String, String> map = M("session").where("sessionid='" + sessionID + "'").find();
-		if (map == null) {
-			redirect("/v1/access/login");
-			pri = false;
-			return;
-		}
-		try {
-			user = JSON.parseObject(map.get("object"), new HashMap<>().getClass());
-			admin_type = Integer.parseInt(user.get("status"));
-			assign("admin_type", admin_type);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		assign("user", user.get("name"));
-		String role = "";
-		switch (admin_type) {
-		case 1:
-			role="管理员";break;
-		case 2:
-			role="经理";break;
-		case 3:
-			role="业务员";break;
-		default:
-			break;
-		}
-		assign("role", role);
-		setLog();
-	}
+    @SuppressWarnings("unchecked")
+    public AdminController(ControllerContext context) {
+        super(context);
+        assign("controller", context.CONTROLLER);
+        HashMap<String, String> map = M("session").where("sessionid='" + sessionID + "'").find();
+        if (map == null) {
+            redirect("/v1/access/login");
+            pri = false;
+            return;
+        }
+        try {
+            assign("id", map.get("id"));
+            user = JSON.parseObject(map.get("object"), new HashMap<>().getClass());
+            admin_type = Integer.parseInt(user.get("status"));
+            assign("admin_type", admin_type);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        assign("user", user.get("name"));
+        assign("id", user.get("id"));
+        String role = "";
+        switch (admin_type) {
+            case 1:
+                role = "管理员";
+                break;
+            case 2:
+                role = "经理";
+                break;
+            case 3:
+                role = "业务员";
+                break;
+            case 4:
+                role = "跟单员";
+                break;
+            default:
+                break;
+        }
+        assign("role", role);
+//        setLog();
+    }
 
-	public void setLog() {
-		new Thread() {
-			public void run() {
-				Model logModel = ModelUtil.getModel("log");
-				HashMap<String, String> res = new HashMap<>();
-				res.put("controller", context.CONTROLLER);
-				res.put("action", context.ACTION);
-				res.put("create_time", TimeUtil.getShortTimeStamp() + "");
-				res.put("type", "1");
-				res.put("uid", user.get("uid"));
-				res.put("getdata", JSON.toJSONString(context.GET));
-				res.put("postdata", JSON.toJSONString(context.POST));
-				try {
-					logModel.add(res);
-				} catch (Exception e) {
-					e.printStackTrace();
-					error("日志记录失败");
-				}
-			}
-		}.start();
-
-	}
+//    public void setLog() {
+//        new Thread() {
+//            public void run() {
+//                Model logModel = ModelUtil.getModel("log");
+//                HashMap<String, String> res = new HashMap<>();
+//                res.put("controller", context.CONTROLLER);
+//                res.put("action", context.ACTION);
+//                res.put("create_time", TimeUtil.getShortTimeStamp() + "");
+//                res.put("getdata", JSON.toJSONString(context.GET));
+//                res.put("postdata", JSON.toJSONString(context.POST));
+//                try {
+//                    logModel.add(res);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    error("日志记录失败");
+//                }
+//            }
+//        }.start();
+//    }
 
 }

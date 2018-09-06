@@ -25,14 +25,13 @@ public class AccessController extends Controller {
 		toHtml("admin_tpl/staff_login");
 	}
 
-	public  void test(String s){
 
-	}
+
 	@action
 	public void do_login() {
 		String username = I("post.user").toString();
 		String password = Md5Util.MD5(I("post.password").toString());
-		HashMap<String, String> map = M("person").where("username=" + username + " and password='" + password + "'").find();
+		HashMap<String, String> map = M("person").where("name='" + username + "' and password='" + password + "'").find();
 		if (map != null) {
 			try {
 				session(map);

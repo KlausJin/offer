@@ -1,12 +1,12 @@
 package com.cloudling.offer.controller.v1;
 
 import com.cloudling.offer.annotation.action;
-import com.cloudling.offer.model.PartCatModel;
-import com.cloudling.offer.model.PartExcelModel;
-import com.cloudling.offer.model.ProductModel;
+import com.cloudling.offer.config.Dictionary;
+import com.cloudling.offer.model.*;
 import com.cloudling.offer.server.Controller;
 import com.cloudling.offer.server.ControllerContext;
 import com.cloudling.offer.util.ExcelUtil;
+import com.cloudling.offer.util.StringUtil;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import java.io.File;
@@ -22,7 +22,7 @@ import java.util.List;
  * @Date 2018-07-19  9:30
  * @Version 1.0
  **/
-public class ProductController extends Controller {
+public class ProductController extends AdminController {
     public ProductController(ControllerContext context) {
         super(context);
     }
@@ -35,13 +35,22 @@ public class ProductController extends Controller {
 
     @action
     public void dialog_search() {
-
         toHtml("admin_tpl/dialog_product_search");
+    }
+
+    @action
+    public void dialog_search_s_spare() {
+        toHtml("admin_tpl/dialog_product_search_s_spare");
     }
 
     @action
     public void dialog_search_client() {
         toHtml("admin_tpl/dialog_product_search_client");
+    }
+
+    @action
+    public void dialog_new_client() {
+        toHtml("admin_tpl/dialog_product_new_client");
     }
 
     @action
@@ -61,12 +70,11 @@ public class ProductController extends Controller {
 
     @action
     public void add_product() {
-        toHtml("admin_tpl/add_product");
+        toHtml("admin_tpl/add_productByExcel");
     }
 
     @action
     public void do_add_product() {
-        PartCatModel pm = new PartCatModel();
         String url = I("url").toString();
         String cat_id = I("cat_id").toString();
         try {
@@ -100,12 +108,33 @@ public class ProductController extends Controller {
     }
 
     @action
+    public void getClientInfo() {
+        ClientModel cm = new ClientModel();
+        ArrayList<HashMap<String, String>> list = cm.field("id,name").where("sale_id=" + user.get("id")).select();
+        success(list);
+    }
+
+    @action
     public void getProduct() {
         String id = I("id") == null ? "0" : I("id").toString();
         ProductModel productModel = new ProductModel();
         success(productModel.getBean(id).getData());
-
     }
+
+    @action
+    public void getCommonSpare(){
+        String id = I("id") == null ? "" : I("id").toString();
+        PartCatModel pm =new PartCatModel();
+        success(pm.getBean_real(id).getData());
+    }
+
+    @action
+    public void getClient() {
+        String id = I("id") == null ? "0" : I("id").toString();
+        ClientModel cm = new ClientModel();
+        success(cm.where("id=" + id).find());
+    }
+
 
 
 }

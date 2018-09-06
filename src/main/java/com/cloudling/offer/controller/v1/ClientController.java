@@ -1,165 +1,205 @@
 package com.cloudling.offer.controller.v1;
 
-import com.alibaba.fastjson.JSON;
+
 import com.cloudling.offer.annotation.action;
-import com.cloudling.offer.server.Controller;
+
+import com.cloudling.offer.config.Dictionary;
+import com.cloudling.offer.model.ClientExcelModel;
+
+import com.cloudling.offer.model.ClientModel;
 import com.cloudling.offer.server.ControllerContext;
 import com.cloudling.offer.util.TimeUtil;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-public class ClientController extends Controller {
-
+/**
+ * @Description TODO
+ * @Author 小云网络jxl
+ * @Date 2018-08-28  12:52
+ * @Version 1.0
+ **/
+public class ClientController extends AdminController {
     public ClientController(ControllerContext context) {
         super(context);
     }
+
+
+    @action
+    public void list(){
+        toHtml("admin_tpl/client_list");
+    }
+
+
+    @action
+    public void getClientList(){
+        String page = I("page").toString();
+        String key = I("key") == null || I("key").equals("") ? "" : I("key").toString();
+        String limit = Integer.parseInt(page) * 10 + ",10";
+        HashMap<String, Object> res = new HashMap<>();
+        StringBuffer sb=new StringBuffer();
+        StringBuffer sb1=new StringBuffer();
+        if ("".equals(key)) {
+            String sql="select a.*,b.name as sale_name,c.name as client_from,d.area_name as area_name from client a left join person b on a.sale_id=b.id left join client_from c on a.client_from_id=c.id left join area d on a.area_id=d.id";
+            String sql1="select a.*,b.name as sale_name,c.name as client_from,d.area_name as area_name from client a left join person b on a.sale_id=b.id left join client_from c on a.client_from_id=c.id left join area d on a.area_id=d.id";
+            sb.append(sql);
+            sb1.append(sql1);
+            if(admin_type==Dictionary.SALESMAN){
+                sb.append(" where a.sale_id="+user.get("id"));
+                sb1.append(" where a.sale_id="+user.get("id"));
+            }else if(admin_type==Dictionary.FOLLOW){
+                sb.append(" where a.sale_id="+user.get("follow_id"));
+                sb1.append(" where a.sale_id="+user.get("follow_id"));
+            }
+            sb.append(" order by a.create_time desc limit "+limit);
+            ArrayList<HashMap<String, String>> list =M("client").query(sb.toString());
+            for (int i = 0; i < list.size(); i++) {
+                list.get(i).put("create_time",TimeUtil.stampToDate(list.get(i).get("create_time"),"yyyy-MM-dd HH:mm:ss"));
+            }
+            res.put("list", list);
+            res.put("num", M("client").query(sb1.toString()).size());
+        }else{
+            String sql="select a.*,b.name as sale_name,c.name as client_from,d.area_name as area_name from client a left join person b on a.sale_id=b.id left join client_from c on a.client_from_id=c.id left join area d on a.area_id=d.id  where a.name like '%"+key+"%'";
+            String sql1="select a.*,b.name as sale_name,c.name as client_from,d.area_name as area_name from client a left join person b on a.sale_id=b.id left join client_from c on a.client_from_id=c.id left join area d on a.area_id=d.id where a.name like '%"+key+"%'";
+            sb.append(sql);
+            sb1.append(sql1);
+            if(admin_type==Dictionary.SALESMAN){
+                sb.append(" and a.sale_id="+user.get("id"));
+                sb1.append(" and a.sale_id="+user.get("id"));
+            }else if(admin_type==Dictionary.FOLLOW){
+                sb.append(" and a.sale_id="+user.get("follow_id"));
+                sb1.append(" and a.sale_id="+user.get("follow_id"));
+            }
+            sb.append(" order by a.create_time desc limit "+limit);
+            ArrayList<HashMap<String, String>> list =M("client").query(sb.toString());
+            for (int i = 0; i < list.size(); i++) {
+                list.get(i).put("create_time",TimeUtil.stampToDate(list.get(i).get("create_time"),"yyyy-MM-dd HH:mm:ss"));
+            }
+            res.put("list", list);
+            res.put("num", M("client").query(sb1.toString()).size());
+        }
+        success(res);
+    }
+
     /**
-     * 增加客户
-     *
-     * @param
+     * @Description: 客户Excel模板导入
+     * @param:
+     * @return:
+     * @auther: CodyLongo
+     * @modified:
      */
     @action
-    public void add (){
-        toHtml("");
+    public void add_clientByExcel(){
+        toHtml("admin_tpl/add_clientByExcel");
     }
+
+    @action
+    public void do_add_excel(){
+        String url = I("url").toString();
+        ClientExcelModel cem=new ClientExcelModel(url);
+        try {
+            List<HashMap<String, String>> ls = cem.excelToClientList();
+            HashMap<String, String> data = new HashMap<>();
+            for (int i = 0; i < ls.size(); i++) {
+                ls.get(i).put("create_time",TimeUtil.getShortTimeStamp()+"");
+                String sale_name=ls.get(i).get("sale_id");
+                String client_from=ls.get(i).get("client_from_id");
+                String sale_id = M("person").field("id").where("name='"+sale_name+"'").find().get("id");
+                String client_from_id=M("client_from").field("id").where("name='"+client_from+"'").find().get("id");
+                ls.get(i).put("sale_id",sale_id);
+                ls.get(i).put("client_from_id",client_from_id);
+                data = ls.get(i);
+                long t=cem.add(data);
+            }
+            success("导入数据库成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            error("导入数据库失败");
+        }
+    }
+
+    @action
+    public void add(){
+        toHtml("admin_tpl/add_client");
+    }
+
     @action
     public void do_add(){
-        String name, logo;
-
+        String client_name=I("client_name").toString();
+        String client_area=I("client_area").toString();
+        String client_from=I("client_from").toString();
+        ClientModel cm=new ClientModel();
+        HashMap<String,String> data=new HashMap<>();
+        HashMap<String, String> cp = M("default_client_profit").where("status=" + Dictionary.COUNTRYTRADE).find();
+        HashMap<String, String> ep = M("default_client_profit").where("status="+Dictionary.FOREIGNTRADE).find();
         try{
-            name= I("post.name").toString();
-            logo=I("post.logo").toString();
+            if(client_area.equals(Dictionary.COUNTRYTRADE+"")){
+                data.put("watchle5k",cp.get("watchle5k"));
+                data.put("watch5k_10k",cp.get("watch5k_10k"));
+                data.put("watch10k_50k",cp.get("watch10k_50k"));
+                data.put("watch50k_100k",cp.get("watch50k_100k"));
+                data.put("clockle500",cp.get("clockle500"));
+                data.put("clock500_1k",cp.get("clock500_1k"));
+                data.put("clock1k_3k",cp.get("clock1k_3k"));
+                data.put("clock3k_5k",cp.get("clock3k_5k"));
+                data.put("clock5k_10k",cp.get("clock5k_10k"));
+                data.put("clock10k_20k",cp.get("clock10k_20k"));
+                data.put("clockme20k",cp.get("clockme20k"));
+            }else{
+                data.put("watchle5k",ep.get("watchle5k"));
+                data.put("watch5k_10k",ep.get("watch5k_10k"));
+                data.put("watch10k_50k",ep.get("watch10k_50k"));
+                data.put("watch50k_100k",ep.get("watch50k_100k"));
+                data.put("clockle500",ep.get("clockle500"));
+                data.put("clock500_1k",ep.get("clock500_1k"));
+                data.put("clock1k_3k",ep.get("clock1k_3k"));
+                data.put("clock3k_5k",ep.get("clock3k_5k"));
+                data.put("clock5k_10k",ep.get("clock5k_10k"));
+                data.put("clock10k_20k",ep.get("clock10k_20k"));
+                data.put("clockme20k",ep.get("clockme20k"));
+            }
+            data.put("name",client_name);
+            data.put("sale_id",user.get("id"));
+            data.put("client_from_id",client_from);
+            data.put("area_id",client_area);
+            data.put("create_time",TimeUtil.getShortTimeStamp()+"");
+            long t = cm.add(data);
+            if(t>0){
+                success("1");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            error("添加客户失败");
         }
-        catch (Exception e){
-            // TODO: handle exception
-            error("参数提交错误");
-            return;
 
-        }
-        String remark = I("post.remark") == null ? "0" : I("post.remark").toString();
-        HashMap<String, String> res = new HashMap<>();
-        res.put("name",name);
-        res.put("logo",logo);
-        if (isempty(remark)){res.put("remark",remark);}
+
+    }
+
+    @action
+    public void remove() {
         try {
-            M("client").add(res);
-            success("数据库更新成功");
+            String id = I("id").toString();
+            int t=M("client").where("id="+id).delete();
+            if (t>0)
+                success("1");
         } catch (Exception e) {
-            // TODO: handle exception
-            error("数据加载到数据库失败");
-
+            error("删除失败");
         }
-        assign("res",JSON.toJSON(res));
-
     }
-    /**
-     * 修改客户
-     *
-     * @param
-     */
+
+
+
     @action
-    public void  edit_client() {
-        String id = I("post.id") == null ? "" : I("post.id").toString();
-        String name = I("post.name") == null ? "" : I("post.name").toString();
-        String logo = I("post.logo") == null ? "" : I("post.logo").toString();
-
-        if (id.equals("")) {
-            error("id不能为空");
-            return;
-        }
-        HashMap<String, Object> res = new HashMap<>();
-        if (isempty(name)){res.put("name",name);}
-        if (isempty(logo)){res.put("logo",logo);}
-        try {
-            M("client").where("id=" + id).save(res);
-            success("数据库更新成功");
-        } catch (Exception e) {
-            // TODO: handle exception
-            error("参数修改错误");
-        }
-
-    }
-    /**
-     * 客户列表
-     *
-     * @param
-     */
-    @action
-    public void get_list(){
-        String page = I("page") == null ? "0" : I("page").toString();
-        String limit = Integer.parseInt(page) * 10 + ",10";
-        String sql="select * , (select count(*) from offer where offer.client_id=client.id) as count,(select max(create_time) from offer where offer.client_id=client.id) as max from client  limit "+limit;
-        ArrayList<HashMap<String, String>> list = M("client").query(sql);
-        for (int i =0;i<list.size();i++){
-            HashMap<String, String> map = list.get(i);
-            int count = Integer.parseInt(map.get("count"));
-            map.put("create_time", TimeUtil.stampToDate(map.get("create_time"), "yyyy-MM-dd HH:mm:ss"));
-        }
-        success(list);
-    }
-    /**
-     * 查看报价详情
-     *
-     * @param
-     */
-@action
-public void check_offer(){
-    String id = I("id") == null ? "0" : I("id").toString();
-    String sql="select * from offer where client_id="+id+" and create_time=(select max(create_time) from offer where client_id= "+id+") ";
-    ArrayList<HashMap<String, String>> list = M("offer").query(sql);
-    for (int i=0;i<list.size();i++){
-        ArrayList<HashMap<String, String>> map = M("offer_product").where("id =" + list.get(i).get("id")).select();
-        ArrayList<HashMap<String, String>> map1 = M("offer_spare").where("id=" + list.get(i).get("id")).select();
-        list.addAll(map);
-        list.addAll(map1);
-    }
-    success(list);
-}
-    /**
-     * 删除客户
-     *
-     * @param
-     */
-@action
-public void remove(){
-    String id = I("id") == null ? "0" : I("id").toString();
-    try {
-        M("client").where("id=" + id).delete();
-        success("删除成功");
-    } catch (Exception e) {
-        // TODO: handle exception
-        error("删除失败");
-
-    }
-}
-
-
-@action
-public void do_get_client(){
-    String page = I("page") == null ? "0" : I("page").toString();
-    String limit = Integer.parseInt(page) * 10 + ",10";
-    String client_name = I("post.client_name") == null ? "0" : I("post.client_name").toString();
-    String sql="select * from client where name like %" + client_name+"% limit " + limit;
-}
-    /**
-     * 搜索客户
-     *
-     * @param
-     */
-    @action
-    public void get_client(){
-        String page = I("page") == null ? "0" : I("page").toString();
-        String limit = Integer.parseInt(page) * 10 + ",10";
-        String client_name = I("post.client_name") == null ? "0" : I("post.client_name").toString();
-        String sql="select * , (select count(*) from offer where offer.client_id=client.id) as count,(select max(create_time) from offer where offer.client_id=client.id) as max from client where name like %" + client_name+"% limit " + limit;
-        ArrayList<HashMap<String, String>> list = M("client").query(sql);
-        for (int i =0;i<list.size();i++){
-            HashMap<String, String> map = list.get(i);
-            int count = Integer.parseInt(map.get("count"));
-            map.put("create_time", TimeUtil.stampToDate(map.get("create_time"), "yyyy-MM-dd HH:mm:ss"));
-        }
+    public void getClientFrom(){
+        ArrayList<HashMap<String, String>> list = M("client_from").field("id,name").select();
         success(list);
     }
 
+    @action
+    public void getArea(){
+        ArrayList<HashMap<String, String>> list = M("area").field("id,area_name").select();
+        success(list);
+    }
 }

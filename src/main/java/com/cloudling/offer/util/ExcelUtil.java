@@ -8,8 +8,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.InputStream;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,14 +26,11 @@ public class ExcelUtil {
     private final static String excel2007U = ".xlsx"; // 2007+ 版本的excel
 
     /**
-     * 将流中的Excel数据转成List<Map>
-     *
-     * @param in
-     *            输入流
-     * @param fileName
-     *            文件名（判断Excel版本）
-     * @return
-     * @throws Exception
+     * @Description: 遍历sheet
+     * @param:
+     * @return:
+     * @auther: CodyLongo
+     * @modified:
      */
     public static List<Sheet> getSheet(InputStream in, String fileName) throws Exception {
         // 根据文件名来创建Excel工作薄
@@ -59,12 +54,74 @@ public class ExcelUtil {
     }
 
 
+    /**
+     * 将流中的Excel数据转成List<Map>
+     *
+     * @param in       输入流
+     * @param fileName 文件名（判断Excel版本）
+     * @param mapping  字段名称映射
+     * @return
+     * @throws Exception
+     */
+    public static List<HashMap<String, String>> parseExcel(InputStream in, String fileName,
+                                                           Map<String, String> mapping) throws Exception {
+        // 根据文件名来创建Excel工作薄
+        Workbook work = getWorkbook(in, fileName);
+        if (null == work) {
+            throw new Exception("创建Excel工作薄为空！");
+        }
+        Sheet sheet = null;
+        Row row = null;
+        Cell cell = null;
+        // 返回数据
+        List<HashMap<String, String>> ls = new ArrayList<>();
+
+        // 遍历Excel中所有的sheet
+        for (int i = 0; i < work.getNumberOfSheets(); i++) {
+            sheet = work.getSheetAt(i);
+            if (sheet == null)
+                continue;
+
+            // 取第一行标题
+            row = sheet.getRow(0);
+            String title[] = null;
+            if (row != null) {
+                title = new String[row.getLastCellNum()];
+
+                for (int y = row.getFirstCellNum(); y < row.getLastCellNum(); y++) {
+                    cell = row.getCell(y);
+                    title[y] = cell.getStringCellValue();
+                }
+
+            } else
+                continue;
+            // 遍历当前sheet中的所有行
+            for (int j = 1; j < sheet.getLastRowNum()+1; j++) {
+                row = sheet.getRow(j);
+                HashMap<String, String> m = new HashMap<>();
+//                System.out.println(row.getFirstCellNum());
+//                System.out.println(row.getLastCellNum());
+//                System.out.println("测试1");
+                // 遍历所有的列
+                for (int y = row.getFirstCellNum(); y < row.getLastCellNum(); y++) {
+                    cell = row.getCell(y);//国内外贸   1
+                    String key = title[y];//地区  国家编号
+                    m.put(mapping.get(key), cell.toString());//(area_name,"国内外贸"),(country_id,"1")
+                }
+
+                ls.add(m);
+            }
+
+        }
+        work.close();
+        return ls;
+    }
+
 
     /**
      * 描述：根据文件后缀，自适应上传文件的版本
      *
-     * @param inStr
-     *            ,fileName
+     * @param inStr ,fileName
      * @return
      * @throws Exception
      */
@@ -81,51 +138,5 @@ public class ExcelUtil {
         return wb;
     }
 
-    /**
-     * 描述：对表格中数值进行格式化
-     *
-     * @param cell
-     * @return
-     */
-    public static Object getCellValue(Cell cell) {
-        Object value = null;
-        DecimalFormat df = new DecimalFormat("0"); // 格式化number String字符
-        SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd"); // 日期格式化
-        DecimalFormat df2 = new DecimalFormat("0"); // 格式化数字
 
-        switch (cell.getCellType()) {
-            case Cell.CELL_TYPE_STRING:
-                value = cell.getRichStringCellValue().getString();
-                break;
-            case Cell.CELL_TYPE_NUMERIC:
-                if ("General".equals(cell.getCellStyle().getDataFormatString())) {
-                    value = df.format(cell.getNumericCellValue());
-                } else if ("m/d/yy".equals(cell.getCellStyle().getDataFormatString())) {
-                    value = sdf.format(cell.getDateCellValue());
-                } else {
-                    value = df2.format(cell.getNumericCellValue());
-                }
-                break;
-            case Cell.CELL_TYPE_BOOLEAN:
-                value = cell.getBooleanCellValue();
-                break;
-            case Cell.CELL_TYPE_BLANK:
-                value = "";
-                break;
-            default:
-                break;
-        }
-        return value;
-    }
-
-//    public static void main(String[] args) throws Exception {
-//        File file = new File("D:\\studn.xls");
-//        FileInputStream fis = new FileInputStream(file);
-//        Map<String, String> m = new HashMap<String, String>();
-//        m.put("id", "id");
-//        m.put("姓名", "name");
-//        m.put("年龄", "age");
-//        List<Map<String, Object>> ls = parseExcel(fis, file.getName(), m);
-//        System.out.println(JSON.toJSONString(ls));
-//    }
 }

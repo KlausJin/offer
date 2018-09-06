@@ -39,27 +39,14 @@ public class SpareModel extends Model {
         ArrayList<HashMap<String, String>> map = getSparesByProductId(product_id);
         for (int i=0;i<map.size();i++){
             HashMap<String,String> res =map.get(i);
-
-           SpareBean bean =new SpareBean( res);
+           SpareBean bean =new SpareBean(res);
            bean.attrBeans= new AttrModel().getlistBySpareId(bean.id);
           list.add(bean);
         }
         return list;
     }
 
-    public List<SpareBean> getBeansByProductId1(String product_id,String offer_id){
 
-        List<SpareBean> list =new ArrayList<>();
-        ArrayList<HashMap<String, String>> map = getSparesByProductId(product_id);
-        for (int i=0;i<map.size();i++){
-            HashMap<String,String> res =map.get(i);
-
-            SpareBean bean =new SpareBean( res);
-            bean.attrBeans= new AttrModel().getlistBySpareId1(bean.id,offer_id);
-            list.add(bean);
-        }
-        return list;
-    }
     /**
      * @Description:根据产品id获取所有的配件
      * @param:
@@ -94,25 +81,12 @@ public class SpareModel extends Model {
         }
         return list;
     }
-    public List<SpareBean> getBeansByCat_id_real1(String cat_id,String offer_id){
-
-        List<SpareBean> list =new ArrayList<>();
-        ArrayList<HashMap<String, String>> map = getSparesByProductId_real(cat_id);
-        for (int i=0;i<map.size();i++){
-            HashMap<String,String> res =map.get(i);
-            SpareBean bean =new SpareBean( res);
-            bean.attrBeans= new AttrModel().getlistBySpareId1(bean.id,offer_id);
-            list.add(bean);
-        }
-        return list;
-    }
     public ArrayList<HashMap<String, String>> getSparesByProductId_real(String cat_id){
 
         return where("product_id="+0+" and cat_id="+cat_id).select();
     }
-
     /**
-     * 删除指定的配件
+     * 删除指定的配件(常用配件)
      * @param id
      */
     public void removeSpareById(String id){
@@ -123,13 +97,6 @@ public class SpareModel extends Model {
       attrModel.removeAttrBySpareId(id);
 
         }
-
-        public ArrayList<HashMap<String,String>> getSpareBySpareId(String spare_id){
-            ArrayList<HashMap<String, String>> list = where("id=" + spare_id).select();
-        return list;
-        }
-
-
     }
 
 

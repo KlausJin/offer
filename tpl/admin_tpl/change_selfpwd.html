@@ -77,7 +77,9 @@
                 var ret = JSON.parse(res)
                 if (ret.code == "success") {
                     if (window.confirm("确认修改您的登录密码吗？")) {
-                        window.location.href = "/v1/setup/list";
+                        window.location.href = "/v1/access/login";
+                    }else {
+                        window.location.href = "/v1/setup/change";
                     }
                 } else {
                     alert(ret.msg)

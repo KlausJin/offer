@@ -11,12 +11,12 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * @Description TODO
+ * @Description Excel上传文件
  * @Author 小云网络jxl
  * @Date 2018-07-19  17:39
  * @Version 1.0
  **/
-public class CommonController extends Controller {
+public class CommonController extends AdminController {
     public CommonController(ControllerContext context) {
         super(context);
     }

@@ -23,7 +23,7 @@
         <div class="col-md-6">
             <div class="content-box-large">
                 <div class="panel-heading">
-                    <div class="panel-title"><a href="adminList" style="margin-right: 15px">返回管理员列表</a></div>
+                    <div class="panel-title"><a href="salesmanList" style="margin-right: 15px">返回业务员列表</a></div>
                 </div>
                 <style type="text/css">
                     .panel-body .pic {
@@ -36,31 +36,39 @@
                     <input type="hidden" value="{$api[id]}" name="id">
 
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">员工姓名</label>
+                        <label class="col-sm-2 control-label">英文名(英姿)</label>
                         <div class="col-sm-4">
-                            <input value="" type="text" class="form-control" id="name" name="name" placeholder="">
+                            <input value="" type="text" class="form-control" id="yz_name" name="yz_name" placeholder="">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">英文名(万思刻)</label>
+                        <div class="col-sm-4">
+                            <input value="" type="text" class="form-control" id="wsk_name" name="wsk_name" placeholder="">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-sm-2 control-label">登录用户名</label>
                         <div class="col-sm-4">
-                            <input value="" type="text" class="form-control" id="username" name="username"
+                            <input value="" type="text" class="form-control" id="name" name="name"
                                    placeholder="">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">登录密码</label>
+                        <label class="col-sm-2 control-label">email(英姿)</label>
                         <div class="col-sm-4">
-                            <input value="" type="password" class="form-control" id="pwd" name="pwd" placeholder="">
+                            <input value="" type="text" class="form-control" id="yz_email" name="yz_email"
+                                   placeholder="">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">email</label>
+                        <label class="col-sm-2 control-label">email(万思刻)</label>
                         <div class="col-sm-4">
-                            <input value="" type="text" class="form-control" id="email" name="email"
+                            <input value="" type="text" class="form-control" id="wsk_email" name="wsk_email"
                                    placeholder="">
                         </div>
                     </div>
@@ -80,19 +88,17 @@
                                 <option value="1">管理员</option>
                                 <option value="2">经理</option>
                                 <option value="3">业务员</option>
+                                <option value="4">跟单员</option>
                             </select>
                         </div>
                     </div>
 
-                    <!--<div class="form-group">-->
-                        <!--<label class="col-sm-2 control-label">所属公司</label>-->
-                        <!--<div class="col-sm-4">-->
-                            <!--<select id="company">-->
-                                <!--<option value="1">英姿</option>-->
-                                <!--<option value="2">万思刻</option>-->
-                            <!--</select>-->
-                        <!--</div>-->
-                    <!--</div>-->
+                    <div class="form-group" id="follow" style="display: none">
+                        <label class="col-sm-2 control-label">所属业务员</label>
+                        <div class="col-sm-4">
+                            <select id="sale_id" class="form-control"></select>
+                        </div>
+                    </div>
 
 
                     <div class="form-group">
@@ -125,25 +131,41 @@
 <script>
     var data = {};
     $(function () {
+        $("#status").on("change",function(){
+            if($("option:selected",this).val()==4){
+                $("#follow").show();
+            }else{
+                $("#follow").hide();
+            }
+        });
+        $.getJSON("getSaleInfo", {}, function (res) {
+            if (res.code == "success")
+                var da = res.data, s = '';
+                s += '<option value=0 selected>无所属业务员</option>'
+            for (var i = 0; i < da.length; i++) {
+                s += '<option value="' + da[i].id + '">' + da[i].name + '</option>'
+            }
+            $("#sale_id").html(s);
+        });
         $("#sub").on("click", function () {
+            data['yz_name'] = $("#yz_name").val();
+            data['wsk_name'] = $("#wsk_name").val();
             data['name'] = $("#name").val();
-            data['username'] = $("#username").val();
-            data['password'] = $("#pwd").val();
             data['status'] = $("#status").val();
-            data['email']=$("#email").val();
-            data['tel']=$("#tel").val();
-            if (!data['name'] || data['name'] == " ") {
-                alert("员工姓名不能为空，请输入正确的员工姓名");
+            data['yz_email'] = $("#yz_email").val();
+            data['wsk_email'] = $("#wsk_email").val();
+            data['tel'] = $("#tel").val();
+            data['follow_id']=$("#sale_id").val();
+            if (!data['yz_name'] || data['yz_name'] == " ") {
+                alert("英文名(英姿)不能为空，请输入正确的姓名");
                 return;
             }
-            else if (!data['username'] || data['username'] == " ") {
+            if (!data['wsk_name'] || data['wsk_name'] == " ") {
+                alert("英文名(万思刻)不能为空，请输入正确的姓名");
+                return;
+            }
+            else if (!data['name'] || data['name'] == " ") {
                 alert("登录用户名不能为空，请输入正确的登录用户名");
-                return;
-            } else if (!data['password'] || data['password'] == " ") {
-                alert("登录密码不能为空，请输入正确的登录密码");
-                return;
-            } else if (!data['email'] || data['email'] == " ") {
-                alert("邮箱不能为空，请输入正确的邮箱");
                 return;
             } else if (!data['tel'] || data['tel'] == " ") {
                 alert("联系方式不能为空，请输入正确的联系方式");
@@ -156,7 +178,7 @@
                     if (window.confirm("录入成功，是否继续录入")) {
                         window.location.reload()
                     } else {
-                        window.location.href = "adminList";
+                        window.location.href = "salesmanList";
                     }
                 } else {
                     alert(ret.msg)

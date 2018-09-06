@@ -152,10 +152,11 @@
                 $("#example_info").html("共" + num + "条记录");
                 if (current_page == 0) pi += ' <li class="prev disabled"> <a href="#">上一页</a></li>';
                 else pi += '<li class="prev"> <a href="#" onclick="lastpage()">上一页</a></li>'
-                var max = num / 10 > 5 ? 5 : Math.ceil(num / 10)
-                for (var i = current_page; i < max; i++) {
+                var min=current_page - 2 < 0 ? 0 :current_page - 2;
+                var max = min+5 > num/10 ? num/10 : min + 5
+                for (var i = min; i < max; i++) {
                     var p = i + 1;
-                    if (i == 0) {
+                    if (i == current_page) {
                         pi += '<li class="active"><a href="#">' + p + '</a></li>'
                     }
 

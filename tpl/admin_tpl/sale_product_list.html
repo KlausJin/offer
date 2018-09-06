@@ -24,8 +24,7 @@
             <div class="content-box-large">
                 <div class="panel-heading">
                     <div class="panel-title">报价管理</div>
-                    <button id="startoffer" class="form-group" onclick="startoffer()">发起报价</button>
-                    <div class="col-sm-6">
+                    <div class="col-sm-2">
                         <input value="" type="text" class="form-control" id="search" name="search" placeholder="搜索客户或者报价编号" />
                     </div>
                 </div>
@@ -106,10 +105,6 @@
         current_page = s;
         tohtml();
     }
-    
-    function startoffer() {
-        window.location.href="start_offer";
-    }
 
 
     var key;
@@ -155,7 +150,7 @@
                 for (i = 0; i < data.length; i++) {
                     s += ' <tr class="odd gradeX" id="tr_' + data[i]['id'] + '">\n' +
                         '\t\t\t\t\t\t\t  <td>' + data[i]['id'] + '</td>\n' +
-                        '\t\t\t\t\t\t\t  <td>' + data[i]['name'] + '</td>\n' +
+                        '\t\t\t\t\t\t\t  <td>' + data[i]['client_name'] + '</td>\n' +
                         '\t\t\t\t\t\t\t  <td>' + data[i]['create_time'] + '</td>\n' +
                         '\t\t\t\t\t\t\t  <td> ' + data[i]['status'] + '</td>' +
                         '\t\t\t\t\t\t\t  <td class="center"> <button onclick="detail(' + data[i]['id'] + ')">查看详情</button>'+

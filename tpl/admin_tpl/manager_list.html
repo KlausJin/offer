@@ -25,13 +25,12 @@
 				  <div class="panel-heading">
 					  <div class="panel-title">经理管理</div>
 					  <div>
+						  <div class="col-sm-3">
+						  	<input value="" type="text" class="form-control" id="search" name="search" placeholder="">
+						  </div>
 						  <button id="searchbyname" type="button" class="btn btn-primary" onclick="searchbyname()">
 							  按姓名查询
 						  </button>
-						  <br>
-						  <div class="col-sm-6">
-						  	<input value="" type="text" class="form-control" id="search" name="search" placeholder="">
-						  </div>
 					  </div>
 				  </div>
 
@@ -41,7 +40,11 @@
 						  <tr>
 							  <th>id</th>
 							  <th>姓名</th>
-							  <th>登录账号</th>
+							  <th>yz_name</th>
+							  <th>wsk_name</th>
+							  <th>yz_email</th>
+							  <th>wsk_email</th>
+							  <th>联系方式</th>
 							  <th>上次登录时间</th>
 							  <th>操作</th>
 						  </tr>
@@ -105,20 +108,19 @@
 	      tohtml();
 	  }
 
-      function reset_pwd(id){
-          window.location.href="reset_pwd?id="+id;
-      }
-
-
       function del(id){
-	      $.getJSON("remove?id="+id,{},function(res){
-	          if(res.code=="success"){
-	              alert("删除成功");
-	              $("#tr_"+id).remove();
-			  }else{
-	              alert(res.msg);
-			  }
-		  })
+		   if(window.confirm("确认要删除该员工吗？")){
+               $.getJSON("remove?id=" + id, {}, function (res) {
+                   if (res.code == "success") {
+                       alert("删除成功");
+                       $("#tr_" + id).remove();
+                   } else {
+                       alert(res.msg);
+                   }
+               })
+           }else{
+		       return;
+		   }
 	  }
 
       var key;
@@ -133,45 +135,45 @@
 	  function tohtml(){
 
 	      var d = {"page":current_page}
-
-          if(key){
-              d['key']=key;
-          }
-
+		  d['key']=key;
           $.getJSON("getManagerList",d,function(res){
               if(res.code=="success"){
                   var da=res.data,s='',data=da['list'],num=da['num'],pi="";
                   $("#example_info").html("共"+num+"条记录");
                   if(current_page==0)  pi+=' <li class="prev disabled"> <a href="#">上一页</a></li>';
                   else pi+='<li class="prev"> <a href="#" onclick="lastpage()">上一页</a></li>'
-				  var max = num/10>5?5:Math.ceil(num/10)
-                  for(var i=current_page;i<max;i++){
-                      var p = i+1;
-                      if(i==0){
-                          pi+= '<li class="active"><a href="#">'+p+'</a></li>'
-					  }
+                  var min=current_page - 2 < 0 ? 0 :current_page - 2;
+                  var max = min+5 > num/10 ? num/10 : min + 5
+                  for (var i = min; i < max; i++) {
+                      var p = i + 1;
+                      if (i == current_page) {
+                          pi += '<li class="active"><a href="#">' + p + '</a></li>'
+                      }
 
-					  else{
-                          pi+= '<li><a href="#"  onclick="topage('+(p-1)+')">'+p+'</a></li>';
-					  }
+                      else {
+                          pi += '<li><a href="#"  onclick="topage(' + (p - 1) + ')">' + p + '</a></li>';
+                      }
 
-				  }
-					if(current_page+1>=num/10){
-                        pi+= '  <li class="next disabled"><a href="#" >下一页</a></li>'
-					}else{
-                        pi+= '  <li class="next"><a href="#" onclick="nextpage()">下一页</a></li>'
-					}
+                  }
+                  if (current_page + 1 >= num / 10) {
+                      pi += '  <li class="next disabled"><a href="#" >下一页</a></li>'
+                  } else {
+                      pi += '  <li class="next"><a href="#" onclick="nextpage()">下一页</a></li>'
+                  }
 
 					$(".pagination").html(pi)
 
                   for(i=0;i<data.length;i++){
                       s+=' <tr class="odd gradeX" id="tr_'+data[i]['id']+'">\n' +
-                          '\t\t\t\t\t\t\t  <td>'+data[i]['id']+'</td>\n' +
-                          '\t\t\t\t\t\t\t  <td>'+data[i]['name']+'</td>\n' +
-                          '\t\t\t\t\t\t\t  <td>'+data[i]['username']+'</td>\n' +
-                          '\t\t\t\t\t\t\t  <td> '+data[i]['last_login_time']+'</td>' +
-                          '\t\t\t\t\t\t\t  <td class="center"> <button onclick="reset_pwd('+data[i]['id']+')">重置初始密码</button>' +
-						  '									<button onclick="del('+data[i]['id']+')">删除</button></td>' +
+                          '\t\t\t\t\t\t\t  <td>' + data[i]['id'] + '</td>\n' +
+                          '\t\t\t\t\t\t\t  <td>' + data[i]['name'] + '</td>\n' +
+                          '\t\t\t\t\t\t\t  <td>' + data[i]['yz_name'] + '</td>\n' +
+                          '\t\t\t\t\t\t\t  <td>' + data[i]['wsk_name'] + '</td>\n' +
+                          '\t\t\t\t\t\t\t  <td>' + data[i]['yz_email'] + '</td>\n' +
+                          '\t\t\t\t\t\t\t  <td>' + data[i]['wsk_email'] + '</td>\n' +
+                          '\t\t\t\t\t\t\t  <td>' + data[i]['tel'] + '</td>\n' +
+                          '\t\t\t\t\t\t\t  <td> ' + data[i]['last_login_time'] + '</td>' +
+                          '\t\t\t\t\t\t\t  <td class="center"> <button onclick="del('+data[i]['id']+')">删除</button></td>' +
                           '\t\t\t\t\t\t  </tr>'
                   }
                   $("#tlist").html(s);

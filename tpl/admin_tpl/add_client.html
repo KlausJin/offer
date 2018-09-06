@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>后台系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- styles -->
+    <link href="/css/styles.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<%include("head.html"){}%>
+<div class="page-content">
+    <div class="row">
+        <%include("left.html"){}%>
+        <div class="col-md-6">
+            <div class="content-box-large">
+                <div class="panel-heading">
+                    <div class="panel-title"><a href="list" style="margin-right: 15px">返回客户列表</a></div>
+                </div>
+                <style type="text/css">
+                    .panel-body .pic {
+                        width: 300px;
+                        height: 150px;
+                        margin-bottom: 20px
+                    }
+                </style>
+                <div class="panel-body form-horizontal">
+                    <input type="hidden" value="{$api[id]}" name="id">
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">客户名称</label>
+                        <div class="col-sm-4">
+                            <input value="" type="text" class="form-control" id="name" name="name" placeholder="">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">客户所属地区</label>
+                        <div class="col-sm-4">
+                            <select id="area" class="form-control"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">客户来源</label>
+                        <div class="col-sm-4">
+                            <select id="from" class="form-control"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">所属业务员</label>
+                        <div class="col-sm-4">
+                            <label id="sale" class="control-label">${user}</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button id="sub" type="submit" class="btn btn-primary">提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+
+        <!--<div class="copy text-center">-->
+        <!--Copyright 2014 <a href='#'>Website</a>-->
+        <!--</div>-->
+
+    </div>
+</footer>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="/js/jquery.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/js/custom.js"></script>
+
+<script>
+    var data = {};
+    $(function () {
+        $.getJSON("getClientFrom", {}, function (res) {
+            if (res.code == "success")
+                var da = res.data, s = '';
+            s += '<option value="0">请选择客户来源</option>'
+            for (var i = 0; i < da.length; i++) {
+                s += '<option value="' + da[i].id + '">' + da[i].name + '</option>'
+            }
+            $("#from").html(s);
+        })
+
+        $.getJSON("getArea", {}, function (res) {
+            if (res.code == "success")
+                var da = res.data, s = '';
+            s += '<option value="0">请选择客户所在地区</option>'
+            for (var i = 0; i < da.length; i++) {
+                s += '<option value="' + da[i].id + '">' + da[i].area_name + '</option>'
+            }
+            $("#area").html(s);
+        })
+
+        $("#sub").on("click", function () {
+            data['client_name'] = $("#name").val();
+            data['client_area'] = $("#area").val();
+            data['client_from'] = $("#from").val();
+            if(!data['client_name']||data['client_name']==""){
+                alert("客户名不能为空，请输入正确的客户名称")
+                return;
+            } else if (data['client_area'] == "0") {
+                alert("请选择客户所属地区");
+                return;
+            } else if (data['client_from'] == "0") {
+                alert("请选择客户来源");
+                return;
+            }
+
+            $.post('/v1/client/do_add', data, function (res) {
+                var ret = JSON.parse(res)
+                if (ret.code == "success") {
+                    alert("新增客户成功");
+                    window.location.href = "list";
+                } else {
+                    alert(ret.msg)
+                }
+            })
+
+        })
+    })
+
+
+</script>
+
+</body>
+</html>

@@ -2,6 +2,7 @@ package com.cloudling.offer.model;
 
 import com.cloudling.offer.bean.PartBean;
 import com.cloudling.offer.bean.PartCatBean;
+import com.cloudling.offer.bean.ProductBean;
 import com.cloudling.offer.util.TimeUtil;
 
 import java.util.ArrayList;
@@ -50,5 +51,25 @@ public class PartCatModel extends Model {
 
     public ArrayList<HashMap<String, String>> queryPartCat(String sql){
         return  query(sql);
+    }
+
+
+    /**
+     * @Description:根据产品cat_id获取产品bean（实时配件)
+     * @param: partcat中的id
+     * @return:
+     * @auther: CodyLongo
+     * @modified:
+     */
+
+    public PartCatBean getBean_real(String id){
+        HashMap<String, String> map = where("id=" + id).find();
+        PartCatBean bean = new PartCatBean(map);
+
+        bean.spareBeans = new SpareModel().getBeansByCat_id_real(bean.id);
+
+        if ( map ==null){ return null; }
+        else{    return bean;}
+
     }
 }
