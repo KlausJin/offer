@@ -35,6 +35,8 @@ public class ProductController extends AdminController {
 
     @action
     public void dialog_search() {
+        String cat_id=I("cat_id").toString();
+        assign("p_cat_id",cat_id);
         toHtml("admin_tpl/dialog_product_search");
     }
 
@@ -102,8 +104,9 @@ public class ProductController extends AdminController {
 
     @action
     public void getProductInfo() {
+        String cat_id=I("cat_id").toString();
         ProductModel pm = new ProductModel();
-        ArrayList<HashMap<String, String>> list = pm.field("id,code").select();
+        ArrayList<HashMap<String, String>> list = pm.field("id,code").where("cat_id="+cat_id).select();
         success(list);
     }
 

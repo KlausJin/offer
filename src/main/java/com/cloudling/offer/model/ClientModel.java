@@ -1,10 +1,5 @@
 package com.cloudling.offer.model;
 
-import com.cloudling.offer.bean.ClientBean;
-import com.cloudling.offer.bean.OfferBean;
-import com.cloudling.offer.util.TimeUtil;
-import com.mysql.fabric.xmlrpc.Client;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 

@@ -48,14 +48,13 @@ public class SpareModel extends Model {
     }
 
     public List<SpareBean> getBeansByProductId1(String product_id,String offer_id){
-
         List<SpareBean> list =new ArrayList<>();
         ArrayList<HashMap<String, String>> map = getSparesByProductId(product_id);
+
         for (int i=0;i<map.size();i++){
             HashMap<String,String> res =map.get(i);
-
             SpareBean bean =new SpareBean( res);
-            bean.attrBeans= new AttrModel().getlistBySpareId1(bean.id,offer_id);
+            bean.attrBeans= new AttrModel().getlistBySpareId1(bean.id,offer_id,product_id);
             list.add(bean);
         }
         return list;
@@ -94,14 +93,17 @@ public class SpareModel extends Model {
         }
         return list;
     }
-    public List<SpareBean> getBeansByCat_id_real1(String cat_id,String offer_id){
+    public List<SpareBean> getBeansByCat_id_real1(String offer_id){
 
         List<SpareBean> list =new ArrayList<>();
-        ArrayList<HashMap<String, String>> map = getSparesByProductId_real(cat_id);
+        OfferAttrModel offerattrModel=new OfferAttrModel();
+        ArrayList<HashMap<String, String>> map = offerattrModel.getSpareByOn(offer_id);
+
         for (int i=0;i<map.size();i++){
-            HashMap<String,String> res =map.get(i);
-            SpareBean bean =new SpareBean( res);
-            bean.attrBeans= new AttrModel().getlistBySpareId1(bean.id,offer_id);
+            HashMap<String,String> data=getSparesBySpareId(map.get(i).get("spare_id"));
+
+            SpareBean bean =new SpareBean( data);
+            bean.attrBeans= new AttrModel().getlistBySpareId1(bean.id,offer_id,bean.product_id);
             list.add(bean);
         }
         return list;
@@ -110,6 +112,11 @@ public class SpareModel extends Model {
 
         return where("product_id="+0+" and cat_id="+cat_id).select();
     }
+    public HashMap<String, String> getSparesBySpareId(String spare_id){
+
+        return where("id="+spare_id).find();
+    }
+
 
     /**
      * 删除指定的配件

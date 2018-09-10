@@ -26,11 +26,11 @@ public class OfferSaleController extends AdminController {
 
     @action
     public void list() {
-        toHtml("admin_tpl/sale_product_list");
+        toHtml("admin_tpl/offer_sale_list");
     }
 
     @action
-    public void getSaleProductList() {
+    public void getSaleOfferList() {
         String page = I("get.page").toString();
         String limit = Integer.parseInt(page) * 10 + ",10";
         HashMap<String, Object> res = new HashMap<>();
@@ -45,12 +45,14 @@ public class OfferSaleController extends AdminController {
                 put(Dictionary.NOOFFER, "待报价");
             }
         };
-        String sql="select a.*,b.name as client_name from offer a left join client b on a.client_id=b.id where a.sale_id="+user.get("id");
-        ArrayList<HashMap<String, String>> list = M("offer").query(sql);
-        for (int i=0;i<list.size();i++){
+        String sql = "select a.*,b.name as client_name from offer a left join client b on a.client_id=b.id where a.sale_id=" + user.get("id");
+        StringBuffer sb = new StringBuffer(sql);
+        String sqls = sb.append(" limit " + limit).toString();
+        ArrayList<HashMap<String, String>> list = M("offer").query(sqls);
+        for (int i = 0; i < list.size(); i++) {
             list.get(i).put("create_time",
                     TimeUtil.stampToDate(list.get(i).get("create_time"), "yyyy-MM-dd HH:mm:ss"));
-            list.get(i).put("status",statusTypes.get(Integer.parseInt(list.get(i).get("status"))));
+            list.get(i).put("status", statusTypes.get(Integer.parseInt(list.get(i).get("status"))));
         }
         res.put("list", list);
         res.put("num", list.size());
@@ -58,18 +60,20 @@ public class OfferSaleController extends AdminController {
     }
 
     @action
-    public void offer_choose(){ toHtml("admin_tpl/start_offer_pre");}
+    public void offer_choose() {
+        toHtml("admin_tpl/start_offer_pre");
+    }
 
     @action
-    public void getCatInfo(){
+    public void getCatInfo() {
         ArrayList<HashMap<String, String>> list = M("part_cat").field("id,name").select();
         success(list);
     }
 
     @action
     public void start_offer() {
-        String cat_id=I("cat_id").toString();
-        assign("cat_id",cat_id);
+        String cat_id = I("cat_id").toString();
+        assign("cat_id", cat_id);
         toHtml("admin_tpl/start_offer");
     }
 
@@ -93,16 +97,30 @@ public class OfferSaleController extends AdminController {
             for (int i = 0; i < products.size(); i++) {
                 HashMap<String, Object> product = products.get(i);
                 String product_id = product.get("id").toString();
-                String product_num=product.get("product_num").toString();
-                numdata.put("offer_id",offer_id+"");
-                numdata.put("product_id",product_id);
-                numdata.put("num",product_num);
+                String product_num = product.get("product_num").toString();
+                numdata.put("offer_id", offer_id + "");
+                numdata.put("product_id", product_id);
+                numdata.put("num", product_num);
                 M("offer_product").add(numdata);
                 HashMap<String, String> res = new HashMap<>();
                 HashMap<String, String> attrs = JSON.parseObject(product.get("attrs").toString(), new HashMap<String, Object>().getClass());
+                ArrayList<HashMap<String, String>> list = M("attr").field("id,parent_id").where(" parent_id !=0 and num=-2").select();
+                HashMap<String, String> spe = new HashMap<>();
+                for (int j = 0; j < list.size(); j++) {
+                    String x = list.get(j).get("id");
+                    String y = list.get(j).get("parent_id");
+                    spe.put(x, y);
+                }
                 for (String key : attrs.keySet()) {
-                    res.put("spare_id", key);
-                    res.put("attr_id", attrs.get(key));
+                    if (spe.containsKey(key)) {
+                        res.put("spare_id", spe.get("" + key + ""));
+                        res.put("attr_id", key);
+                        res.put("num", attrs.get(key));
+                    } else {
+                        res.put("spare_id", key);
+                        res.put("attr_id", attrs.get(key));
+                        res.put("num", 0+"");
+                    }
                     res.put("product_id", product_id);
                     res.put("offer_id", offer_id + "");
                     long t = M("offer_attr").add(res);

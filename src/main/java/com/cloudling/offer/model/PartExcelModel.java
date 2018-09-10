@@ -49,6 +49,9 @@ public class PartExcelModel extends Model {
 
         for (int i = 0; i < sheet.getLastRowNum(); i++) {
             Row row = sheet.getRow(i);
+            if (row==null){
+                break;
+            }
             Object field = row.getCell(0);
 
             String fname = field == null ? "" : field.toString();
@@ -87,6 +90,9 @@ public class PartExcelModel extends Model {
     private void getAttr(String spare_name, int spare_id, int col, int start_row, int end_row) throws ExcelImportException {
         for (int i = start_row; i <= end_row; i++) {
             Row row = sheet.getRow(i);
+            if (row==null){
+                break;
+            }
             String field = row.getCell(col) == null ? "" : row.getCell(col).toString();
             if (i == start_row && "".equals(field)) {
                 field = spare_name;
@@ -140,6 +146,9 @@ public class PartExcelModel extends Model {
 
         for (int i = start_row + 1; i <= end_row; i++) {
             Row row = sheet.getRow(i);
+            if (row==null){
+                break;
+            }
             HashMap<String, String> data = new HashMap<>();
             for (int j = col; j < row.getLastCellNum(); j++) {
                 int index = j - col;
@@ -203,11 +212,14 @@ public class PartExcelModel extends Model {
 
         for (int i = 0; i < sheet.getLastRowNum(); i++) {
             Row row = sheet.getRow(i);
-            String filed = row.getCell(0) == null ? "" : row.getCell(0).toString();
+            if (row==null){
+                break;
+            }
+            String filed = row.getCell(0) == null? "" : row.getCell(0).toString();
             if (!"".equals(filed) && PRODUCT_CODE.equals(filed.toString())) {
                 product_code = row.getCell(1).toString();
                 if(product_code.contains(".")){
-                    product_code=product_code.split(".")[0];
+                    product_code=product_code.substring(0,product_code.indexOf("."));
                 }
             }
             if (!"".equals(filed) && PRODUCT_PRICE.equals(filed.toString())) {
@@ -255,8 +267,12 @@ public class PartExcelModel extends Model {
      */
     int getNextFiledRowCount(int col, int row) {
         int res = row;
+
         for (int i = row + 1; i <= sheet.getLastRowNum(); i++) {
             Row r = sheet.getRow(i);
+            if (r==null){
+                break;
+            }
             String filed = r.getCell(col) == null ? "" : r.getCell(col).toString();
 
             if (!"".equals(filed)) {

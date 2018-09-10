@@ -1,8 +1,6 @@
 package com.cloudling.offer.model;
 
-
-import com.cloudling.offer.bean.ProductBean;
-import com.cloudling.offer.bean.SpareBean;
+import com.cloudling.offer.bean.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +35,8 @@ public class ProductModel extends Model {
         return list;
     }
 
+
+
     /**
      * @Description:根据产品id获取产品bean(固定配件)
      * @param: 产品id
@@ -59,21 +59,19 @@ public class ProductModel extends Model {
         }
     }
 
-    public ProductBean getBean1(String offer_id){
+    public List<ProductBean> getBean1(String offer_id){
         OfferProductModel offerProductModel=new OfferProductModel();
+        ArrayList<HashMap<String, String>> res = offerProductModel.getProductByOfferId(offer_id);
+        List<ProductBean> list =new ArrayList<>();
+        for (int i=0;i<res.size();i++){
+            HashMap<String, String> map= where("id="+res.get(i).get("product_id")).find();
+            ProductBean bean = new ProductBean(map);
+            bean.spareBeans = new SpareModel().getBeansByProductId1(bean.id,offer_id);
+            list.add(bean);
 
-        HashMap<String, String> res = offerProductModel.getProductByOfferId(offer_id);
-        HashMap<String, String> map= where("id="+res.get("product_id")).find();
-        ProductBean bean = new ProductBean(map);
-        bean.spareBeans = new SpareModel().getBeansByProductId1(bean.id,offer_id);
-
-        if (map == null){
-            return null;
         }
-        else{
+        return list;
 
-            return bean;
-        }
     }
 
 
@@ -104,17 +102,21 @@ public class ProductModel extends Model {
 
 
 
-    public ProductBean getBean_real1(String offer_id){
+    public List<ProductBean> getBean_real1(String offer_id){
         OfferProductModel offerProductModel=new OfferProductModel();
+        List<ProductBean> list =new ArrayList<>();
+        ArrayList<HashMap<String, String>>res = offerProductModel.getProductByOfferId(offer_id);
+        for (int i=0;i<res.size();i++){
+            HashMap<String, String> map= where("id="+res.get(i).get("product_id")).find();
+            ProductBean bean = new ProductBean(map);
 
-        HashMap<String, String> res = offerProductModel.getProductByOfferId(offer_id);
-        HashMap<String, String> map= where("id="+res.get("product_id")).find();
-        ProductBean bean = new ProductBean(map);
+            bean.spareBeans = new SpareModel().getBeansByCat_id_real1(offer_id);
+            list.add(bean);
 
-        bean.spareBeans = new SpareModel().getBeansByCat_id_real1(bean.cat_id,offer_id);
+        }
 
-        if ( map ==null){ return null; }
-        else{    return bean;}
+
+        return list;
 
     }
 

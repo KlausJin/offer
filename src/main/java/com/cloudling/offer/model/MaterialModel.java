@@ -8,6 +8,6 @@ public class MaterialModel extends Model {
     }
 
     public HashMap<String, String> getMaterial(String name){
-       return where("name="+name).find();
+        return where("name='"+name+"'").find();
     }
 }

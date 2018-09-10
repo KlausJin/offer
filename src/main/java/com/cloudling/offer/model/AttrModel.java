@@ -58,57 +58,71 @@ public class AttrModel extends Model {
 
 
 
-    public List<AttrBean> getlistBySpareId1(String spare_id,String offer_id){
+    public List<AttrBean> getlistBySpareId1(String spare_id,String offer_id,String product_id){
         List<AttrBean> list =new ArrayList<>();
         ArrayList<HashMap<String, String>> map =getspareId(spare_id);
         for (int i=0;i<map.size();i++){
             HashMap<String,String> res= map.get(i);
-            AttrBean bean =new AttrBean(res);
-            bean.f_attrBeans=new AttrModel().getBeanByAttrId(bean.id,offer_id);
-            list.add(bean);}
+            HashMap<String, String> data= new OfferAttrModel().getMapBySpareId(res.get("id"), offer_id);
+            if (data==null){
+                AttrBean bean =new AttrBean(res);
+                bean.f_attrBeans=new AttrModel().getBeanByAttrId(bean.id,offer_id,product_id);
+                list.add(bean);
+            }
+            else{
+                res.replace("id",data.get("attr_id"));
+                AttrBean bean =new AttrBean(res);
+                bean.f_attrBeans=new AttrModel().getBeanByAttrId(data.get("spare_id"),offer_id,product_id);
+                list.add(bean);
+            }
+        }
         return list;
     }
 
 
-    public List<AttrBean> getBeanByAttrId(String spare_id, String offer_id) {
+    public List<AttrBean> getBeanByAttrId(String spare_id, String offer_id,String product_id) {
         OfferProductModel offerProductModel = new OfferProductModel();
         ProductModel productModel = new ProductModel();
         MaterialModel materialModel = new MaterialModel();
-        HashMap<String, String> pro = offerProductModel.getProductByOfferId(offer_id);
-        HashMap<String, String> catid = productModel.getCatId(pro.get("product_id"));
-        ArrayList<HashMap<String, String>> res = new OfferAttrModel().getMapBySpareId(spare_id, offer_id);
+        HashMap<String, String> catid = productModel.getCatId(product_id);
+        HashMap<String, String> res = new OfferAttrModel().getMapBySpareId(spare_id, offer_id);
+
         List<AttrBean> list = new ArrayList<>();
-        if (res.size() == 0) {
+        if (res==null|| res.get("attr_id").equals("-1")) {
             ArrayList<HashMap<String, String>> data = getListByParentId(spare_id);
             for (int i = 0; i < data.size(); i++) {
                 HashMap<String, String> res1 = data.get(i);
                 if (catid.get("cat_id").equals("32")) {
-                    if (res1.get("price").equals("-2")) {
+                    if (res1.get("price").equals("-2.0000")) {
                         res1.replace("price", materialModel.getMaterial(res1.get("name")).get("price"));
                         AttrBean bean = new AttrBean(res1);
                         list.add(bean);
+
                     } else {
                         AttrBean bean = new AttrBean(res1);
                         list.add(bean);
+
                     }
 
                 } else {
                     if (res1.get("code").equals("0")) {
-                        if (res1.get("price").equals("-2")) {
+                        if (res1.get("price").equals("-2.0000")) {
                             res1.replace("price", null);
                             AttrBean bean = new AttrBean(res1);
                             list.add(bean);
                         } else {
                             AttrBean bean = new AttrBean(res1);
                             list.add(bean);
+
                         }
 
                     } else {
                         if (res1.get("code").equals("01")) {
                             AttrBean bean = new AttrBean(res1);
                             list.add(bean);
+
                         }
-                        else if (res1.get("sapre_id").equals("出货费用")){
+                        else if (res1.get("spare_id").equals("出货费用")){
                             AttrBean bean = new AttrBean(res1);
                             list.add(bean);
                         }
@@ -131,40 +145,41 @@ public class AttrModel extends Model {
 
         else {
 
-            for (int j = 0; j < res.size(); j++) {
-                HashMap<String, String> map = getListByAttrId(res.get(j).get("attr_id"));
-                if (catid.get("cat_id").equals("32")) {
-                    if (map.get("price").equals("-2")) {
-                        map.replace("price", materialModel.getMaterial(map.get("name")).get("price"));
-                        AttrBean bean = new AttrBean(map);
-                        list.add(bean);
-                    } else {
-                        AttrBean bean = new AttrBean(map);
-                        list.add(bean);
-                    }
-
-                } else {
-                    if (map.get("code").equals("01")|| map.get("code").equals("0")){
-                        AttrBean bean = new AttrBean(map);
-                        list.add(bean);
-                    }
-                    else if (map.get("sapre_id").equals("出货费用")){
-                        AttrBean bean = new AttrBean(map);
-                        list.add(bean);
-                    }
-                    else {
-                        HashMap<String, String> pri = where("parent_id=" + map.get("parent_id") + " and code=" + "01").field("price").find();
-                        double price = Double.parseDouble(pri.get("price")) + Double.parseDouble(map.get("price"));
-                        map.replace("price", String.valueOf(price));
-                        AttrBean bean = new AttrBean(map);
-                        list.add(bean);
-                    }
-
-
+            HashMap<String, String> map = getListByAttrId(res.get("attr_id"));
+            if (catid.get("cat_id").equals("32")) {
+                if (map.get("price").equals("-2.0000")) {
+                    map.replace("price", materialModel.getMaterial(map.get("name")).get("price"));
+                    AttrBean bean = new AttrBean(map);
+                    list.add(bean);
                 }
+
+                else {
+                    AttrBean bean = new AttrBean(map);
+                    list.add(bean);
+                }
+
             }
 
+            else if (catid.get("cat_id").equals("22")) {
+                if (map.get("code").equals("01") || map.get("code").equals("0")) {
+                    AttrBean bean = new AttrBean(map);
+                    list.add(bean);
+                } else if (getSpareByParentId(map.get("parent_id")).get("name").equals("出货费用")) {
+                    AttrBean bean = new AttrBean(map);
+                    list.add(bean);
+                } else {
+                    HashMap<String, String> pri = where("parent_id=" + map.get("parent_id") + " and code=" + "01").field("price").find();
+                    double price = Double.parseDouble(pri.get("price")) + Double.parseDouble(map.get("price"));
+                    map.replace("price", String.valueOf(price));
+                    AttrBean bean = new AttrBean(map);
+                    list.add(bean);
+                }
+
+            }
         }
+
+
+
 
 
         return list;
@@ -184,6 +199,10 @@ public class AttrModel extends Model {
     public HashMap<String,String> getListByAttrId(String attr_id){
         HashMap<String,String> map =where("id="+attr_id).find();
         return map;
+    }
+    public HashMap<String,String> getSpareByParentId(String parent_id){
+        HashMap<String, String> list = where("id=" + parent_id).find();
+        return list;
     }
 
 
@@ -216,9 +235,9 @@ public class AttrModel extends Model {
      */
     public double box_area(String spare_id,String attr_id){
         HashMap<String, String> attr = where("id=" + attr_id).find();
-        HashMap<String, String> kmap = where("name=" + "宽"+" and spare_id="+ spare_id).field("id").find();
-        HashMap<String, String> gmap = where("name=" + "高"+" and spare_id="+ spare_id).field("id").find();
-        HashMap<String, String> hmap = where("name=" + "厚"+" and spare_id="+ spare_id).field("id").find();
+        HashMap<String, String> kmap = where("name='宽' and spare_id="+ spare_id).field("id").find();
+        HashMap<String, String> gmap = where("name='高' and spare_id="+ spare_id).field("id").find();
+        HashMap<String, String> hmap = where("name='厚' and spare_id="+ spare_id).field("id").find();
         HashMap<String, String> kres = where("code=" + attr.get("code") + "and parent=" + kmap.get("id")).find();
         HashMap<String, String> gres = where("code=" + attr.get("code") + "and parent=" + gmap.get("id")).find();
         HashMap<String, String> hres = where("code=" + attr.get("code") + "and parent=" + hmap.get("id")).find();
@@ -381,5 +400,6 @@ public class AttrModel extends Model {
 
 
     }
+
 
 }

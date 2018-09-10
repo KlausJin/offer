@@ -10,6 +10,7 @@ import com.cloudling.offer.server.ControllerContext;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -74,6 +75,18 @@ public class TestController extends Controller {
 //        b=(int)a;
 //        System.out.println(b);
 //    }
+
+    @action
+    public void test4(){
+        ArrayList<HashMap<String, String>> list = M("attr").field("id,parent_id").where(" parent_id !=0 and num=-2").select();
+        HashMap<String, String> spe=new HashMap<>();
+        for(int j=0;j<list.size();j++){
+            String x=list.get(j).get("id");
+            String y=list.get(j).get("parent_id");
+            spe.put(x,y);
+        }
+        success(spe);
+    }
 
 
 }

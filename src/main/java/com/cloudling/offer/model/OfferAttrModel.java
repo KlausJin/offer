@@ -7,9 +7,16 @@ public class OfferAttrModel extends  Model {
     public OfferAttrModel() {
         super("offer_attr");
     }
-    public ArrayList<HashMap<String,String>> getMapBySpareId(String spare_id, String offer_id){
-        ArrayList<HashMap<String,String>> map = where("spare_id=" + spare_id +" and offer_id="+offer_id).select();
+    public HashMap<String,String> getMapBySpareId(String spare_id, String offer_id){
+        HashMap<String,String> map = where("spare_id=" + spare_id +" and offer_id="+offer_id ).find();
         return map;
     }
+    public ArrayList<HashMap<String,String>> getSpareByNum(String spare_id){
+        ArrayList<HashMap<String,String>> list=where("spare_id ="+spare_id).select();
+        return list;
+    }
+    public ArrayList<HashMap<String, String>> getSpareByOn(String offer_id){
+        return where("offer_id="+offer_id+" and attr_id="+"on").select();
 
+    }
 }

@@ -20,7 +20,7 @@ public class SpareBean extends Bean {
     }
 
      public String id;
-     public  int product_id;
+     public  String product_id;
 
      public String name;
 
@@ -45,9 +45,7 @@ public class SpareBean extends Bean {
 
         return name;
     }
-    public int getProduct_id(){
-        return product_id;
-    }
+
 
     public void setName(String name) {
         this.name = name;

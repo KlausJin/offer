@@ -67,10 +67,6 @@
                             <button class="btn-default form-control brs" onclick="new_offer()">+添加产品</button>
                         </div>
                         <br>
-                        <!--<div class="col-md-3">-->
-                            <!--<h5>产品数量</h5>-->
-                            <!--<input type="number" class="form-control" id="product_num">-->
-                        <!--</div>-->
                     </div>
 
 
@@ -148,8 +144,8 @@
         $.extend({
             "open": function (html, cb) {
                 window.open(html, 'newwindow', 'height=400, width=600, top=300,left=600, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no');
-                _w['open_cb'] = cb;
-            },
+            _w['open_cb'] = cb;
+    },
             "warn": function (msg) {
                 alert(msg)
             },
@@ -166,29 +162,29 @@
 
         _w['rids'] = {};
 
-        _w['bindAttr']=function(){
+        _w['bindAttr'] = function () {
             $("select").each(function () {
-                var t = $(this),id = t.attr("data-id"),v=$(this).find("option:selected").attr("data-code");
+                var t = $(this), id = t.attr("data-id"), v = $(this).find("option:selected").attr("data-code");
                 var child_ids = rids[id] || [];
-                for(var i=0;i<child_ids.length;i++){
+                for (var i = 0; i < child_ids.length; i++) {
                     var child_id = child_ids[i];
-                    if(child_id>0){
-                        var child = $("[data-id='"+child_id+"']");
+                    if (child_id > 0) {
+                        var child = $("[data-id='" + child_id + "']");
                         child.find("option").each(function () {
-                            var tt = $(this),code = tt.attr("data-code");
-                            if(code!=v){
+                            var tt = $(this), code = tt.attr("data-code");
+                            if (code != v) {
                                 tt.hide();
                             }
                         })
                     }
                 }
                 var or_id = oids[id] || 0;
-                if(or_id>0){
+                if (or_id > 0) {
 
-                    var child1 = $("[data-id='"+or_id+"']");
-                    var child2 = $("[data-id='"+id+"']");
-                    child1.attr("data-or-id",id)
-                    child2.attr("data-or-id",or_id)
+                    var child1 = $("[data-id='" + or_id + "']");
+                    var child2 = $("[data-id='" + id + "']");
+                    child1.attr("data-or-id", id)
+                    child2.attr("data-or-id", or_id)
                     child1.prepend('<option value="-1">不启用</option>')
                     child2.prepend('<option value="-1">不启用</option>')
                     child1.val(-1)
@@ -197,19 +193,19 @@
 
             })
 
-            $("select").on("change",function () {
-                var t = $(this),id = t.attr("data-id"),v=$(this).find("option:selected").attr("data-code");
+            $("select").on("change", function () {
+                var t = $(this), id = t.attr("data-id"), v = $(this).find("option:selected").attr("data-code");
                 var child_ids = rids[id] || 0;
-                for (var i=0;i<child_ids.length;i++){
+                for (var i = 0; i < child_ids.length; i++) {
                     var child_id = child_ids[i];
-                    if(child_id>0){
+                    if (child_id > 0) {
 
-                        var child = $("[data-id='"+child_id+"']");
+                        var child = $("[data-id='" + child_id + "']");
                         child.find("option").each(function () {
-                            var tt = $(this),code = tt.attr("data-code");
-                            if(code!=v){
+                            var tt = $(this), code = tt.attr("data-code");
+                            if (code != v) {
                                 tt.hide();
-                            }else{
+                            } else {
                                 child.val(tt.val())
                                 tt.show();
                             }
@@ -218,10 +214,10 @@
                 }
 
                 var or_id = t.attr('data-or-id');
-                if(or_id>0){
+                if (or_id > 0) {
                     var v = t.val();
-                    if(v!=-1){
-                        $("[data-id='"+or_id+"']").val(-1);
+                    if (v != -1) {
+                        $("[data-id='" + or_id + "']").val(-1);
                     }
                 }
 
@@ -246,18 +242,22 @@
 
                 } else {
 
+                    var name = atts[0].name || this.data.name;
+                    if (atts[0].num == -2) {
+                        s += '<input placeholder="请输入所需的数量" type="number" data-id="' + atts[0].id + '"  class="form-control input-num">'
+                    }
                     var relate_id = data['relate_id'] || 0;
-                    if(relate_id>0){
+                    if (relate_id > 0) {
                         rids[relate_id] = rids[relate_id] || []
                         rids[relate_id].push(data['id']);
                     }
 
                     var or_id = data['or_id'] || 0;
                     oids[or_id] = data['id'];
-                    s += '<select data-or-id="'+or_id+'" data-relate-id="'+relate_id+'" data-id="' + data["id"] + '" class="form-control ">'
+                    s += '<select data-or-id="' + or_id + '" data-relate-id="' + relate_id + '" data-id="' + data["id"] + '" class="form-control ">'
                     for (var i = 0; i < atts.length; i++) {
 
-                        s += '<option data-code="'+atts[i].code+'" value="' + atts[i].id + '">' + atts[i].name + '</option>'
+                        s += '<option data-code="' + atts[i].code + '" value="' + atts[i].id + '">' + atts[i].name + '</option>'
                     }
                     s += '</select>'
                 }
@@ -288,14 +288,14 @@
             "show_spare": function (data, t) {
                 var spares = data.spareBeans, s = '';
                 for (var i = 0; i < spares.length; i++) {
-                    if(spares[i].name == "生耳" || spares[i].name == "装配" || spares[i].name == "包装" ){
-                        continue;
+                    if (spares[i].name == "包装" ||spares[i].name == "生耳" || spares[i].name == "装配" ) {
+                        break;
                     }
                     s += '<h5>' + spares[i].name + '</h5>'
                     s += '<div class="product_attr">';
                     var attrBeans = spares[i].attrBeans;
                     for (var j = 0; j < attrBeans.length; j++) {
-                        if(attrBeans[j].name == "注塑费" || attrBeans[j].name == "材质(g)" || attrBeans[j].name == "材质(g/cm)" ){
+                        if (attrBeans[j].name == "注塑费" || attrBeans[j].name == "材质(g)" || attrBeans[j].name == "加工费") {
                             continue;
                         }
                         var attr = new Attr(attrBeans[j]);
@@ -395,7 +395,7 @@
             }
             products[index] = {};
             products[index]['id'] = data.id;
-            products[index]['product_num']=100;
+            products[index]['product_num'] = 100;
             Offer.show_pro_btn();
             Offer.add_pro_btn(data);
             Offer.clear_product();
@@ -477,7 +477,7 @@
     }
 
     function new_offer() {
-        $.open('/v1/product/dialog_search', function (id) {
+        $.open('/v1/product/dialog_search?cat_id='+${cat_id}+'', function (id) {
             $.getdata("/v1/product/getProduct", {"id": id}, function (res) {
                 list.push(res)
                 add_pro(res)
@@ -561,14 +561,14 @@
         }
         data['products'] = products;
         data['custom_id'] = custom_id;
-        data['sale_id']=${id};
+        data['sale_id'] =${id};
         console.log(JSON.stringify(data))
-        $.post("/v1/offerSale/get_offer",{"data":JSON.stringify(data)},function (res) {
-            var ret=JSON.parse(res);
-            if(ret.code  == "success"){
+        $.post("/v1/offerSale/get_offer", {"data": JSON.stringify(data)}, function (res) {
+            var ret = JSON.parse(res);
+            if (ret.code == "success") {
                 alert("提交报价信息成功")
-                window.location.href="list";
-            }else{
+                window.location.href = "list";
+            } else {
                 alert(ret.msg);
             }
         })
