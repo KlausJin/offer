@@ -184,10 +184,41 @@ public class AttrModel extends Model {
 
         return list;
     }
+    /**
+     * @Description:渲染到经理报价页面(常用配件)
+     * @param:
+     * @return:
+     * @auther: CodyLongo
+     * @modified:
+     */
+/*    public List<AttrBean> getSpareId_real(String spare_id,String offer_id,String product_id){
+           ArrayList<HashMap<String,String>> map=getspareId(spare_id);
+        List<AttrBean> list =new ArrayList<>();
+           for (int i=0;i<map.size();i++){
+               HashMap<String,String> res= map.get(i);
+               AttrBean bean =new AttrBean(res);
+               bean.f_attrBeans=new AttrModel().getBeanByParentId_real(bean.id,offer_id);
+               list.add(bean);
+           }
+        return list;
+
+    }
+    public List<AttrBean> getBeanByParentId_real(String spare_id,String offer_id){
+        OfferAttrModel offerAttrModel=new OfferAttrModel();
+        HashMap<String ,String> map=offerAttrModel.getMapBySpareId(spare_id,offer_id);
+
+    }*/
+
+
+
+
 
     public ArrayList<HashMap<String, String>> getspareId(String sapre_id) {
         ArrayList<HashMap<String, String>> list = where("spare_id =" + sapre_id).select();
         return list;
+    }
+    public HashMap<String,String> getSpareId_real(String spare_id){
+        return where("id="+spare_id).find();
     }
 
     public ArrayList<HashMap<String, String>> getListByParentId(String spare_id){

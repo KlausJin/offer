@@ -110,7 +110,7 @@ public class ProductModel extends Model {
             HashMap<String, String> map= where("id="+res.get(i).get("product_id")).find();
             ProductBean bean = new ProductBean(map);
 
-            bean.spareBeans = new SpareModel().getBeansByCat_id_real1(offer_id);
+            bean.spareBeans = new SpareModel().getBeansByCat_id_real1(bean.id,offer_id);
             list.add(bean);
 
         }

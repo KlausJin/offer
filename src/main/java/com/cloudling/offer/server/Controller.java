@@ -31,7 +31,7 @@ public class Controller {
 	public Controller(ControllerContext context){
 		this.context = context;
 		assigns = new HashMap<>();
-		sessionID =context.request.getSession().getId();//"1b8nnnh5ooibu1qui4csxgwd8";
+		sessionID ="186j5ki2ux6fdhl3am4efcikw";//context.request.getSession().getId();//"1b8nnnh5ooibu1qui4csxgwd8";
 	}
 
 	protected void session(Object object) throws Exception {

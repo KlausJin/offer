@@ -15,8 +15,8 @@ public class OfferAttrModel extends  Model {
         ArrayList<HashMap<String,String>> list=where("spare_id ="+spare_id).select();
         return list;
     }
-    public ArrayList<HashMap<String, String>> getSpareByOn(String offer_id){
-        return where("offer_id="+offer_id+" and attr_id="+"on").select();
+    public ArrayList<HashMap<String, String>> getSpareByOn(String product_id,String offer_id){
+        return where("offer_id="+offer_id+" and attr_id="+"on"+" and product_id="+product_id).select();
 
     }
 }
