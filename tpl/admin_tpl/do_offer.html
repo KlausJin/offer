@@ -66,7 +66,6 @@
                     </div>
 
 
-
                 </div>
             </div>
         </div>
@@ -89,121 +88,279 @@
 
 
 <script>
+    var list = [];
+    var index = 0;
+    var custom_id = 0;
+    var products = [];
+    (function (_w, $) {
+
+        $.extend({
+            "warn": function (msg) {
+                alert(msg)
+            },
+            "getdata": function (a, b, c) {
+                $.getJSON(a, b, function (res) {
+                    if (res.code == "success") {
+                        c(res.data)
+                    } else {
+                        $.warn(res.msg)
+                    }
+                })
+            }
+        })
+
+
+        _w['show_pro'] = function (data) {
+            if (index >= 1) {
+                getCurrentProduct()
+            }
+            products[index] = {};
+            products[index]['id'] = data.id;
+            products[index]['product_num'] = 100;
+            Offer.show_pro_btn(data);
+            Offer.clear_product();
+            // Offer.show_spare(data, $(".spare_list"));
+            Offer.clear_common_spare();
+        }
+
+        _w['Offer'] = {
+            "show_pro_btn": function (data) {
+                $(".btn_pro").show();
+                var products = data.productBeans, p = '';
+                for (var i = 0; i < products.length; i++) {
+                    var p = '<button id="pro_btn_' + index + '" onclick="switch_pro(' + index + ')" class="btn-primary btn-default form-control brs">' + products[i].code + '</button>';
+                    $(".btn_pro").find(".btn_pro_list").find("button").removeClass("btn-primary")
+                    $(".btn_pro").find(".btn_pro_list").append(p)
+
+                    var spares = products[i].spareBeans, s = '';
+                    alert(JSON.stringify(spares))
+                    for (var j = 0; j < spares.length; j++) {
+                        s += '<h5>' + spares[j].name + '</h5>'
+                        s += '<div class="product_attr">';
+                        var attrBeans = spares[j].attrBeans;
+                        alert(JSON.stringify(attrBeans))
+                        for (var z = 0; z < attrBeans.length; z++) {
+                            var attr = new Attr(attrBeans[z]);
+                            s += attr.getHtml();
+                        }
+                        s += '</div>'
+                    }
+                    $(".spare_list").append(s)
+                    index++;
+                }
+
+            },
+            "show_common_spare": function (data, t) {
+                var spares = data.spareBeans, s = '';
+                for (var i = 0; i < spares.length; i++) {
+
+
+                    s += ' <label class="checkbox-inline"><input class="cs" data-id="' + spares[i].id + '" type="checkbox">'
+                        + spares[i].name + '</label>'
+                    s += '<div id="product_attr_' + spares[i].id + '" class="product_attr attr_diabled">';
+                    var attrBeans = spares[i].attrBeans;
+                    for (var j = 0; j < attrBeans.length; j++) {
+                        var attr = new Attr(attrBeans[j]);
+                        s += attr.getHtml();
+                    }
+                    s += '</div>'
+                }
+                t.append(s)
+
+                bindAttr();
+
+                t.find(".cs").each(function () {
+                    var tt = $(this), id = tt.attr("data-id");
+                    $("#product_attr_" + id).find("select").attr("disabled", "disabled")
+                })
+
+                t.find(".input-num").each(function () {
+                    var tt = $(this)
+                    tt.attr("disabled", true)
+                })
+
+                t.find(".cs").on("change", function () {
+                    var tt = $(this), id = tt.attr("data-id");
+                    if (tt[0].checked) {
+                        $("#product_attr_" + id).removeClass("attr_diabled")
+                        $("#product_attr_" + id).find(".input-num").attr("disabled", false)
+                        $("#product_attr_" + id).find("select").attr("disabled", false)
+                    } else {
+                        $("#product_attr_" + id).find(".input-num").attr("disabled", true)
+                        $("#product_attr_" + id).addClass("attr_diabled")
+                        $("#product_attr_" + id).find("select").attr("disabled", true)
+                    }
+                })
+            },
+            "clear_product": function () {
+                $(".spare_list").html("")
+            },
+            "clear_common_spare": function () {
+                $(".cs").each(function () {
+                    var tt = $(this), id = tt.attr("data-id");
+                    tt.attr('checked', false)
+                    tt[0].checked = false;
+                    $("#product_attr_" + id).find("select").attr("disabled", "disabled")
+                    $("#product_attr_" + id).find("select").val("")
+                })
+                $(".input-num").each(function () {
+                    var tt = $(this)
+                    tt.attr("disabled", true)
+                    tt.val("")
+                })
+            }
+        }
+
+
+        _w['Attr'] = function (data) {
+            this.data = data;
+            this.getHtml = function () {
+                var atts = this.data.f_attrBeans;
+                var s = '<div class="form-group">\n' +
+                    '                <label class="col-md-2 control-label" for="text-field">' + this.data.name + '</label>\n' +
+                    '            <div class="col-md-3">';
+
+                if (atts.length == 1) {
+                    var name = atts[0].name || this.data.name;
+                    if (atts[0].num == -2) {
+                        s += '<input placeholder="请输入' + name + '的数量" type="number" data-id="' + atts[0].id + '"  class="form-control input-num">'
+                    } else {
+                        s += '<label class="col-md-10 control-label" style="text-align: left">' + name + '</label>'
+                    }
+
+                } else {
+
+                    var name = atts[0].name || this.data.name;
+                    if (atts[0].num == -2) {
+                        s += '<input placeholder="请输入所需的数量" type="number" data-id="' + atts[0].id + '"  class="form-control input-num">'
+                    }
+                    var relate_id = data['relate_id'] || 0;
+                    if (relate_id > 0) {
+                        rids[relate_id] = rids[relate_id] || []
+                        rids[relate_id].push(data['id']);
+                    }
+
+                    var or_id = data['or_id'] || 0;
+                    oids[or_id] = data['id'];
+                    s += '<select data-or-id="' + or_id + '" data-relate-id="' + relate_id + '" data-id="' + data["id"] + '" class="form-control ">'
+                    for (var i = 0; i < atts.length; i++) {
+
+                        s += '<option data-code="' + atts[i].code + '" value="' + atts[i].id + '">' + atts[i].name + '</option>'
+                    }
+                    s += '</select>'
+                }
+
+                s += ' </div>\n' +
+                    '                </div>';
+
+
+                return s;
+
+
+            }
+
+
+        }
+
+        _w['switch_pro'] = function (pos) {
+            if (pos == index - 1) return;
+            else {
+                getCurrentProduct()
+                Offer.clear_common_spare();
+                $(".btn_pro_list").find("button").removeClass("btn-primary")
+                // Offer.clear_product();
+                index = pos + 1;
+                $("#pro_btn_" + pos).addClass("btn-primary")
+
+                var has_data = products[pos] || false;
+                if (has_data) {
+                    tohtml(has_data)
+                }
+            }
+        }
+    })(window, jQuery)
+
+    function tohtml(data) {
+        var pos = index - 1;
+        var product = products[pos] || false;
+        var attrs = product['attrs']
+
+
+        $("select").each(function () {
+
+            var t = $(this), attr_id = t.attr("data-id");
+            var v = attrs[attr_id] || false;
+            if (v) {
+                t.attr("disabled", false)
+                t.val(v)
+            } else {
+                t.attr("disabled", true)
+            }
+
+        })
+        //
+        $(".cs").each(function () {
+            var t = $(this), attr_id = t.attr("data-id");
+            var v = attrs[attr_id] || false;
+            if (v) {
+                t.attr('checked', true)
+                t[0].checked = true;
+            }
+
+        })
+        //
+        $(".input-num").each(function () {
+            var t = $(this), attr_id = t.attr("data-id");
+            var v = attrs[attr_id] || false;
+            if (v) {
+                t.attr("disabled", false)
+                t.val(v)
+            } else {
+                t.attr("disabled", true)
+            }
+        })
+    }
+
     $(function () {
-        $.getdata("/v1/product/getProduct", {"id":${offer_id}}, function (res) {
-            add_pro(res)
+        $.getdata("/v1/offerManage/getProduct", {"id":${offer_id}}, function (res) {
+            show_pro(res)
         })
 
 
     })
 
-
-    _w['add_pro'] = function (data) {
-        if (index >= 1) {
-            getCurrentProduct()
+    function getCurrentProduct() {
+        var pos = index - 1;
+        var product = products[pos] || false;
+        if (!product) {
+            return false;
         }
-        products[index] = {};
-        products[index]['id'] = data.id;
-        products[index]['product_num'] = 100;
-        Offer.show_pro_btn();
-        Offer.add_pro_btn(data);
-        Offer.clear_product();
-        Offer.show_spare(data, $(".spare_list"));
-        Offer.clear_common_spare();
-    }
+        products[pos]["attrs"] = {};
 
-    _w['Offer'] = {
-        "show_pro_btn": function (data) {
-            $(".btn_pro").show();
-            var s = '<button id="pro_btn_' + index + '" onclick="switch_pro(' + index + ')" class="btn-primary btn-default form-control brs">' + data.code + '</button>';
-            $(".btn_pro").find(".btn_pro_list").find("button").removeClass("btn-primary")
-            $(".btn_pro").find(".btn_pro_list").append(s)
-            index++;
-        },
-        "add_pro_btn": function (data) {
-            var products=data.productBeans,s= '';
-            for (var i = 0; i < products.length; i++) {
-                var s = '<button id="pro_btn_' + index + '" onclick="switch_pro(' + index + ')" class="btn-primary btn-default form-control brs">' + data.code + '</button>';
-                $(".btn_pro").find(".btn_pro_list").find("button").removeClass("btn-primary")
-                $(".btn_pro").find(".btn_pro_list").append(s)
+        $("select").each(function () {
+
+            var t = $(this), attr_id = t.attr("data-id"), v = t.val();
+            if (!t.attr("disabled"))
+                products[pos]["attrs"][attr_id] = v;
+        })
+
+        $(".cs").each(function () {
+            var t = $(this), attr_id = t.attr("data-id");
+            if (t[0].checked) {
+                products[pos]["attrs"][attr_id] = t.val();
             }
-            index++;
-        },
-        "show_spare": function (data, t) {
-            var spares = data.spareBeans, s = '';
-            for (var i = 0; i < spares.length; i++) {
-                s += '<h5>' + spares[i].name + '</h5>'
-                s += '<div class="product_attr">';
-                var attrBeans = spares[i].attrBeans;
-                for (var j = 0; j < attrBeans.length; j++) {
-                    var attr = new Attr(attrBeans[j]);
-                    s += attr.getHtml();
-                }
-                s += '</div>'
+        })
+
+        $(".input-num").each(function () {
+            var t = $(this), attr_id = t.attr("data-id");
+            if (!t.attr("disabled")) {
+                products[pos]["attrs"][attr_id] = t.val();
             }
-            t.append(s)
-            bindAttr();
+        })
 
-        },
-        "show_common_spare": function (data, t) {
-            var spares = data.spareBeans, s = '';
-            for (var i = 0; i < spares.length; i++) {
+        return true;
 
 
-                s += ' <label class="checkbox-inline"><input class="cs" data-id="' + spares[i].id + '" type="checkbox">'
-                    + spares[i].name + '</label>'
-                s += '<div id="product_attr_' + spares[i].id + '" class="product_attr attr_diabled">';
-                var attrBeans = spares[i].attrBeans;
-                for (var j = 0; j < attrBeans.length; j++) {
-                    var attr = new Attr(attrBeans[j]);
-                    s += attr.getHtml();
-                }
-                s += '</div>'
-            }
-            t.append(s)
-
-            bindAttr();
-
-            t.find(".cs").each(function () {
-                var tt = $(this), id = tt.attr("data-id");
-                $("#product_attr_" + id).find("select").attr("disabled", "disabled")
-            })
-
-            t.find(".input-num").each(function () {
-                var tt = $(this)
-                tt.attr("disabled", true)
-            })
-
-            t.find(".cs").on("change", function () {
-                var tt = $(this), id = tt.attr("data-id");
-                if (tt[0].checked) {
-                    $("#product_attr_" + id).removeClass("attr_diabled")
-                    $("#product_attr_" + id).find(".input-num").attr("disabled", false)
-                    $("#product_attr_" + id).find("select").attr("disabled", false)
-                } else {
-                    $("#product_attr_" + id).find(".input-num").attr("disabled", true)
-                    $("#product_attr_" + id).addClass("attr_diabled")
-                    $("#product_attr_" + id).find("select").attr("disabled", true)
-                }
-            })
-        },
-        "clear_product": function () {
-            $(".spare_list").html("")
-        },
-        "clear_common_spare": function () {
-            $(".cs").each(function () {
-                var tt = $(this), id = tt.attr("data-id");
-                tt.attr('checked', false)
-                tt[0].checked = false;
-                $("#product_attr_" + id).find("select").attr("disabled", "disabled")
-                $("#product_attr_" + id).find("select").val("")
-            })
-            $(".input-num").each(function () {
-                var tt = $(this)
-                tt.attr("disabled", true)
-                tt.val("")
-            })
-        }
     }
 
 </script>

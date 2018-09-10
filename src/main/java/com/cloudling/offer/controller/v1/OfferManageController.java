@@ -97,17 +97,12 @@ public class OfferManageController extends AdminController {
      * @param
      */
     @action
-    public void getproduct() {
+    public void getProduct() {
         String id = I("id") == null ? "" : I("id").toString();
         OfferModel offerModel = new OfferModel();
         Bean t=offerModel.getProductBean(id);
         HashMap<String, Object> b =t.getData();
         success(b);
-
-
-
-
-
     }
 
 }
