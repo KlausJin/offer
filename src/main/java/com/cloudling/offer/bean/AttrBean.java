@@ -46,6 +46,8 @@ public class AttrBean extends Bean {
 
     public int or_id;
 
+    public int is_material;
+
 
 
    public List<AttrBean> f_attrBeans;

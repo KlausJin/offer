@@ -19,7 +19,8 @@
 <style type="text/css">
     .form-control {
         padding: 0px 5px;
-        height: 28px
+        height: 28px;
+        font-size: 13px;
     }
 
     .brs {
@@ -91,7 +92,8 @@
     var list = [];
     var index = 0;
     var custom_id = 0;
-    var products = [];
+    var product={},products = [],oids={},rids={};
+    cb = {};
     (function (_w, $) {
 
         $.extend({
@@ -110,7 +112,44 @@
         })
 
 
+
+        _w['formulas'] = {
+            1:function (a,data) {
+                return data['num']*data['price']/1000;
+            }
+
+
+        }
+
+        //初始化产品
+        _w['initProducts']=function(data){
+            product =  data;
+            products = product.productBeans;
+            initTab();
+            Offer.show_spare(products[0],$(".spare_list"))
+
+        }
+
+        //初始化导航
+        _w['initTab']=function(){
+            $(".btn_pro").show();
+            var p = '';
+
+            for(var i=0;i<products.length;i++){
+                p += '<button id="pro_btn_' + i + '" onclick="switch_pro(' + index + ')" class="btn-default form-control brs">' + products[i].code + '</button>';
+            }
+
+            $(".btn_pro").find(".btn_pro_list").append(p)
+            $(".btn_pro").find(".btn_pro_list").find("button").removeClass("btn-primary")
+            $("#pro_btn_0").addClass("btn-primary")
+
+        }
+
+
+
+
         _w['show_pro'] = function (data) {
+            console.log(data)
             if (index >= 1) {
                 getCurrentProduct()
             }
@@ -133,12 +172,11 @@
                     $(".btn_pro").find(".btn_pro_list").append(p)
 
                     var spares = products[i].spareBeans, s = '';
-                    alert(JSON.stringify(spares))
+
                     for (var j = 0; j < spares.length; j++) {
                         s += '<h5>' + spares[j].name + '</h5>'
                         s += '<div class="product_attr">';
                         var attrBeans = spares[j].attrBeans;
-                        alert(JSON.stringify(attrBeans))
                         for (var z = 0; z < attrBeans.length; z++) {
                             var attr = new Attr(attrBeans[z]);
                             s += attr.getHtml();
@@ -148,6 +186,23 @@
                     $(".spare_list").append(s)
                     index++;
                 }
+
+            },
+            "show_spare": function (data, t) {
+                var spares = data.spareBeans, s = '';
+                for (var i = 0; i < spares.length; i++) {
+
+                    s += '<h5>' + spares[i].name + '</h5>'
+                    s += '<div class="product_attr">';
+                    var attrBeans = spares[i].attrBeans;
+                    for (var j = 0; j < attrBeans.length; j++) {
+                        var attr = new Attr(attrBeans[j]);
+                        s += attr.getHtml();
+                    }
+                    s += '</div>'
+                }
+                t.append(s)
+                bindAttr();
 
             },
             "show_common_spare": function (data, t) {
@@ -211,21 +266,95 @@
             }
         }
 
+        _w['bindAttr'] = function () {
+            $("select").each(function () {
+                var t = $(this), id = t.attr("data-id"), v = $(this).find("option:selected").attr("data-code");
+                var child_ids = rids[id] || [];
+                for (var i = 0; i < child_ids.length; i++) {
+                    var child_id = child_ids[i];
+                    if (child_id > 0) {
+                        var child = $("[data-id='" + child_id + "']");
+                        child.find("option").each(function () {
+                            var tt = $(this), code = tt.attr("data-code");
+                            if (code != v) {
+                                tt.hide();
+                            }
+                        })
+                    }
+                }
+                var or_id = oids[id] || 0;
+                if (or_id > 0) {
+
+                    var child1 = $("[data-id='" + or_id + "']");
+                    var child2 = $("[data-id='" + id + "']");
+                    child1.attr("data-or-id", id)
+                    child2.attr("data-or-id", or_id)
+                    child1.prepend('<option value="-1">不启用</option>')
+                    child2.prepend('<option value="-1">不启用</option>')
+                    child1.val(-1)
+                    child2.val(-1)
+                }
+
+            })
+
+            $("select").on("change", function () {
+                var t = $(this), id = t.attr("data-id"), v = $(this).find("option:selected").attr("data-code"),
+                    price = $(this).find("option:selected").attr("data-price")
+
+                $("#price_"+id).html(price)
+                var f = cb["cb_"+id] || function (a) {
+
+                };
+                f(price)
+
+
+                var child_ids = rids[id] || 0;
+                for (var i = 0; i < child_ids.length; i++) {
+                    var child_id = child_ids[i];
+                    if (child_id > 0) {
+
+                        var child = $("[data-id='" + child_id + "']");
+                        child.find("option").each(function () {
+                            var tt = $(this), code = tt.attr("data-code");
+                            if (code != v) {
+                                tt.hide();
+                            } else {
+                                child.val(tt.val())
+                                tt.show();
+                            }
+                        })
+                    }
+                }
+
+                var or_id = t.attr('data-or-id');
+                if (or_id > 0) {
+                    var v = t.val();
+                    if (v != -1) {
+                        $("[data-id='" + or_id + "']").val(-1);
+                    }
+                }
+
+
+
+            })
+        }
 
         _w['Attr'] = function (data) {
             this.data = data;
             this.getHtml = function () {
                 var atts = this.data.f_attrBeans;
-                var s = '<div class="form-group">\n' +
+                var s = '<div class="form-group" >\n' +
                     '                <label class="col-md-2 control-label" for="text-field">' + this.data.name + '</label>\n' +
-                    '            <div class="col-md-3">';
+                    '            <div class="col-md-2">';
 
                 if (atts.length == 1) {
                     var name = atts[0].name || this.data.name;
                     if (atts[0].num == -2) {
                         s += '<input placeholder="请输入' + name + '的数量" type="number" data-id="' + atts[0].id + '"  class="form-control input-num">'
                     } else {
-                        s += '<label class="col-md-10 control-label" style="text-align: left">' + name + '</label>'
+                        s += '<label class="col-md-10 control-label" style="text-align: left">' + name ;
+
+                        s+='</label>';
                     }
 
                 } else {
@@ -245,12 +374,92 @@
                     s += '<select data-or-id="' + or_id + '" data-relate-id="' + relate_id + '" data-id="' + data["id"] + '" class="form-control ">'
                     for (var i = 0; i < atts.length; i++) {
 
-                        s += '<option data-code="' + atts[i].code + '" value="' + atts[i].id + '">' + atts[i].name + '</option>'
+                        s += '<option data-price="'+atts[i].price+'" data-code="' + atts[i].code + '" value="' + atts[i].id + '">' + atts[i].name + '</option>'
                     }
                     s += '</select>'
                 }
 
-                s += ' </div>\n' +
+                s += ' </div>\n';
+
+                var price = atts[0].price;
+
+                if(price!=0)
+
+                s+='<div class="col-md-2">';
+
+                s+='<label class="control-label">';
+                var is_m = atts[0].is_material || 0;
+                if(is_m){
+                    s+='单价：'
+                }
+                s+='<span id="price_'+data['id']+'">'+atts[0].price+'</label>'
+
+
+                s+='</div>'
+
+                var num = atts[0].num || 0;
+                var formula = atts[0].formula || 0;
+
+                if(num>0){
+                    s+='<div class="col-md-2"><label class="control-label">数量：'+num+'</label></div>'
+                }
+
+
+                if(formula>0){
+                    var v = "";
+                    switch (formula){
+                        case 1:
+                            v=mul(atts[0].num,atts[0].price);
+                            var id = data['id'];
+
+                            cb["cb_"+id]=function (a) {
+                                var nv = a*atts[0].num;
+
+                                $("#all_price_"+id).val(nv);
+                            }
+                            break;
+                        case 2:
+                            v=mul(mul(atts[0].num,atts[0].num),atts[0].price)/10000;
+                            var id = data['id'];
+
+                            cb["cb_"+id]=function (a) {
+                                var nv = mul(mul(atts[0].num,atts[0].num),a)/10000;
+
+                                $("#all_price_"+id).val(nv);
+                            }
+                            break;
+                        case 6:
+                            v=mul(atts[0].num,atts[0].price);
+                            var id = data['id'];
+
+                            cb["cb_"+id]=function (a) {
+                                var nv = a*atts[0].num;
+
+                                $("#all_price_"+id).val(nv);
+                            }
+                            break;
+                        case 3:
+                        case 4:
+                            v=mul(atts[0].num,atts[0].price);
+                            v = div(v,10000);
+                            var id = data['id'];
+
+                            cb["cb_"+id]=function (a) {
+                                var nv = a*atts[0].num;
+                                v = div(v,10000);
+
+                                $("#all_price_"+id).val(nv);
+                            }
+                            break;
+
+
+
+                    }
+
+                    s+='<div class="col-md-2"><input id="all_price_'+data['id']+'" readonly type="text" value="'+v+'" class="form-control"></div>'
+                }
+
+                s+=
                     '                </div>';
 
 
@@ -279,6 +488,127 @@
             }
         }
     })(window, jQuery)
+
+
+
+    // 浮点数求和
+    function add(a, b) {
+        var c, d, e;
+        try {
+            c = a.toString().split(".")[1].length;
+        } catch (f) {
+            c = 0;
+        }
+        try {
+            d = b.toString().split(".")[1].length;
+        } catch (f) {
+            d = 0;
+        }
+        return e = Math.pow(10, Math.max(c, d)), (mul(a, e) + mul(b, e)) / e;
+    }
+
+    // 浮点数相减
+    function sub(a, b) {
+        var c, d, e;
+        try {
+            c = a.toString().split(".")[1].length;
+        } catch (f) {
+            c = 0;
+        }
+        try {
+            d = b.toString().split(".")[1].length;
+        } catch (f) {
+            d = 0;
+        }
+        return e = Math.pow(10, Math.max(c, d)), (mul(a, e) - mul(b, e)) / e;
+    }
+
+    // 浮点数相乘
+    function mul(a, b) {
+        var c = 0,
+            d = a.toString(),
+            e = b.toString();
+        try {
+            c += d.split(".")[1].length;
+        } catch (f) {}
+        try {
+            c += e.split(".")[1].length;
+        } catch (f) {}
+        return Number(d.replace(".", "")) * Number(e.replace(".", "")) / Math.pow(10, c);
+    }
+
+    // 浮点数相除
+    function div(a, b) {
+        var c, d, e = 0,
+            f = 0;
+        try {
+            e = a.toString().split(".")[1].length;
+        } catch (g) {}
+        try {
+            f = b.toString().split(".")[1].length;
+        } catch (g) {}
+        return c = Number(a.toString().replace(".", "")), d = Number(b.toString().replace(".", "")), mul(c / d, Math.pow(10, f - e));
+    }
+    // 浮点数求和
+    function add(a, b) {
+        var c, d, e;
+        try {
+            c = a.toString().split(".")[1].length;
+        } catch (f) {
+            c = 0;
+        }
+        try {
+            d = b.toString().split(".")[1].length;
+        } catch (f) {
+            d = 0;
+        }
+        return e = Math.pow(10, Math.max(c, d)), (mul(a, e) + mul(b, e)) / e;
+    }
+
+    // 浮点数相减
+    function sub(a, b) {
+        var c, d, e;
+        try {
+            c = a.toString().split(".")[1].length;
+        } catch (f) {
+            c = 0;
+        }
+        try {
+            d = b.toString().split(".")[1].length;
+        } catch (f) {
+            d = 0;
+        }
+        return e = Math.pow(10, Math.max(c, d)), (mul(a, e) - mul(b, e)) / e;
+    }
+
+    // 浮点数相乘
+    function mul(a, b) {
+        var c = 0,
+            d = a.toString(),
+            e = b.toString();
+        try {
+            c += d.split(".")[1].length;
+        } catch (f) {}
+        try {
+            c += e.split(".")[1].length;
+        } catch (f) {}
+        return Number(d.replace(".", "")) * Number(e.replace(".", "")) / Math.pow(10, c);
+    }
+
+    // 浮点数相除
+    function div(a, b) {
+        var c, d, e = 0,
+            f = 0;
+        try {
+            e = a.toString().split(".")[1].length;
+        } catch (g) {}
+        try {
+            f = b.toString().split(".")[1].length;
+        } catch (g) {}
+        return c = Number(a.toString().replace(".", "")), d = Number(b.toString().replace(".", "")), mul(c / d, Math.pow(10, f - e));
+    }
+
+
 
     function tohtml(data) {
         var pos = index - 1;
@@ -323,7 +653,7 @@
 
     $(function () {
         $.getdata("/v1/offerManage/getProduct", {"id":${offer_id}}, function (res) {
-            show_pro(res)
+            initProducts(res)
         })
 
 
