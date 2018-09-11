@@ -72,7 +72,15 @@ public class AttrModel extends Model {
             else{
                 res.replace("id",data.get("attr_id"));
                 AttrBean bean =new AttrBean(res);
-                bean.f_attrBeans=new AttrModel().getBeanByAttrId(data.get("spare_id"),offer_id,product_id);
+                HashMap<String,String> emptyData = new HashMap<>();
+                AttrBean emptyBean = new AttrBean(emptyData);
+                if(data.get("attr_id").equals("-1")){
+                    emptyBean.id = "-1";
+                    emptyBean.name = "不启用";
+                    bean.f_attrBeans=new ArrayList<>();
+                    bean.f_attrBeans.add(emptyBean);
+                }
+                else bean.f_attrBeans=new AttrModel().getBeanByAttrId(data.get("spare_id"),offer_id,product_id);
                 list.add(bean);
             }
         }
@@ -92,6 +100,7 @@ public class AttrModel extends Model {
             ArrayList<HashMap<String, String>> data = getListByParentId(spare_id);
             for (int i = 0; i < data.size(); i++) {
                 HashMap<String, String> res1 = data.get(i);
+
                 if (catid.get("cat_id").equals("32")) {
                     if (res1.get("price").equals("-2.0000")) {
                         res1.replace("price", materialModel.getMaterial(res1.get("name")).get("price"));
