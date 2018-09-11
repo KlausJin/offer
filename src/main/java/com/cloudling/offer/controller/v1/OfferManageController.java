@@ -97,17 +97,26 @@ public class OfferManageController extends AdminController {
      * @param
      */
     @action
-    public void getproduct() {
+    public void getProduct() {
         String id = I("id") == null ? "" : I("id").toString();
         OfferModel offerModel = new OfferModel();
         Bean t=offerModel.getProductBean(id);
         HashMap<String, Object> b =t.getData();
         success(b);
 
-
-
-
-
+    }
+    /**
+     * 产品属性渲染到模板(常用配件)
+     *
+     * @param
+     */
+    @action
+    public void getProduct_real(){
+        String id = I("id") == null ? "" : I("id").toString();
+        OfferModel offerModel = new OfferModel();
+        Bean t=offerModel.getProductBean_real(id);
+        HashMap<String, Object> b =t.getData();
+        success(b);
     }
 
 }

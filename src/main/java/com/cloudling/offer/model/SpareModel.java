@@ -93,7 +93,7 @@ public class SpareModel extends Model {
         }
         return list;
     }
-  /*  public List<SpareBean> getBeansByCat_id_real1(String product_id,String offer_id){
+    public List<SpareBean> getBeansByCat_id_real1(String product_id,String offer_id){
 
         List<SpareBean> list =new ArrayList<>();
         OfferAttrModel offerattrModel=new OfferAttrModel();
@@ -106,7 +106,7 @@ public class SpareModel extends Model {
             list.add(bean);
         }
         return list;
-    }*/
+    }
     public ArrayList<HashMap<String, String>> getSparesByProductId_real(String cat_id){
 
         return where("product_id="+0+" and cat_id="+cat_id).select();

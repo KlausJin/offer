@@ -191,7 +191,7 @@ public class AttrModel extends Model {
      * @auther: CodyLongo
      * @modified:
      */
-/*    public List<AttrBean> getSpareId_real(String spare_id,String offer_id,String product_id){
+    public List<AttrBean> getSpareId_real(String spare_id,String offer_id,String product_id){
            ArrayList<HashMap<String,String>> map=getspareId(spare_id);
         List<AttrBean> list =new ArrayList<>();
            for (int i=0;i<map.size();i++){
@@ -206,8 +206,12 @@ public class AttrModel extends Model {
     public List<AttrBean> getBeanByParentId_real(String spare_id,String offer_id){
         OfferAttrModel offerAttrModel=new OfferAttrModel();
         HashMap<String ,String> map=offerAttrModel.getMapBySpareId(spare_id,offer_id);
-
-    }*/
+        List<AttrBean> list =new ArrayList<>();
+        HashMap<String,String>  res=getListByAttrId(map.get("attr_id"));
+        AttrBean bean = new AttrBean(res);
+        list.add(bean);
+        return list;
+    }
 
 
 
