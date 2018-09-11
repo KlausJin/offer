@@ -62,7 +62,7 @@ public class AttrModel extends Model {
      * @return
      */
 
-    public List<AttrBean> getlistBySpareId1(String spare_id,String offer_id,String product_id){
+    public List<AttrBean> getlistBySpareId1(String spare_id,String offer_id,String product_id,String cat_id){
         List<AttrBean> list =new ArrayList<>();
         ArrayList<HashMap<String, String>> map =getspareId(spare_id);
         OfferAttrModel offerAttrModel = OfferAttrModel.getInstance(offer_id);
@@ -71,7 +71,7 @@ public class AttrModel extends Model {
             HashMap<String, String> data= offerAttrModel.getMapBySpareId(res.get("id"), offer_id);
             if (data==null){
                 AttrBean bean =new AttrBean(res);
-                bean.f_attrBeans=new AttrModel().getBeanByAttrId(bean.id,offer_id,product_id);
+                bean.f_attrBeans=new AttrModel().getBeanByAttrId(bean.id,offer_id,product_id,cat_id);
                 list.add(bean);
             }
             else{
@@ -85,7 +85,7 @@ public class AttrModel extends Model {
                     bean.f_attrBeans=new ArrayList<>();
                     bean.f_attrBeans.add(emptyBean);
                 }
-                else bean.f_attrBeans=new AttrModel().getBeanByAttrId(data.get("spare_id"),offer_id,product_id);
+                else bean.f_attrBeans=new AttrModel().getBeanByAttrId(data.get("spare_id"),offer_id,product_id,cat_id);
                 list.add(bean);
             }
         }
@@ -93,7 +93,7 @@ public class AttrModel extends Model {
     }
 
 
-    public List<AttrBean> getBeanByAttrId(String spare_id, String offer_id,String product_id) {
+    public List<AttrBean> getBeanByAttrId(String spare_id, String offer_id,String product_id,String cat_id) {
         OfferProductModel offerProductModel = new OfferProductModel();
         ProductModel productModel = new ProductModel();
         MaterialModel materialModel = new MaterialModel();
@@ -107,7 +107,7 @@ public class AttrModel extends Model {
             for (int i = 0; i < data.size(); i++) {
                 HashMap<String, String> res1 = data.get(i);
 
-                if (catid.get("cat_id").equals("32")) {
+                if (cat_id.equals("32")) {
                     if (res1.get("price").equals("-2.0000")) {
                         res1.replace("price", materialModel.getMaterial(res1.get("name")).get("price"));
                         AttrBean bean = new AttrBean(res1);
@@ -161,7 +161,7 @@ public class AttrModel extends Model {
         else {
 
             HashMap<String, String> map = getListByAttrId(res.get("attr_id"));
-            if (catid.get("cat_id").equals("32")) {
+            if (cat_id.equals("32")) {
                 if (map.get("price").equals("-2.0000")) {
                     map.replace("price", materialModel.getMaterial(map.get("name")).get("price"));
                     AttrBean bean = new AttrBean(map);
@@ -219,7 +219,7 @@ public class AttrModel extends Model {
 
     }
     public List<AttrBean> getBeanByParentId_real(String spare_id,String offer_id){
-        OfferAttrModel offerAttrModel=new OfferAttrModel();
+        OfferAttrModel offerAttrModel = OfferAttrModel.getInstance(offer_id);
         HashMap<String ,String> map=offerAttrModel.getMapBySpareId(spare_id,offer_id);
         List<AttrBean> list =new ArrayList<>();
         HashMap<String,String>  res=getListByAttrId(map.get("attr_id"));

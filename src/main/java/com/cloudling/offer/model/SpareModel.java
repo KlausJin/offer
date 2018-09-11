@@ -47,14 +47,14 @@ public class SpareModel extends Model {
         return list;
     }
 
-    public List<SpareBean> getBeansByProductId1(String product_id,String offer_id){
+    public List<SpareBean> getBeansByProductId1(String product_id,String offer_id,String cat_id){
         List<SpareBean> list =new ArrayList<>();
         ArrayList<HashMap<String, String>> map = getSparesByProductId(product_id);
 
         for (int i=0;i<map.size();i++){
             HashMap<String,String> res =map.get(i);
             SpareBean bean =new SpareBean( res);
-            bean.attrBeans= new AttrModel().getlistBySpareId1(bean.id,offer_id,product_id);
+            bean.attrBeans= new AttrModel().getlistBySpareId1(bean.id,offer_id,product_id,cat_id);
             list.add(bean);
         }
         return list;
@@ -96,8 +96,8 @@ public class SpareModel extends Model {
     public List<SpareBean> getBeansByCat_id_real1(String product_id,String offer_id){
 
         List<SpareBean> list =new ArrayList<>();
-        OfferAttrModel offerattrModel=new OfferAttrModel();
-        ArrayList<HashMap<String, String>> map = offerattrModel.getSpareByOn(product_id,offer_id);
+        OfferAttrModel offerAttrModel = OfferAttrModel.getInstance(offer_id);
+        ArrayList<HashMap<String, String>> map = offerAttrModel.getSpareByOn(product_id,offer_id);
 
         for (int i=0;i<map.size();i++){
             HashMap<String,String> res=getSpare_real(map.get(i).get("spare_id"));
