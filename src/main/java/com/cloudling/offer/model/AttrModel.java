@@ -110,6 +110,7 @@ public class AttrModel extends Model {
                 if (cat_id.equals("32")) {
                     if (res1.get("price").equals("-2.0000")) {
                         res1.replace("price", materialModel.getMaterial(res1.get("name")).get("price"));
+                        res1.put("is_material","1");
                         AttrBean bean = new AttrBean(res1);
                         list.add(bean);
 
@@ -161,9 +162,16 @@ public class AttrModel extends Model {
         else {
 
             HashMap<String, String> map = getListByAttrId(res.get("attr_id"));
+            if(map.get("formula").equals("3")){
+                map.put("num",box_area(map)+"");
+            }
             if (cat_id.equals("32")) {
+
                 if (map.get("price").equals("-2.0000")) {
                     map.replace("price", materialModel.getMaterial(map.get("name")).get("price"));
+                    map.put("is_material","1");
+
+
                     AttrBean bean = new AttrBean(map);
                     list.add(bean);
                 }
@@ -186,6 +194,8 @@ public class AttrModel extends Model {
                     HashMap<String, String> pri = where("parent_id=" + map.get("parent_id") + " and code=" + "01").field("price").find();
                     double price = Double.parseDouble(pri.get("price")) + Double.parseDouble(map.get("price"));
                     map.replace("price", String.valueOf(price));
+
+
                     AttrBean bean = new AttrBean(map);
                     list.add(bean);
                 }
@@ -283,14 +293,15 @@ public class AttrModel extends Model {
     /**
      * 计算盒子表面积
      */
-    public double box_area(String spare_id,String attr_id){
-        HashMap<String, String> attr = where("id=" + attr_id).find();
-        HashMap<String, String> kmap = where("name='宽' and spare_id="+ spare_id).field("id").find();
-        HashMap<String, String> gmap = where("name='高' and spare_id="+ spare_id).field("id").find();
-        HashMap<String, String> hmap = where("name='厚' and spare_id="+ spare_id).field("id").find();
-        HashMap<String, String> kres = where("code=" + attr.get("code") + "and parent=" + kmap.get("id")).find();
-        HashMap<String, String> gres = where("code=" + attr.get("code") + "and parent=" + gmap.get("id")).find();
-        HashMap<String, String> hres = where("code=" + attr.get("code") + "and parent=" + hmap.get("id")).find();
+    public double box_area(HashMap<String, String>  attr){
+        HashMap<String,String> parent = where("id="+attr.get("parent_id")).find();
+        String spare_id = parent.get("spare_id");
+        HashMap<String, String> kmap = where("name like '%宽%' and spare_id="+ spare_id).field("id").find();
+        HashMap<String, String> gmap = where("name like '%高%' and spare_id="+ spare_id).field("id").find();
+        HashMap<String, String> hmap = where("name like '%厚%' and spare_id="+ spare_id).field("id").find();
+        HashMap<String, String> kres = where("code=" + attr.get("code") + " and parent_id=" + kmap.get("id")).find();
+        HashMap<String, String> gres = where("code=" + attr.get("code") + " and parent_id=" + gmap.get("id")).find();
+        HashMap<String, String> hres = where("code=" + attr.get("code") + " and parent_id=" + hmap.get("id")).find();
         double num;
         double knum=Double.parseDouble(kres.get("name"));
         double gnum=Double.parseDouble(gres.get("name"));
