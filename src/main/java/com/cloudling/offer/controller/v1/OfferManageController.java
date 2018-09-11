@@ -98,11 +98,14 @@ public class OfferManageController extends AdminController {
      */
     @action
     public void getProduct() {
+       long s =TimeUtil.getLongTimeStamp();
         String id = I("id") == null ? "" : I("id").toString();
         OfferModel offerModel = new OfferModel();
         Bean t=offerModel.getProductBean(id);
         HashMap<String, Object> b =t.getData();
         success(b);
+        long ms =TimeUtil.getLongTimeStamp()-s;
+        System.out.println("-------------------"+ms+"ms");
 
     }
     /**
