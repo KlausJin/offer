@@ -2,6 +2,7 @@ package com.cloudling.offer.model;
 
 import com.cloudling.offer.bean.AttrBean;
 import com.cloudling.offer.util.DoubleUtil;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -138,12 +139,7 @@ public class AttrModel extends Model {
                             AttrBean bean = new AttrBean(res1);
                             list.add(bean);
 
-                        }
-                        else if (res1.get("spare_id").equals("出货费用")){
-                            AttrBean bean = new AttrBean(res1);
-                            list.add(bean);
-                        }
-                        else {
+                        } else {
                             HashMap<String, String> pri = where("parent_id=" + res1.get("parent_id") + " and code=" + "01").field("price").find();
                             double price = Double.parseDouble(pri.get("price")) + Double.parseDouble(res1.get("price"));
                             res1.replace("price", String.valueOf(price));
@@ -153,6 +149,7 @@ public class AttrModel extends Model {
 
 
                     }
+
 
                 }
             }
@@ -168,9 +165,8 @@ public class AttrModel extends Model {
             }
 
             if(map.get("formula").equals("4")){
-                map.put("num",carton_area(map)+"");
-            }
-
+                map.put("num",carton_area(map,offer_id).get("area")+"");
+               }
             if (cat_id.equals("32")) {
 
                 if (map.get("price").equals("-2.0000")) {
@@ -191,9 +187,6 @@ public class AttrModel extends Model {
 
             else if (catid.get("cat_id").equals("22")) {
                 if (map.get("code").equals("01") || map.get("code").equals("0")) {
-                    AttrBean bean = new AttrBean(map);
-                    list.add(bean);
-                } else if (getSpareByParentId(map.get("parent_id")).get("name").equals("出货费用")) {
                     AttrBean bean = new AttrBean(map);
                     list.add(bean);
                 } else {
@@ -243,10 +236,15 @@ public class AttrModel extends Model {
 
     }
     public List<AttrBean> getBeanByParentId_real(String spare_id,String offer_id,String product_id){
+      OfferProductModel offerProductModel =new OfferProductModel();
         OfferAttrModel offerAttrModel = OfferAttrModel.getInstance(offer_id);
         HashMap<String ,String> map=offerAttrModel.getOfferAttrBySpareId(spare_id,offer_id,product_id);
         List<AttrBean> list =new ArrayList<>();
         HashMap<String,String>  res=getListByAttrId(map.get("attr_id"));
+        if (res.get("formula").equals("8")|| res.get("formula").equals("9")){
+            HashMap<String, String> cbm = offerProductModel.getCBM(offer_id,product_id);
+            res.put("CBM",cbm.get("cbm"));
+        }
         res.replace("num",map.get("num"));
         AttrBean bean = new AttrBean(res);
         list.add(bean);
@@ -257,8 +255,8 @@ public class AttrModel extends Model {
 
 
 
-    public ArrayList<HashMap<String, String>> getspareId(String sapre_id) {
-        ArrayList<HashMap<String, String>> list = where("spare_id =" + sapre_id).select();
+    public ArrayList<HashMap<String, String>> getspareId(String spare_id) {
+        ArrayList<HashMap<String, String>> list = where("spare_id =" + spare_id).select();
         return list;
     }
     public HashMap<String,String> getSpareId_real(String spare_id){
@@ -351,7 +349,9 @@ public class AttrModel extends Model {
      *
      */
 
-    public double carton_area(HashMap<String,String> attr){
+    public HashMap<String,Double> carton_area(HashMap<String,String> attr,String offer_id){
+        OfferProductModel offerProductModel =new OfferProductModel();
+        HashMap<String,Double> list=new HashMap<>();
         HashMap<String,String> parent = where("id="+attr.get("parent_id")).find();
         HashMap<String, String> spare = new Model("spare").where("id=" + parent.get("spare_id")).find();
         String product_id = spare.get("product_id");
@@ -374,9 +374,11 @@ public class AttrModel extends Model {
         HashMap<String, String> res = carton_area(size[0] + "", size[1] + "", size[2] + "",
                 (int)Float.parseFloat(box.get("value"))+"", box2.get("value"));
 
-        return DoubleUtil.div(Double.parseDouble(res.get("area")),(int)Float.parseFloat(box.get("value")),2);
-
-
+        double area = DoubleUtil.div(Double.parseDouble(res.get("area")), (int) Float.parseFloat(box.get("value")), 2);
+        double CBM= DoubleUtil.round(Double.parseDouble(res.get("CBM")),4);
+        list.put("area",area);
+        offerProductModel.addCBM(CBM+"",product_id,offer_id);
+        return list;
 
     }
 
@@ -389,7 +391,6 @@ public class AttrModel extends Model {
             double chang=(Double.parseDouble(hnum)*Double.parseDouble(num))+2.5;
             if (name.equals("有")){
                 double gao=Double.parseDouble(gnum)+2;
-                area=(kuan+chang+5)*(chang+gao+3)*2;
                 area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(chang,gao),3)),2);
                 CBM=DoubleUtil.div(DoubleUtil.mul(DoubleUtil.mul(chang,kuan),gao),1000000);
                 res.put("长",chang+"");
@@ -449,7 +450,6 @@ public class AttrModel extends Model {
                 res.put("宽",kuan+"");
                 res.put("高",gao+"");
                 res.put("area",area+"");
-                res.put("CBM",CBM+"");
                 res.put("CBM",CBM+"");
 
             }

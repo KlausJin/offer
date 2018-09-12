@@ -3,6 +3,7 @@ package com.cloudling.offer.model;
 import com.cloudling.offer.bean.OfferBean;
 
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 
 public class OfferModel extends Model {
     public OfferModel()
@@ -37,6 +38,7 @@ public class OfferModel extends Model {
            return bean;
         }
     }
+
 }
 
 

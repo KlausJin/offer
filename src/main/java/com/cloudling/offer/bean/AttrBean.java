@@ -20,7 +20,7 @@ public class AttrBean extends Bean {
     public   float price;
 
     String attr;
-
+   public String CBM;
 
     public  String num;
 

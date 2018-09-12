@@ -49,11 +49,11 @@ public class SpareModel extends Model {
 
     public List<SpareBean> getBeansByProductId1(String product_id,String offer_id,String cat_id){
         List<SpareBean> list =new ArrayList<>();
-        ArrayList<HashMap<String, String>> map = getSparesByProductId(product_id);
+        ArrayList<HashMap<String, String>> map = getSparesByProductId(product_id); //根据product_id 查找spare
 
-        for (int i=0;i<map.size();i++){
+        for (int i=0;i<map.size();i++){                                          //遍历找出的spare
             HashMap<String,String> res =map.get(i);
-            SpareBean bean =new SpareBean( res);
+            SpareBean bean =new SpareBean( res);                                 //放入bean
             bean.attrBeans= new AttrModel().getlistBySpareId1(bean.id,offer_id,product_id,cat_id);
             list.add(bean);
         }
