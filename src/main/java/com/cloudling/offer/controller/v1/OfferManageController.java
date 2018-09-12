@@ -90,6 +90,12 @@ public class OfferManageController extends AdminController {
     }
 
 
+    @action
+    public void do_edit(){
+
+    }
+
+
 
     /**
      * 产品属性渲染到模板(固定配件)

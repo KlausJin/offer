@@ -70,6 +70,13 @@ public class OfferSaleController extends AdminController {
         success(list);
     }
 
+    /**
+     * @Description:业务员报价细节
+     * @param:
+     * @return:
+     * @auther: CodyLongo
+     * @modified:
+     */
     @action
     public void start_offer() {
         String cat_id = I("cat_id").toString();
@@ -77,8 +84,15 @@ public class OfferSaleController extends AdminController {
         toHtml("admin_tpl/start_offer");
     }
 
+    /**
+     * @Description:业务员提交需求存数据库
+     * @param:
+     * @return:
+     * @auther: CodyLongo
+     * @modified:
+     */
     @action
-    public void get_offer() {
+    public void do_offer() {
         try {
             String offer_info = I("data").toString();
             HashMap<String, Object> d = JSON.parseObject(offer_info, new HashMap<String, Object>().getClass());
@@ -104,23 +118,24 @@ public class OfferSaleController extends AdminController {
                 M("offer_product").add(numdata);
                 HashMap<String, String> res = new HashMap<>();
                 HashMap<String, String> attrs = JSON.parseObject(product.get("attrs").toString(), new HashMap<String, Object>().getClass());
-                ArrayList<HashMap<String, String>> list = M("attr").field("id,parent_id").where(" parent_id !=0 and num=-2").select();
-                HashMap<String, String> spe = new HashMap<>();
-                for (int j = 0; j < list.size(); j++) {
-                    String x = list.get(j).get("id");
-                    String y = list.get(j).get("parent_id");
-                    spe.put(x, y);
-                }
+                HashMap<String,String> nums = new HashMap<>();
+                HashMap<String, String> s_attrs = new HashMap<>();
                 for (String key : attrs.keySet()) {
-                    if (spe.containsKey(key)) {
-                        res.put("spare_id", spe.get("" + key + ""));
-                        res.put("attr_id", key);
-                        res.put("num", attrs.get(key));
-                    } else {
-                        res.put("spare_id", key);
-                        res.put("attr_id", attrs.get(key));
-                        res.put("num", 0+"");
+                    if(key.indexOf("n_")==0){
+                        String id = key.replace("n_","");
+                        nums.put(id,attrs.get(key));
+                        //attrs.remove(key);
+                    }else{
+                        s_attrs.put(key,attrs.get(key));
                     }
+
+                }
+
+                for (String key : s_attrs.keySet()) {
+                    res.put("spare_id", key);
+                    res.put("attr_id", s_attrs.get(key));
+                    String num = nums.containsKey(key)?nums.get(key):"0";
+                    res.put("num", num);
                     res.put("product_id", product_id);
                     res.put("offer_id", offer_id + "");
                     long t = M("offer_attr").add(res);

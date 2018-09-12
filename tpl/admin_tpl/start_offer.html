@@ -564,7 +564,7 @@
         data['sale_id'] =${id};
         console.log(JSON.stringify(data))
 
-        $.post("/v1/offerSale/get_offer", {"data": JSON.stringify(data)}, function (res) {
+        $.post("/v1/offerSale/do_offer", {"data": JSON.stringify(data)}, function (res) {
             var ret = JSON.parse(res);
             if (ret.code == "success") {
                 alert("提交报价信息成功")
