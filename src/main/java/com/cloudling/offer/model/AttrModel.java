@@ -239,6 +239,7 @@ public class AttrModel extends Model {
         HashMap<String ,String> map=offerAttrModel.getMapBySpareId(spare_id,offer_id);
         List<AttrBean> list =new ArrayList<>();
         HashMap<String,String>  res=getListByAttrId(map.get("attr_id"));
+        res.replace("num",map.get("num"));
         AttrBean bean = new AttrBean(res);
         list.add(bean);
         return list;
@@ -366,7 +367,7 @@ public class AttrModel extends Model {
         HashMap<String, String> res = carton_area(size[0] + "", size[1] + "", size[2] + "",
                 (int)Float.parseFloat(box.get("value"))+"", box2.get("value"));
 
-       return Double.parseDouble(res.get("面积"))/(int)Float.parseFloat(box.get("value"));
+       return Double.parseDouble(res.get("area"))/(int)Float.parseFloat(box.get("value"));
 
 
 
@@ -374,6 +375,7 @@ public class AttrModel extends Model {
 
     public HashMap<String,String> carton_area(String knum,String gnum,String hnum,String num,String name){
         double area;
+        Double CBM;
         HashMap<String,String> res=new HashMap<>();
         if (num.equals("4")||num.equals("5")||num.equals("6")||num.equals("8")||num.equals("10")||num.equals("12")){
             double kuan=Double.parseDouble(knum)+1.3;
@@ -381,21 +383,25 @@ public class AttrModel extends Model {
             if (name.equals("有")){
                 double gao=Double.parseDouble(gnum)+2;
                 area=(kuan+chang+5)*(chang+gao+3)*2;
+                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(chang,gao),3)),2);
+                CBM=DoubleUtil.div(DoubleUtil.mul(DoubleUtil.mul(chang,kuan),gao),1000000);
                 res.put("长",chang+"");
                 res.put("宽",kuan+"");
                 res.put("高",gao+"");
-                res.put("面积",area+"");
+                res.put("area",area+"");
+                res.put("CBM",CBM+"");
 
 
             }
             else {
                 double gao=Double.parseDouble(gnum)+1.5;
-                area=(kuan+chang+5)*(chang+gao+3)*2;
+                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(chang,gao),3)),2);
+                CBM=DoubleUtil.div(DoubleUtil.mul(DoubleUtil.mul(chang,kuan),gao),1000000);
                 res.put("长",chang+"");
                 res.put("宽",kuan+"");
                 res.put("高",gao+"");
-                res.put("面积",area+"");
-
+                res.put("area",area+"");
+                res.put("CBM",CBM+"");
             }
 
         }
@@ -404,22 +410,25 @@ public class AttrModel extends Model {
             double chang=(Double.parseDouble(hnum)*(Double.parseDouble(num)/2))+2.5;
             if (name.equals("有")){
                 double gao=Double.parseDouble(gnum)*2+2;
-                area=(kuan+chang+5)*(chang+gao+3)*2;
+                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(chang,gao),3)),2);
+                CBM=DoubleUtil.div(DoubleUtil.mul(DoubleUtil.mul(chang,kuan),gao),1000000);
+
                 res.put("长",chang+"");
                 res.put("宽",kuan+"");
                 res.put("高",gao+"");
-                res.put("面积",area+"");
-
+                res.put("area",area+"");
+                res.put("CBM",CBM+"");
 
             }
             else {
                 double gao=Double.parseDouble(gnum)*2+1.5;
-                area=(kuan+chang+5)*(chang+gao+3)*2;
+                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(chang,gao),3)),2);
+                CBM=DoubleUtil.div(DoubleUtil.mul(DoubleUtil.mul(chang,kuan),gao),1000000);
                 res.put("长",chang+"");
                 res.put("宽",kuan+"");
                 res.put("高",gao+"");
-                res.put("面积",area+"");
-
+                res.put("area",area+"");
+                res.put("CBM",CBM+"");
             }
         }
         else if (num.equals("40")||num.equals("48")){
@@ -427,22 +436,25 @@ public class AttrModel extends Model {
             double chang=(Double.parseDouble(hnum)*(Double.parseDouble(num)/4))+2.5;
             if (name.equals("有")){
                 double gao=Double.parseDouble(gnum)*2+2;
-                area=(kuan+chang+5)*(chang+gao+3)*2;
+                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(chang,gao),3)),2);
+                CBM=DoubleUtil.div(DoubleUtil.mul(DoubleUtil.mul(chang,kuan),gao),1000000);
                 res.put("长",chang+"");
                 res.put("宽",kuan+"");
                 res.put("高",gao+"");
-                res.put("面积",area+"");
-
+                res.put("area",area+"");
+                res.put("CBM",CBM+"");
+                res.put("CBM",CBM+"");
 
             }
             else {
                 double gao=Double.parseDouble(gnum)*2+1.5;
-                area=(kuan+chang+5)*(chang+gao+3)*2;
+                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(chang,gao),3)),2);
+                CBM=DoubleUtil.div(DoubleUtil.mul(DoubleUtil.mul(chang,kuan),gao),1000000);
                 res.put("长",chang+"");
                 res.put("宽",kuan+"");
                 res.put("高",gao+"");
-                res.put("面积",area+"");
-
+                res.put("area",area+"");
+                res.put("CBM",CBM+"");
             }
         }
         else if (num.equals("60")){
@@ -450,22 +462,24 @@ public class AttrModel extends Model {
             double chang=(Double.parseDouble(hnum)*(Double.parseDouble(num)/6))+2.5;
             if (name.equals("有")){
                 double gao=Double.parseDouble(gnum)*2+2;
-                area=(kuan+chang+5)*(chang+gao+3)*2;
+                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(chang,gao),3)),2);
+                CBM=DoubleUtil.div(DoubleUtil.mul(DoubleUtil.mul(chang,kuan),gao),1000000);
                 res.put("长",chang+"");
                 res.put("宽",kuan+"");
                 res.put("高",gao+"");
-                res.put("面积",area+"");
-
+                res.put("area",area+"");
+                res.put("CBM",CBM+"");
 
             }
             else {
                 double gao=Double.parseDouble(gnum)*2+1.5;
-                area=(kuan+chang+5)*(chang+gao+3)*2;
+                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(chang,gao),3)),2);
+                CBM=DoubleUtil.div(DoubleUtil.mul(DoubleUtil.mul(chang,kuan),gao),1000000);
                 res.put("长",chang+"");
                 res.put("宽",kuan+"");
                 res.put("高",gao+"");
-                res.put("面积",area+"");
-
+                res.put("area",area+"");
+                res.put("CBM",CBM+"");
             }
         }
         else if (num.equals("80")){
@@ -473,22 +487,24 @@ public class AttrModel extends Model {
             double chang=(Double.parseDouble(hnum)*(Double.parseDouble(num)/8))+2.5;
             if (name.equals("有")){
                 double gao=Double.parseDouble(gnum)*2+2;
-                area=(kuan+chang+5)*(chang+gao+3)*2;
+                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(chang,gao),3)),2);
+                CBM=DoubleUtil.div(DoubleUtil.mul(DoubleUtil.mul(chang,kuan),gao),1000000);
                 res.put("长",chang+"");
                 res.put("宽",kuan+"");
                 res.put("高",gao+"");
-                res.put("面积",area+"");
-
+                res.put("area",area+"");
+                res.put("CBM",CBM+"");
 
             }
             else {
                 double gao=Double.parseDouble(gnum)*2+1.5;
-                area=(kuan+chang+5)*(chang+gao+3)*2;
+                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(chang,gao),3)),2);
+                CBM=DoubleUtil.div(DoubleUtil.mul(DoubleUtil.mul(chang,kuan),gao),1000000);
                 res.put("长",chang+"");
                 res.put("宽",kuan+"");
                 res.put("高",gao+"");
-                res.put("面积",area+"");
-
+                res.put("area",area+"");
+                res.put("CBM",CBM+"");
             }
         }
         else if (num.equals("100")){
@@ -496,22 +512,24 @@ public class AttrModel extends Model {
             double chang=(Double.parseDouble(hnum)*(Double.parseDouble(num)/10))+2.5;
             if (name.equals("有")){
                 double gao=Double.parseDouble(gnum)*2+2;
-                area=(kuan+chang+5)*(chang+gao+3)*2;
+                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(chang,gao),3)),2);
+                CBM=DoubleUtil.div(DoubleUtil.mul(DoubleUtil.mul(chang,kuan),gao),1000000);
                 res.put("长",chang+"");
                 res.put("宽",kuan+"");
                 res.put("高",gao+"");
-                res.put("面积",area+"");
-
+                res.put("area",area+"");
+                res.put("CBM",CBM+"");
 
             }
             else {
                 double gao=Double.parseDouble(gnum)*2+1.5;
-                area=(kuan+chang+5)*(chang+gao+3)*2;
+                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(chang,gao),3)),2);
+                CBM=DoubleUtil.div(DoubleUtil.mul(DoubleUtil.mul(chang,kuan),gao),1000000);
                 res.put("长",chang+"");
                 res.put("宽",kuan+"");
                 res.put("高",gao+"");
-                res.put("面积",area+"");
-
+                res.put("area",area+"");
+                res.put("CBM",CBM+"");
             }
         }
 
