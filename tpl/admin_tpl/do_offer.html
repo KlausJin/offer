@@ -54,7 +54,7 @@
                             </span>
                         </div>
                         <div class="col-md-2">
-                            <button class="btn-default form-control  btn-primary" onclick="sub()">
+                            <button class="btn-default form-control  btn-primary" onclick="subProduct()">
                                 提交报价
                             </button>
                         </div>
@@ -435,7 +435,7 @@
                             cb["cb_"+id]=function (a) {
                                 var nv = a*atts[0].num;
 
-                                $("#all_price_"+id).val(nv);
+                                $("#all_price_"+id).val(nv.toFixed(2));
                             }
                             break;
                         case 2:
@@ -445,7 +445,7 @@
                             cb["cb_"+id]=function (a) {
                                 var nv = mul(mul(atts[0].num,atts[0].num),a)/10000;
 
-                                $("#all_price_"+id).val(nv);
+                                $("#all_price_"+id).val(nv.toFixed(2));
                             }
                             break;
                         case 6:
@@ -455,7 +455,7 @@
                             cb["cb_"+id]=function (a) {
                                 var nv = a*atts[0].num;
 
-                                $("#all_price_"+id).val(nv);
+                                $("#all_price_"+id).val(nv.toFixed(2));
                             }
                             break;
                         case 3:
@@ -468,7 +468,7 @@
                                 var nv = a*atts[0].num;
                                 v = div(v,10000);
 
-                                $("#all_price_"+id).val(nv);
+                                $("#all_price_"+id).val(nv.toFixed(2));
                             }
                             break;
                         case 7:
@@ -481,7 +481,7 @@
                                 var nv =div(a,atts[0].num)
 
 
-                                $("#all_price_"+id).val(nv);
+                                $("#all_price_"+id).val(nv.toFixed(2));
                             }
                             break;
 
@@ -489,7 +489,7 @@
 
                     }
 
-                    s+='<div class="col-md-2"><input id="all_price_'+data['id']+'" readonly type="text" value="'+v+'" ' +
+                    s+='<div class="col-md-2"><input id="all_price_'+data['id']+'" readonly type="text" value="'+v.toFixed(2)+'" ' +
                         'class="form-control all_price"></div>'
                 }else{
                     s+='<div class="col-md-2"><input id="all_price_'+data['id']+'" readonly type="text" value="'+atts[0].price+'" class="form-control"></div>'
@@ -582,7 +582,7 @@
             })
         }
 
-        _w['sub'] = function () {
+        _w['subProduct'] = function () {
             save_product();
             if(save_data.length!=products.length){
                 alert('还有产品未完成报价，无法提交')
