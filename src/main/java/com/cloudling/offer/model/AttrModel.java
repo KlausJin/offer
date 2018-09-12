@@ -244,6 +244,7 @@ public class AttrModel extends Model {
         if (res.get("formula").equals("8")|| res.get("formula").equals("9")){
             HashMap<String, String> cbm = offerProductModel.getCBM(offer_id,product_id);
             res.put("CBM",cbm.get("cbm"));
+            res.put("packing",cbm.get("packing"));
         }
         res.replace("num",map.get("num"));
         AttrBean bean = new AttrBean(res);
@@ -377,7 +378,7 @@ public class AttrModel extends Model {
         double area = DoubleUtil.div(Double.parseDouble(res.get("area")), (int) Float.parseFloat(box.get("value")), 2);
         double CBM= DoubleUtil.round(Double.parseDouble(res.get("CBM")),4);
         list.put("area",area);
-        offerProductModel.addCBM(CBM+"",product_id,offer_id);
+        offerProductModel.addCBM(CBM+"",product_id,offer_id,box.get("value"));
         return list;
 
     }

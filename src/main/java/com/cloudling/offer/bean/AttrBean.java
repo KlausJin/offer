@@ -21,7 +21,7 @@ public class AttrBean extends Bean {
 
     String attr;
    public String CBM;
-
+public String packing;
     public  String num;
 
     public AttrBean(HashMap<String,String> data) {
