@@ -484,6 +484,10 @@
                                 $("#all_price_"+id).val(nv.toFixed(2));
                             }
                             break;
+                        case 8:
+                            v = div(3500,atts[0].num)+div(mul(atts[0].price,atts[0].CBM),atts[0].packing);
+
+                            break;
 
 
 
@@ -492,7 +496,7 @@
                     s+='<div class="col-md-2"><input id="all_price_'+data['id']+'" readonly type="text" value="'+v.toFixed(2)+'" ' +
                         'class="form-control all_price"></div>'
                 }else{
-                    s+='<div class="col-md-2"><input id="all_price_'+data['id']+'" readonly type="text" value="'+atts[0].price+'" class="form-control"></div>'
+                    s+='<div class="col-md-2"><input id="all_price_'+data['id']+'" readonly type="text" value="'+atts[0].price.toFixed(2)+'" class="form-control"></div>'
 
                 }
 
@@ -540,6 +544,7 @@
             price = price.toFixed(2)
             $(".h_price").html(price);
             var all_price = price * parseFloat($(".h_num").html());
+
             $(".h_all").html(all_price.toFixed(2));
         }
 

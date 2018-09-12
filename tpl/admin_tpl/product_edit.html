@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>后台系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- styles -->
+    <link href="/css/styles.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <style type="text/css">
+	  .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12{
+		  padding: 0px 20px 0px 0px; position: relative;
+	  }
+	  .s-loading{ position: absolute; right: 0px; top: 5px; width: 15px; height: 15px; background: url("/images/loading.gif")}
+	  .s-ok{ background-size: 15px 15px; position: absolute; right: 0px; top: 5px; width: 15px; height: 15px; background-image: url("/images/ok.png")}
+
+	  .form-control {
+		  height: 30px;
+		  padding: 5px 10px;
+		  font-size: 12px;
+		  line-height: 1.5;
+		  border-radius: 3px;
+	  }
+	  .xclose{ position: absolute; width: 25px; height: 25px; padding-left: 5px; padding-top: 7px;
+		  cursor: pointer; display: none}
+	  .form-group{ position: relative}
+	  .form-group:hover{ background-color: #ccc; }
+	  .form-group:hover .xclose{ display: block}
+	  .template{
+		  display: none;}
+      .s_add{ display: block; width: 18px; height: 18px; background-image: url("/images/add.png"); background-size: 16px 16px; margin-top: 5px; cursor: pointer}
+      .s_cut{ display: block; width: 18px; height: 18px; background-image: url("/images/cut.png"); background-size: 16px 16px; margin-top: 5px; cursor: pointer}
+
+  </style>
+  <body>
+
+
+    <div class="page-content">
+    	<div class="row">
+			<include file="admin_tpl/left.html"/>
+		  <div class="col-md-12">
+			  <div class="panel-body product_edit">
+
+			  </div>
+
+		  </div>
+		</div>
+    </div>
+
+    <footer>
+         <div class="container">
+         
+            <!--<div class="copy text-center">-->
+               <!--Copyright 2014 <a href='#'>Website</a>-->
+            <!--</div>-->
+            
+         </div>
+      </footer>
+
+
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.js"></script>
+
+  <script>
+      (function (_w,$) {
+
+          var formulas =
+              [{"value":0,"name":"不参与计算"},
+                  {"value":1,"name":"1"},
+                  {"value":2,"name":"2"},
+                  {"value":3,"name":"3"},
+                  {"value":4,"name":"4"},
+                  {"value":5,"name":"5"},
+                  {"value":6,"name":"6"},
+                  {"value":7,"name":"7"},
+                  {"value":8,"name":"8"},
+                  {"value":9,"name":"9"},
+
+
+              ];
+
+          var t_input_str = '<div class="form-group t_input template">\n' +
+              '\t\t\t\t\t\t  <label  class="col-sm-1 control-label"></label>\n' +
+              '\t\t\t\t\t\t  <div class="col-sm-1">\n' +
+              '\t\t\t\t\t\t\t  <input value="" type="text" class="form-control" name="" placeholder="">\n' +
+              '\t\t\t\t\t\t  </div>\n' +
+              '\t\t\t\t\t  </div>';
+
+          var t_select_str = '<div class="form-group t_select template">\n' +
+              '\t\t\t\t\t\t  <label  class="col-sm-1 control-label">产品编码</label>\n' +
+              '\t\t\t\t\t\t  <div class="col-sm-1">\n' +
+              '\t\t\t\t\t\t\t  <select value="" class="form-control" id="" name="" placeholder=""></select>\n' +
+              '\t\t\t\t\t\t  </div>\n' +
+              '\t\t\t\t\t  </div>';
+
+          var t_spare_str = '<div class="form-group template t_spare">\n' +
+              '\t\t\t\t\t  <label  class="col-sm-2 control-label">分类名称：</label>\n' +
+              '\t\t\t\t\t  <div class="col-sm-1">\n' +
+              '\t\t\t\t\t\t  <input value="" type="text" class="form-control" data-attr="name"  placeholder="">\n' +
+              '\t\t\t\t\t  </div>\n' +
+              '\t\t\t\t\t  <label  class="col-sm-1 control-label">关联分类：</label>\n' +
+              '\t\t\t\t\t  <div class="col-sm-1">\n' +
+              '\t\t\t\t\t\t  <select value="" type="text" class="form-control" data-attr="relate_id"></select>\n' +
+              '\t\t\t\t\t  </div>\n' +
+              '\t\t\t\t\t  <label  class="col-sm-1 control-label">抑或分类：</label>\n' +
+              '\t\t\t\t\t  <div class="col-sm-1">\n' +
+              '\t\t\t\t\t\t  <select value="" type="text" class="form-control" data-attr="or_id" ></select>\n' +
+              '\t\t\t\t\t  </div>\n' +
+              '\t\t\t\t\t  <div class="col-sm-1">\n' +
+              '\t\t\t\t\t\t  <span class="s_add" onclick="to_pop($(this))"></span>' +
+              '\t\t\t\t\t  </div>\n' +
+              '\t\t\t\t  </div>';
+
+          var t_attr_str = '\n' +
+              '\t\t\t\t  <div class="form-group template t_attr">\n' +
+              '\t\t\t\t\t  <label  class="col-sm-3 control-label">编号：</label>\n' +
+              '\t\t\t\t\t  <div class="col-sm-1">\n' +
+              '\t\t\t\t\t\t  <input value="" type="text" class="form-control"  data-attr="code" name="" placeholder="">\n' +
+              '\t\t\t\t\t  </div>\n' +
+              '\t\t\t\t\t  <label  class="col-sm-1 control-label">属性：</label>\n' +
+              '\t\t\t\t\t  <div class="col-sm-1">\n' +
+              '\t\t\t\t\t\t  <input value="" type="text" class="form-control" data-attr="name" name="" placeholder="">\n' +
+              '\t\t\t\t\t  </div>\n' +
+              '\t\t\t\t\t  <label  class="col-sm-1 control-label">价格：</label>\n' +
+              '\t\t\t\t\t  <div class="col-sm-1">\n' +
+              '\t\t\t\t\t\t  <input value="" type="text" class="form-control" data-attr="price"  name="" placeholder="">\n' +
+              '\t\t\t\t\t  </div>\n' +
+              '\t\t\t\t\t  <label  class="col-sm-1 control-label">数量：</label>\n' +
+              '\t\t\t\t\t  <div class="col-sm-1">\n' +
+              '\t\t\t\t\t\t  <input value="" type="text" class="form-control" data-attr="num"   name="" placeholder="">\n' +
+              '\t\t\t\t\t  </div>\n' +
+              '\t\t\t\t\t  <label  class="col-sm-1 control-label">计算方式：</label>\n' +
+              '\t\t\t\t\t  <div class="col-sm-1">\n' +
+              '\t\t\t\t\t\t  <select value="" type="text" class="form-control"  data-attr="formula"  name="" placeholder=""></select>\n' +
+              '\t\t\t\t\t  </div>\n' +
+              '\t\t\t\t  </div>'
+
+          $("body").append(t_input_str);
+          $("body").append(t_select_str);
+          $("body").append(t_spare_str)
+          $("body").append(t_attr_str)
+
+          var t_input = $(".t_input");
+          var t_select = $(".t_select");
+          var t_spare = $(".t_spare");
+          var t_attr = $(".t_attr");
+
+          $.extend({
+              "postJSON":function (a, b, c) {
+                  $.post(a,b,function(res){
+                      c(JSON.parse(res))
+                  })
+              },
+              "warn":function (s) {
+                  alert(s)
+              }
+          })
+
+          _w['to_pop']=function(t){
+              if(t.hasClass("s_add")){
+                  t.parent().parent().parent().find(".sub_attr").show()
+                  t.removeClass("s_add").addClass("s_cut")
+              }else{
+                  t.parent().parent().parent().find(".sub_attr").hide()
+                  t.removeClass("s_cut").addClass("s_add")
+              }
+          }
+
+          _w['changev']=function (t) {
+			 var name = t.attr("name");
+			 var div_loading = $('<div class="status s-loading"></div>')
+              t.parent().find(".status").remove();
+			  t.parent().append(div_loading)
+             var t1 = name.split("-");
+			  var data = {};
+
+
+			  $.extend(data,JSON.parse(t1[2]))
+              var k = t1[1];data[k] = t.val()
+
+
+			   $.postJSON("/v1/product/"+t1[0],data,function (res) {
+                   if(res.code=="success"){
+                       div_loading.removeClass("s-loading").addClass("s-ok")
+                       setTimeout(function () {
+                           div_loading.remove();
+                       },1000)
+                   }else{
+                       $.warn(res.msg)
+                       div_loading.remove();
+                   }
+               })
+
+          }
+
+          var to_input=function(a,b,c,d){
+              var t = t_input.clone();
+              t.removeClass("template")
+			  t.removeClass("t_input")
+              t.find("label").html(b);
+              var v = c || false;
+              if(v) t.find("input").attr("value",c)
+			  var d = d || false;
+              if(d) t.find("input").attr("name",d)
+              t.find("input").attr("onchange",'changev($(this))')
+
+              a.append(t.prop('outerHTML'))
+
+
+		  }
+
+          _w['SubAttr'] = function(data){
+              this.data = data;
+
+              var to_attr=function(a){
+                  var t = t_attr.clone();
+                  t.removeClass("template")
+                  t.removeClass("t_attr")
+                  t.find("input,select").each(function () {
+                      var an = $(this).attr("data-attr");
+                      if(an=="formula") {
+
+                          var s = ''
+                          for(var i=0;i<formulas.length;i++){
+                              s+='<option value="'+formulas[i].value+'">'+formulas[i].name+'</option>'
+                          }
+                          $(this).html(s)
+                      }
+
+                      var v = data[an];
+                      if(v || v==0) $(this).val(v) && $(this).attr("value",v)
+                      $(this).find("option[value='"+v+"']").attr("selected", "selected");
+                      $(this).attr('name','edit_attr-'+an+'-'+'{"id":'+data.id+'}')
+                      $(this).attr("onchange",'changev($(this))')
+
+                  })
+                  a.append(t.prop('outerHTML'))
+
+
+              }
+
+			  this.setHtml = function (a) {
+                 to_attr(a)
+
+              }
+
+          }
+
+          _w['Attr'] = function(data){
+              this.data = data;
+			  var sub_attr;
+			  this.getAttr = function () {
+				  if(!sub_attr){
+                      sub_attr = [];
+				      var d = this.data.f_attrBeans;
+					  console.log(this.data)
+                      for(var i=0;i<d.length;i++){
+
+                       sub_attr[i]=new SubAttr(d[i]);
+
+
+                      }
+				  }
+				  return sub_attr;
+              }
+              var to_attr=function(a,b){
+                  var t = t_spare.clone();
+                  t.removeClass("template")
+                  t.removeClass("t_spare")
+                  t.find("input,select").each(function () {
+                      var an = $(this).attr("data-attr");
+                      var v = data[an];
+                      if(an=="relate_id" || an =="or_id") {
+                          var all = b.getAllParent(),s='<option value="0">无</option>';
+
+                          for(var i=0;i<all.length;i++){
+                              s+='<option value="'+all[i].id+'">'+all[i].name+'</option>'
+                          }
+                          $(this).html(s)
+                          $(this).find("option[value='"+v+"']").attr("selected", "selected");
+
+
+
+                      }
+
+
+                      if(v || v==0) {
+                          $(this).attr("value",v)
+                          $(this).val(v)
+                      }
+                      $(this).attr('name','edit_attr-'+an+'-'+'{"id":'+data.id+'}')
+                      $(this).attr("onchange",'changev($(this))')
+                  })
+                  a.append(t.prop('outerHTML'))
+
+              }
+              this.setHtml=function(a,b){
+                  var attr_div=$('<div class="attr"></div>');
+			      to_attr(attr_div,b)
+                  var sub_attr_div=$('<div class="sub_attr" style="display: none"></div>');
+				  var attr = this.getAttr();
+			      for(var i=0;i<attr.length;i++){
+						attr[i].setHtml(sub_attr_div)
+				  }
+                  attr_div.append(sub_attr_div)
+				  a.append(attr_div)
+			  }
+
+		  }
+
+		  _w['Spare'] = function(data){
+			  this.data = data;
+			  this.id = data.id;
+			  var attr;
+
+			  this.getAttr = function(){
+			      if(!attr){
+			          attr = [];
+			          var d = this.data.attrBeans;
+                      for(var i=0;i<d.length;i++){
+                          attr[i]=new Attr(d[i]);
+                      }
+				  }
+				  return attr;
+			  }
+
+
+
+			  this.setHtml = function (a,b) {
+                  var spare_div=$('<div class="spare"></div>');
+                  to_input(spare_div,"配件名称",this.data['name'],'do_edit_spare-name-'+'{"id":'+data.id+'}')
+
+                  var attrs = this.getAttr();
+				  for(var i=0;i<attrs.length;i++){
+				      attrs[i].setHtml(spare_div,b)
+				  }
+
+                  a.append(spare_div)
+              }
+		  }
+
+
+
+          _w['Product'] = function (data) {
+              this.data = data;
+              this.id = data.id;
+              var spare;
+
+              this.getSpare=function() {
+                  if(!spare){
+                      spare = [];
+                      var d = this.data.spareBeans;
+                      for(var i=0;i<d.length;i++){
+                          spare[i]=new Spare(d[i]);
+					  }
+				  }
+				  return spare;
+
+              }
+
+
+
+              this.setHtml=function (t) {
+                  var product_wrap=$('<div class="product_wrap form-horizontal"></div>');
+                  product_wrap.attr("data-id",this.id)
+                  product_wrap.append('  <legend>产品</legend>');
+                  to_input(product_wrap,"产品编码",this.data['code'],'edit_product-code-'+'{"id":'+data.id+'}')
+                 // to_input(product_wrap,"基础价格",this.data['price'],'edit_product-price-'+'{"id":'+data.id+'}')
+				  t.append(product_wrap)
+                  var spare_wrap = $('<div class="spare_wrap form-horizontal"></div>');
+                  spare_wrap.attr("data-id",this.id)
+                  spare_wrap.append('  <legend>配件</legend>');
+
+                  var spares =  this.getSpare();
+                  for(var i=0;i<spares.length;i++){
+                      spares[i].setHtml(spare_wrap,this)
+				  }
+
+                  t.append(spare_wrap)
+
+              }
+
+              var all_parent;
+              this.getAllParent=function(){
+                  if(!all_parent){
+                      all_parent = [];
+                      var d = this.data.spareBeans;
+                      for(var i=0;i<d.length;i++){
+                          var attrs = d[i].attrBeans;
+                          for(var j=0;j<attrs.length;j++){
+                              var item = {};
+                              item['name'] = d[i].name+"-"+attrs[j].name;
+                              item['id'] = attrs[j].id;
+                              all_parent.push(item)
+                          }
+                      }
+
+
+                  }
+                  return all_parent;
+              }
+
+
+
+          }
+
+
+
+
+      })(window,jQuery);
+
+
+      var data = ${data};
+
+      var product = new Product(data);
+
+      product.setHtml($(".product_edit"))
+
+
+
+  </script>
+  </body>
+</html>

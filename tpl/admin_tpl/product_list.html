@@ -43,7 +43,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="content-box-large">
 
                         <div class="panel-body">
@@ -63,10 +63,10 @@
                             </table>
                         </div>
                         <div class="row">
-                            <div class="col-xs-6">
+                            <div class="col-xs-3">
                                 <div class="dataTables_info" id="example_info"></div>
                             </div>
-                            <div class="col-xs-6">
+                            <div class="col-xs-8">
                                 <div class="dataTables_paginate paging_bootstrap">
                                     <ul class="pagination">
                                     </ul>
@@ -122,6 +122,11 @@
                     tohtml();
                 }
 
+                function edit(id) {
+                    window.open("/v1/product/edit?id="+id,"_blank","toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=1000, height=600")
+
+
+                }
 
                 function tohtml() {
 
@@ -173,7 +178,7 @@
                                     '\t\t\t\t\t\t\t  <td>' + data[i]['id'] + '</td>\n' +
                                     '\t\t\t\t\t\t\t  <td>' + data[i]['code'] + '</td>\n' +
                                     '\t\t\t\t\t\t\t  <td>' + data[i]['count'] + '</td>\n' +
-                                    '\t\t\t\t\t\t\t  <td class="center"><button onclick="detail('+data[i]['id']+')">查看</button>' +
+                                    '\t\t\t\t\t\t\t  <td class="center"><button onclick="edit('+data[i]['id']+')">查看/编辑</button>' + '&nbsp;&nbsp;'
                                     '\t\t\t\t\t\t  </tr>'
                             }
                             $("#tlist").html(s);
