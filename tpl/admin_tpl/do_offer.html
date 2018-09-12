@@ -47,23 +47,36 @@
                     <div class="panel-title">产品报价</div>
                 </div>
 
-                <div class="panel-body form-horizontal">
-                    <div class="row btn_pro" style="display: none">
-                        <div class="col-md-10">
+                <div class="panel-body form-horizontal" >
+                    <div class="row btn_pro" style="display: none; ">
+                        <div class="col-md-8">
                             <span class="btn_pro_list">
                             </span>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn-default form-control  btn-primary" onclick="sub()">
+                                提交报价
+                            </button>
                         </div>
                     </div>
 
 
                     <legend>固定配件</legend>
-                    <div class="spare_list">
+                    <div class="spare_list s_list">
                         <!--配件内容-->
                     </div>
 
                     <legend>常用配件</legend>
-                    <div class="s_spare_list">
+                    <div class="s_spare_list s_list">
                         <!--配件内容-->
+                    </div>
+
+                    <legend>汇总</legend>
+                    <div class="form-group" style=" font-size: 16px; background-color: #ccc; padding-bottom: 10px">
+                        <label class="col-md-2 control-label" >数量：<span class="h_num"></span></label>
+
+                        <label class="col-md-2 control-label" >单价：<span class="h_price"></span></label>
+                        <label class="col-md-2 control-label" >总价：<span class="h_all"></span></label>
                     </div>
 
 
@@ -92,7 +105,7 @@
     var list = [];
     var index = 0;
     var custom_id = 0;
-    var product={},products = [],oids={},rids={},common_spares=[];
+    var product={},products = [],oids={},rids={},common_spares=[],save_data=[],attrs=[];
     cb = {};
     (function (_w, $) {
 
@@ -133,7 +146,7 @@
         _w['initCommonProducts']=function(data){
             common_spares = data.productBeans;
             Offer.show_spare(common_spares[0],$(".s_spare_list"))
-
+            make_price();
         }
 
         //初始化导航
@@ -142,7 +155,7 @@
             var p = '';
 
             for(var i=0;i<products.length;i++){
-                p += '<button id="pro_btn_' + i + '" onclick="switch_pro(' + index + ')" class="btn-default form-control brs">' + products[i].code + '</button>';
+                p += '<button id="pro_btn_' + i + '" onclick="switch_pro(' + i + ')" class="btn-default form-control brs">' + products[i].code + '</button>';
             }
 
             $(".btn_pro").find(".btn_pro_list").append(p)
@@ -154,19 +167,7 @@
 
 
 
-        _w['show_pro'] = function (data) {
-            console.log(data)
-            if (index >= 1) {
-                getCurrentProduct()
-            }
-            products[index] = {};
-            products[index]['id'] = data.id;
-            products[index]['product_num'] = 100;
-            Offer.show_pro_btn(data);
-            Offer.clear_product();
-            // Offer.show_spare(data, $(".spare_list"));
-            Offer.clear_common_spare();
-        }
+
 
         _w['Offer'] = {
             "show_pro_btn": function (data) {
@@ -255,24 +256,15 @@
             },
             "clear_product": function () {
                 $(".spare_list").html("")
-            },
-            "clear_common_spare": function () {
-                $(".cs").each(function () {
-                    var tt = $(this), id = tt.attr("data-id");
-                    tt.attr('checked', false)
-                    tt[0].checked = false;
-                    $("#product_attr_" + id).find("select").attr("disabled", "disabled")
-                    $("#product_attr_" + id).find("select").val("")
-                })
-                $(".input-num").each(function () {
-                    var tt = $(this)
-                    tt.attr("disabled", true)
-                    tt.val("")
-                })
+                $(".s_spare_list").html("")
             }
+
         }
 
         _w['bindAttr'] = function () {
+
+
+
             $("select").each(function () {
                 var t = $(this), id = t.attr("data-id"), v = $(this).find("option:selected").attr("data-code");
                 var child_ids = rids[id] || [];
@@ -313,6 +305,7 @@
                 };
                 f(price)
 
+                make_price();
 
                 var child_ids = rids[id] || 0;
                 for (var i = 0; i < child_ids.length; i++) {
@@ -348,9 +341,17 @@
         _w['Attr'] = function (data) {
             this.data = data;
             this.getHtml = function () {
+
+
+
                 var atts = this.data.f_attrBeans;
+
+                if(this.data.name.indexOf("费用")>-1){
+                    $(".h_num").html(atts[0].num);
+                }
+
                 var s = '<div class="form-group" >\n' +
-                    '                <label class="col-md-2 control-label" for="text-field">' + this.data.name + '</label>\n' +
+                    '                <label class="col-md-2 control-label d_spare" for="text-field">' + this.data.name + '</label>\n' +
                     '            <div class="col-md-2">';
 
                 if (atts.length == 1) {
@@ -358,7 +359,7 @@
                     if (atts[0].num == -2) {
                         s += '<input placeholder="请输入' + name + '的数量" type="number" data-id="' + atts[0].id + '"  class="form-control input-num">'
                     } else {
-                        s += '<label class="col-md-10 control-label" style="text-align: left">' + name ;
+                        s += '<label class="col-md-10 control-label d_attr" style="text-align: left">' + name ;
 
                         s+='</label>';
                     }
@@ -377,7 +378,7 @@
 
                     var or_id = data['or_id'] || 0;
                     oids[or_id] = data['id'];
-                    s += '<select data-or-id="' + or_id + '" data-relate-id="' + relate_id + '" data-id="' + data["id"] + '" class="form-control ">'
+                    s += '<select data-or-id="' + or_id + '" data-relate-id="' + relate_id + '" data-id="' + data["id"] + '" class="form-control d_attr">'
                     for (var i = 0; i < atts.length; i++) {
 
                         s += '<option data-price="'+atts[i].price+'" data-code="' + atts[i].code + '" value="' + atts[i].id + '">' + atts[i].name + '</option>'
@@ -470,12 +471,26 @@
                                 $("#all_price_"+id).val(nv);
                             }
                             break;
+                        case 7:
+
+                            v=div(atts[0].price,atts[0].num);
+
+                            var id = data['id'];
+
+                            cb["cb_"+id]=function (a) {
+                                var nv =div(a,atts[0].num)
+
+
+                                $("#all_price_"+id).val(nv);
+                            }
+                            break;
 
 
 
                     }
 
-                    s+='<div class="col-md-2"><input id="all_price_'+data['id']+'" readonly type="text" value="'+v+'" class="form-control"></div>'
+                    s+='<div class="col-md-2"><input id="all_price_'+data['id']+'" readonly type="text" value="'+v+'" ' +
+                        'class="form-control all_price"></div>'
                 }else{
                     s+='<div class="col-md-2"><input id="all_price_'+data['id']+'" readonly type="text" value="'+atts[0].price+'" class="form-control"></div>'
 
@@ -496,21 +511,89 @@
         }
 
         _w['switch_pro'] = function (pos) {
-            if (pos == index - 1) return;
+            if (pos == index) return;
             else {
-                getCurrentProduct()
-                Offer.clear_common_spare();
+                save_product()
+                save_attr()
                 $(".btn_pro_list").find("button").removeClass("btn-primary")
-                // Offer.clear_product();
-                index = pos + 1;
+                Offer.clear_product();
+                index = pos;
                 $("#pro_btn_" + pos).addClass("btn-primary")
-
-                var has_data = products[pos] || false;
+                Offer.show_spare(products[index],$(".spare_list"))
+                Offer.show_spare(common_spares[0],$(".s_spare_list"))
+                make_price();
+                //
+                var has_data = attrs[pos] || false;
                 if (has_data) {
                     tohtml(has_data)
                 }
             }
         }
+
+
+        _w['make_price'] = function () {
+            var price = 0;
+            $(".all_price").each(function () {
+                var t = $(this);
+                price+=parseFloat(t.val());
+            })
+            price = price.toFixed(2)
+            $(".h_price").html(price);
+            var all_price = price * parseFloat($(".h_num").html());
+            $(".h_all").html(all_price.toFixed(2));
+        }
+
+        _w['save_product']=function () {
+            save_data[index] = {};
+            var data = {};
+            $(".s_list").each(function () {
+                var t = $(this);
+                t.find("h5").each(function () {
+                    var tt = $(this),spare_name=tt.html();
+                    tt.next().find(".form-group").each(function () {
+                        var ttt = $(this),key = spare_name+"-"+ttt.find(".d_spare").html();
+                        var ele = ttt.find(".d_attr"),value;
+                        if(ele.get(0).tagName=="SELECT"){
+                            value = ele.find("option:selected").html();
+                        }else{
+                            value = ele.html();
+                        }
+                        data[key]=value;
+                    })
+                })
+            })
+            var sa = {
+                "product":products[0]['code'],
+                "num":$(".h_num").html(),
+                "price":$(".h_price").html(),
+                "all_price":$(".h_all").html(),
+                "data":data
+            }
+            save_data[index] = sa;
+            console.log(save_data);
+        }
+
+        _w['save_attr'] = function(){
+            $("select").each(function () {
+                attrs[index] = {};
+                var t = $(this), attr_id = t.attr("data-id"), v = t.val();
+
+                attrs[index][attr_id] = v;
+            })
+        }
+
+        _w['sub'] = function () {
+            save_product();
+            if(save_data.length!=products.length){
+                alert('还有产品未完成报价，无法提交')
+                return;
+            }
+            var d = {"offer_id":"${offer_id}","products":JSON.stringify(save_data)};
+
+            alert(JSON.stringify(d))
+
+        }
+
     })(window, jQuery)
 
 
@@ -577,44 +660,23 @@
 
 
     function tohtml(data) {
-        var pos = index - 1;
-        var product = products[pos] || false;
-        var attrs = product['attrs']
-
 
         $("select").each(function () {
 
             var t = $(this), attr_id = t.attr("data-id");
-            var v = attrs[attr_id] || false;
+            var v = data[attr_id] || false;
             if (v) {
-                t.attr("disabled", false)
                 t.val(v)
-            } else {
-                t.attr("disabled", true)
-            }
+                var price = t.find("option:selected").attr("data-price");
+                $("#price_"+id).html(price)
 
-        })
-        //
-        $(".cs").each(function () {
-            var t = $(this), attr_id = t.attr("data-id");
-            var v = attrs[attr_id] || false;
-            if (v) {
-                t.attr('checked', true)
-                t[0].checked = true;
-            }
+                var f = cb["cb_"+attr_id] || function (a) {
 
-        })
-        //
-        $(".input-num").each(function () {
-            var t = $(this), attr_id = t.attr("data-id");
-            var v = attrs[attr_id] || false;
-            if (v) {
-                t.attr("disabled", false)
-                t.val(v)
-            } else {
-                t.attr("disabled", true)
+                };
+                f(price)
             }
         })
+
     }
 
     $(function () {
