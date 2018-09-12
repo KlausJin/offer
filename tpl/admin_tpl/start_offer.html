@@ -244,7 +244,7 @@
 
                     var name = atts[0].name || this.data.name;
                     if (atts[0].num == -2) {
-                        s += '<input placeholder="请输入所需的数量" type="number" data-id="' + atts[0].id + '"  class="form-control input-num">'
+                        s += '<input placeholder="请输入所需的数量" type="number" data-id="n_' +  data["id"] + '"  class="form-control input-num">'
                     }
                     var relate_id = data['relate_id'] || 0;
                     if (relate_id > 0) {
@@ -563,6 +563,7 @@
         data['custom_id'] = custom_id;
         data['sale_id'] =${id};
         console.log(JSON.stringify(data))
+
         $.post("/v1/offerSale/get_offer", {"data": JSON.stringify(data)}, function (res) {
             var ret = JSON.parse(res);
             if (ret.code == "success") {
