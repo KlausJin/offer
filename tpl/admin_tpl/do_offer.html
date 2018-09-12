@@ -92,7 +92,7 @@
     var list = [];
     var index = 0;
     var custom_id = 0;
-    var product={},products = [],oids={},rids={};
+    var product={},products = [],oids={},rids={},common_spares=[];
     cb = {};
     (function (_w, $) {
 
@@ -127,6 +127,12 @@
             products = product.productBeans;
             initTab();
             Offer.show_spare(products[0],$(".spare_list"))
+
+        }
+        //初始化常用配件
+        _w['initCommonProducts']=function(data){
+            common_spares = data.productBeans;
+            Offer.show_spare(common_spares[0],$(".s_spare_list"))
 
         }
 
@@ -383,7 +389,16 @@
 
                 var price = atts[0].price;
 
-                if(price!=0)
+                if(price==0){
+                    s+=
+                        '                </div>';
+                    return s;
+                }
+
+                var num = atts[0].num || 0;
+                var formula = atts[0].formula || 0;
+
+                if(formula>0){
 
                 s+='<div class="col-md-2">';
 
@@ -396,12 +411,16 @@
 
 
                 s+='</div>'
+                }else{
+                    s+='<div class="col-md-2"></div>';
+                }
 
-                var num = atts[0].num || 0;
-                var formula = atts[0].formula || 0;
+
 
                 if(num>0){
                     s+='<div class="col-md-2"><label class="control-label">数量：'+num+'</label></div>'
+                }else{
+                    s+='<div class="col-md-2"></div>';
                 }
 
 
@@ -457,7 +476,12 @@
                     }
 
                     s+='<div class="col-md-2"><input id="all_price_'+data['id']+'" readonly type="text" value="'+v+'" class="form-control"></div>'
+                }else{
+                    s+='<div class="col-md-2"><input id="all_price_'+data['id']+'" readonly type="text" value="'+atts[0].price+'" class="form-control"></div>'
+
                 }
+
+
 
                 s+=
                     '                </div>';
@@ -491,64 +515,6 @@
 
 
 
-    // 浮点数求和
-    function add(a, b) {
-        var c, d, e;
-        try {
-            c = a.toString().split(".")[1].length;
-        } catch (f) {
-            c = 0;
-        }
-        try {
-            d = b.toString().split(".")[1].length;
-        } catch (f) {
-            d = 0;
-        }
-        return e = Math.pow(10, Math.max(c, d)), (mul(a, e) + mul(b, e)) / e;
-    }
-
-    // 浮点数相减
-    function sub(a, b) {
-        var c, d, e;
-        try {
-            c = a.toString().split(".")[1].length;
-        } catch (f) {
-            c = 0;
-        }
-        try {
-            d = b.toString().split(".")[1].length;
-        } catch (f) {
-            d = 0;
-        }
-        return e = Math.pow(10, Math.max(c, d)), (mul(a, e) - mul(b, e)) / e;
-    }
-
-    // 浮点数相乘
-    function mul(a, b) {
-        var c = 0,
-            d = a.toString(),
-            e = b.toString();
-        try {
-            c += d.split(".")[1].length;
-        } catch (f) {}
-        try {
-            c += e.split(".")[1].length;
-        } catch (f) {}
-        return Number(d.replace(".", "")) * Number(e.replace(".", "")) / Math.pow(10, c);
-    }
-
-    // 浮点数相除
-    function div(a, b) {
-        var c, d, e = 0,
-            f = 0;
-        try {
-            e = a.toString().split(".")[1].length;
-        } catch (g) {}
-        try {
-            f = b.toString().split(".")[1].length;
-        } catch (g) {}
-        return c = Number(a.toString().replace(".", "")), d = Number(b.toString().replace(".", "")), mul(c / d, Math.pow(10, f - e));
-    }
     // 浮点数求和
     function add(a, b) {
         var c, d, e;
@@ -654,7 +620,11 @@
     $(function () {
         $.getdata("/v1/offerManage/getProduct", {"id":${offer_id}}, function (res) {
             initProducts(res)
+            $.getdata("/v1/offerManage/getProduct_real",{"id":${offer_id}},function (res) {
+                initCommonProducts(res);
+            })
         })
+
 
 
     })
