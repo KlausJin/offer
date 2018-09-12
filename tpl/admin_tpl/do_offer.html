@@ -691,39 +691,8 @@
 
     })
 
-    function getCurrentProduct() {
-        var pos = index - 1;
-        var product = products[pos] || false;
-        if (!product) {
-            return false;
-        }
-        products[pos]["attrs"] = {};
-
-        $("select").each(function () {
-
-            var t = $(this), attr_id = t.attr("data-id"), v = t.val();
-            if (!t.attr("disabled"))
-                products[pos]["attrs"][attr_id] = v;
-        })
-
-        $(".cs").each(function () {
-            var t = $(this), attr_id = t.attr("data-id");
-            if (t[0].checked) {
-                products[pos]["attrs"][attr_id] = t.val();
-            }
-        })
-
-        $(".input-num").each(function () {
-            var t = $(this), attr_id = t.attr("data-id");
-            if (!t.attr("disabled")) {
-                products[pos]["attrs"][attr_id] = t.val();
-            }
-        })
-
-        return true;
 
 
-    }
 
 </script>
 </div>
