@@ -488,7 +488,9 @@
                             v = div(3500,atts[0].num)+div(mul(atts[0].price,atts[0].CBM),atts[0].packing);
 
                             break;
-
+                        case 9:
+                            v = div(mul(atts[0].price,atts[0].CBM),atts[0].packing)
+                            break;
 
 
                     }
@@ -524,7 +526,7 @@
                 index = pos;
                 $("#pro_btn_" + pos).addClass("btn-primary")
                 Offer.show_spare(products[index],$(".spare_list"))
-                Offer.show_spare(common_spares[0],$(".s_spare_list"))
+                Offer.show_spare(common_spares[index],$(".s_spare_list"))
                 make_price();
                 //
                 var has_data = attrs[pos] || false;
