@@ -224,19 +224,27 @@ public class AttrModel extends Model {
      */
     public List<AttrBean> getSpareId_real(String spare_id,String offer_id,String product_id){
            ArrayList<HashMap<String,String>> map=getspareId(spare_id);
+        OfferAttrModel offerAttrModel = OfferAttrModel.getInstance(offer_id);
         List<AttrBean> list =new ArrayList<>();
            for (int i=0;i<map.size();i++){
                HashMap<String,String> res= map.get(i);
-               AttrBean bean =new AttrBean(res);
-               bean.f_attrBeans=new AttrModel().getBeanByParentId_real(bean.id,offer_id);
-               list.add(bean);
+               HashMap<String ,String> data=offerAttrModel.getOfferAttrBySpareId(map.get(i).get("id"),offer_id,product_id);
+               if (data==null){
+                   continue;
+               }
+               else{
+                   AttrBean bean =new AttrBean(res);
+                   bean.f_attrBeans=new AttrModel().getBeanByParentId_real(bean.id,offer_id,product_id);
+                   list.add(bean);
+               }
+
            }
         return list;
 
     }
-    public List<AttrBean> getBeanByParentId_real(String spare_id,String offer_id){
+    public List<AttrBean> getBeanByParentId_real(String spare_id,String offer_id,String product_id){
         OfferAttrModel offerAttrModel = OfferAttrModel.getInstance(offer_id);
-        HashMap<String ,String> map=offerAttrModel.getMapBySpareId(spare_id,offer_id);
+        HashMap<String ,String> map=offerAttrModel.getOfferAttrBySpareId(spare_id,offer_id,product_id);
         List<AttrBean> list =new ArrayList<>();
         HashMap<String,String>  res=getListByAttrId(map.get("attr_id"));
         res.replace("num",map.get("num"));
@@ -308,10 +316,9 @@ public class AttrModel extends Model {
         knum = size[0];
         gnum = size[1];
         hnum = size[2];
-        return DoubleUtil.mul((DoubleUtil.add(DoubleUtil.mul(DoubleUtil.add(knum,hnum),2),3.7)),
-                ((DoubleUtil.add(DoubleUtil.add(gnum,hnum),DoubleUtil.mul(hnum,0.5)))+5.4));
 
-
+        return  DoubleUtil.round( DoubleUtil.mul((DoubleUtil.add(DoubleUtil.mul(DoubleUtil.add(knum,hnum),2),3.7)),
+        ((DoubleUtil.add(DoubleUtil.add(gnum,hnum),DoubleUtil.mul(hnum,0.5)))+5.4)),2);
     }
 
     private double[] getXYZ(String spare_id){
@@ -367,7 +374,7 @@ public class AttrModel extends Model {
         HashMap<String, String> res = carton_area(size[0] + "", size[1] + "", size[2] + "",
                 (int)Float.parseFloat(box.get("value"))+"", box2.get("value"));
 
-       return Double.parseDouble(res.get("area"))/(int)Float.parseFloat(box.get("value"));
+        return DoubleUtil.div(Double.parseDouble(res.get("area")),(int)Float.parseFloat(box.get("value")),2);
 
 
 
