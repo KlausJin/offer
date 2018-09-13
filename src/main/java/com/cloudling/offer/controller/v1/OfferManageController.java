@@ -10,6 +10,7 @@ import com.cloudling.offer.server.Controller;
 import com.cloudling.offer.server.ControllerContext;
 import com.cloudling.offer.util.TimeUtil;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -92,7 +93,46 @@ public class OfferManageController extends AdminController {
 
     @action
     public void do_edit(){
+        try{
+            String quote_info=I("data").toString();
+            HashMap<String, Object> d = JSON.parseObject(quote_info, new HashMap<String, Object>().getClass());
+            String offer_id=d.get("offer_id").toString();
+            String manage_id = d.get("manage_id").toString();
+            HashMap<String, String> quoteData = new HashMap<>();
+            HashMap<String, String> offerData = new HashMap<>();
+            quoteData.put("offer_id",offer_id);
+            quoteData.put("manage_id",manage_id);
+            quoteData.put("create_time",TimeUtil.getShortTimeStamp()+"");
+            offerData.put("status",Dictionary.ISOFFER+"");
+            offerData.put("quote_time",TimeUtil.getShortTimeStamp()+"");
+            long id=M("quote").add(quoteData);
+            M("offer").where("id="+offer_id).save_string(offerData);
+            List<HashMap<String, Object>> products =
+                    (List<HashMap<String, Object>>) JSON.parseArray(d.get("products").toString(), new HashMap<String, Object>().getClass());
+            HashMap<String, String> proData = new HashMap<>();
+            for (int i = 0; i < products.size(); i++) {
+                HashMap<String, Object> product = products.get(i);
+                String pro_name=product.get("product").toString();
+                String pro_num=product.get("num").toString();
+                String pro_price=product.get("price").toString();
+                proData.put("quote_id",id+"");
+                proData.put("pro_name",pro_name);
+                proData.put("pro_num",pro_num);
+                proData.put("pro_price",pro_price);
+                long pro_id=M("quote_pro").add(proData);
+                HashMap<String, String> res = new HashMap<>();
+                HashMap<String, String> data = JSON.parseObject(product.get("data").toString(), new HashMap<String, Object>().getClass());
+                for (String key:data.keySet()) {
+                    res.put(key,data.get("key"));
+                    res.put("pro_id",pro_id+"");
+                    long t=M("quote_detail").add(res);
+                }
+            }
 
+
+        }catch (Exception e){
+
+        }
     }
 
 

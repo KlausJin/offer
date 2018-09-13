@@ -185,12 +185,11 @@ public class OfferSaleController extends AdminController {
                 for (String key : attrs.keySet()) {
                     if(key.indexOf("n_")==0){
                         String id = key.replace("n_","");
-                        nums.put(id,attrs.get(key));
+                        nums.put(id,attrs.get(key).equals("")?"0":attrs.get(key));
                         //attrs.remove(key);
                     }else{
                         s_attrs.put(key,attrs.get(key));
                     }
-
                 }
 
                 for (String key : s_attrs.keySet()) {

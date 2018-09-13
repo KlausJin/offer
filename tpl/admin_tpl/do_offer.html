@@ -442,7 +442,7 @@
                             cb["cb_"+id]=function (a) {
                                 var nv = a*atts[0].num;
 
-                                $("#all_price_"+id).val(nv.toFixed(2));
+                                $("#all_price_"+id).val(nv.toFixed(4));
                             }
                             break;
                         case 2:
@@ -452,7 +452,7 @@
                             cb["cb_"+id]=function (a) {
                                 var nv = mul(mul(atts[0].num,atts[0].num),a)/10000;
 
-                                $("#all_price_"+id).val(nv.toFixed(2));
+                                $("#all_price_"+id).val(nv.toFixed(4));
                             }
                             break;
                         case 6:
@@ -462,7 +462,7 @@
                             cb["cb_"+id]=function (a) {
                                 var nv = a*atts[0].num;
 
-                                $("#all_price_"+id).val(nv.toFixed(2));
+                                $("#all_price_"+id).val(nv.toFixed(4));
                             }
                             break;
                         case 3:
@@ -475,7 +475,7 @@
                                 var nv = a*atts[0].num;
                                 v = div(v,10000);
 
-                                $("#all_price_"+id).val(nv.toFixed(2));
+                                $("#all_price_"+id).val(nv.toFixed(4));
                             }
                             break;
                         case 7:
@@ -488,7 +488,7 @@
                                 var nv =div(a,atts[0].num)
 
 
-                                $("#all_price_"+id).val(nv.toFixed(2));
+                                $("#all_price_"+id).val(nv.toFixed(4));
                             }
                             break;
                         case 8:
@@ -502,7 +502,7 @@
 
                     }
 
-                    s+='<div class="col-md-2"><input id="all_price_'+data['id']+'" readonly type="text" value="'+v.toFixed(2)+'" ' +
+                    s+='<div class="col-md-2"><input id="all_price_'+data['id']+'" readonly type="text" value="'+v.toFixed(4)+'" ' +
                         'class="form-control all_price"></div>'
                 }else{
                     var id = data['id'];
@@ -511,7 +511,7 @@
                         $("#all_price_"+id).val(a);
 
                     }
-                    s+='<div class="col-md-2"><input id="all_price_'+data['id']+'" readonly type="text" value="'+atts[0].price.toFixed(2)+'" class="form-control all_price"></div>'
+                    s+='<div class="col-md-2"><input id="all_price_'+data['id']+'" readonly type="text" value="'+atts[0].price.toFixed(4)+'" class="form-control all_price"></div>'
 
                 }
 
@@ -557,7 +557,7 @@
                 price = add(price,parseFloat(t.val()))
             })
 
-            $(".h_price").html(price);
+            $(".h_price").html(price.toFixed(2));
             var num = $(".h_num").html();
 
             if(num=="" || isNaN(num)){
@@ -565,7 +565,7 @@
                 $(".btn-sub").hide()
                 return;
             }
-            var all_price = price * parseFloat($(".h_num").html());
+            var all_price = price.toFixed(2) * parseFloat($(".h_num").html());
 
             $(".h_all").html(all_price.toFixed(2));
         }
@@ -615,7 +615,7 @@
                 alert('还有产品未完成报价，无法提交')
                 return;
             }
-            var d = {"offer_id":"${offer_id}","products":JSON.stringify(save_data)};
+            var d = {"offer_id":"${offer_id}","manage_id":"${id}","products":JSON.stringify(save_data)};
 
             alert(JSON.stringify(d))
 
