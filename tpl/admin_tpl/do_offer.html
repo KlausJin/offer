@@ -54,7 +54,7 @@
                             </span>
                         </div>
                         <div class="col-md-2">
-                            <button class="btn-default form-control  btn-primary" onclick="subProduct()">
+                            <button class="btn-default btn-sub form-control  btn-primary" onclick="subProduct()">
                                 提交报价
                             </button>
                         </div>
@@ -308,6 +308,7 @@
 
                 make_price();
 
+
                 var child_ids = rids[id] || 0;
                 for (var i = 0; i < child_ids.length; i++) {
                     var child_id = child_ids[i];
@@ -553,7 +554,7 @@
             var price = 0;
             $(".all_price").each(function () {
                 var t = $(this);
-                price+=parseFloat(t.val());
+                price = add(price,parseFloat(t.val()))
             })
 
             $(".h_price").html(price);
@@ -561,6 +562,7 @@
 
             if(num=="" || isNaN(num)){
                 alert('该报价需求没有选择出货数量，无法报价')
+                $(".btn-sub").hide()
                 return;
             }
             var all_price = price * parseFloat($(".h_num").html());
