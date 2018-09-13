@@ -201,7 +201,8 @@
 
                     s += '<h5>' + spares[i].name + '</h5>'
                     s += '<div class="product_attr">';
-                    var attrBeans = spares[i].attrBeans;
+                    var attrBeans = spares[i].attrBeans || [];
+
                     for (var j = 0; j < attrBeans.length; j++) {
                         var attr = new Attr(attrBeans[j]);
                         s += attr.getHtml();
@@ -391,9 +392,11 @@
                 var price = atts[0].price;
 
                 if(price==0){
-                    s+=
-                        '                </div>';
-                    return s;
+                    if(atts.length==1) {
+                        s +=
+                            '                </div>';
+                        return s;
+                    }
                 }
 
                 var num = atts[0].num || 0;
@@ -426,8 +429,11 @@
 
 
                 if(formula>0){
-                    var v = "";
+
                     switch (formula){
+                        case 0:
+
+                            break;
                         case 1:
                             v=mul(atts[0].num,atts[0].price);
                             var id = data['id'];
@@ -498,7 +504,13 @@
                     s+='<div class="col-md-2"><input id="all_price_'+data['id']+'" readonly type="text" value="'+v.toFixed(2)+'" ' +
                         'class="form-control all_price"></div>'
                 }else{
-                    s+='<div class="col-md-2"><input id="all_price_'+data['id']+'" readonly type="text" value="'+atts[0].price.toFixed(2)+'" class="form-control"></div>'
+                    var id = data['id'];
+                    cb["cb_"+id]=function (a) {
+
+                        $("#all_price_"+id).val(a);
+
+                    }
+                    s+='<div class="col-md-2"><input id="all_price_'+data['id']+'" readonly type="text" value="'+atts[0].price.toFixed(2)+'" class="form-control all_price"></div>'
 
                 }
 
@@ -543,8 +555,14 @@
                 var t = $(this);
                 price+=parseFloat(t.val());
             })
-            price = price.toFixed(2)
+
             $(".h_price").html(price);
+            var num = $(".h_num").html();
+
+            if(num=="" || isNaN(num)){
+                alert('该报价需求没有选择出货数量，无法报价')
+                return;
+            }
             var all_price = price * parseFloat($(".h_num").html());
 
             $(".h_all").html(all_price.toFixed(2));
