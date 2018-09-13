@@ -195,7 +195,12 @@ public class OfferSaleController extends AdminController {
                         nums.put(id,attrs.get(key).equals("")?"0":attrs.get(key));
                         //attrs.remove(key);
                     }else{
-                        s_attrs.put(key,attrs.get(key));
+                        if((key.indexOf("__")>0)){
+                            String[] t2 = key.split("__");
+                            nums.put(t2[0],attrs.get(key));
+                            s_attrs.put(t2[0],t2[1]);
+                        }
+                        else s_attrs.put(key,attrs.get(key));
                     }
                 }
 

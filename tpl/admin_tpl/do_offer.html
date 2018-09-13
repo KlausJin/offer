@@ -622,8 +622,16 @@
                 return;
             }
             var d = {"offer_id":"${offer_id}","manage_id":"${id}","products":JSON.stringify(save_data)};
-
             alert(JSON.stringify(d))
+            $.post("/v1/offerManage/do_edit", {"data": JSON.stringify(d)}, function (res) {
+                var ret = JSON.parse(res);
+                if (ret.code == "success") {
+                    alert("报价成功")
+                    window.location.href = "list";
+                } else {
+                    alert(ret.msg);
+                }
+            })
 
         }
 

@@ -235,13 +235,12 @@
                 if (atts.length == 1) {
                     var name = atts[0].name || this.data.name;
                     if (atts[0].num == -2) {
-                        s += '<input placeholder="请输入' + name + '的数量" type="number" data-id="' + atts[0].id + '"  class="form-control input-num">'
+                        s += '<input placeholder="请输入' + name + '的数量" type="number" data-id="' + data.id + '__'+atts[0].id+'"  class="form-control input-num">'
                     } else {
                         s += '<label class="col-md-10 control-label" style="text-align: left">' + name + '</label>'
                     }
 
                 } else {
-
                     var name = atts[0].name || this.data.name;
                     if (atts[0].num == -2) {
                         s += '<input placeholder="请输入所需的数量" type="number" data-id="n_' +  data["id"] + '"  class="form-control input-num">'
