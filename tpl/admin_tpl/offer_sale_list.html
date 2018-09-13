@@ -36,8 +36,8 @@
                         <tr>
                             <th>id</th>
                             <th>客户</th>
-                            <th>报价时间</th>
-                            <th>状态</th>
+                            <th><dl><dd>报价时间</dd><dt>状态</dt></dl></th>
+
                             <th>操作</th>
                         </tr>
                         </thead>
@@ -155,8 +155,28 @@
                     s += ' <tr class="odd gradeX" id="tr_' + data[i]['id'] + '">\n' +
                         '\t\t\t\t\t\t\t  <td>' + data[i]['id'] + '</td>\n' +
                         '\t\t\t\t\t\t\t  <td>' + data[i]['client_name'] + '</td>\n' +
-                        '\t\t\t\t\t\t\t  <td>' + data[i]['create_time'] + '</td>\n' +
-                        '\t\t\t\t\t\t\t  <td> ' + data[i]['status'] + '</td>' +
+                        '\t\t\t\t\t\t\t  <td>';
+
+                        s+='<dl><dd><a href="javascript:void()" onclick="show_offer('+data[i]['id']+')">'+data[i]['create_time']+'</a></dd><dt>'
+                    if(data[i]['status']=="已报价"){
+                        s+='<a href="javascript:void()">查看报价</a>'
+                    }else{
+                        s+=data[i]['status']
+                    }
+                            s+='</dt></dl>'
+
+                    var subs = data[i]['sub'];
+                        for(var j=0;j<subs.length;j++){
+                            s+='<dl><dd><a onclick="show_offer('+subs[j]['id']+')" href="javascript:void()">'+subs[j]['create_time']+'(修改)</a></dd><dt>';
+                            if(subs[j]['status']=="已报价"){
+                                s+=subs[j]['status']='<a href="javascript:void()">查看报价</a>'
+                            }else{
+                                s+=subs[j]['status']
+                            }
+                             s+='</dt></dl>'
+                        }
+
+                        s+= '</td>\n' +
                         '\t\t\t\t\t\t\t  <td class="center">'+
                         '									<button onclick="reoffer(' + data[i]['id'] + ')">修改报价需求</button></td>' +
                         '\t\t\t\t\t\t  </tr>'
@@ -165,6 +185,15 @@
             }
         })
     }
+
+    function show_offer(id) {
+        window.location.href="/v1/offerSale/show?id="+id;
+    }
 </script>
+<style type="text/css">
+    dl{ width: 100%; margin: 0px; padding: 0px; float: left; }
+    dd{ width: 60%; text-align: right;margin: 0px; padding: 0px; float: left;line-height: 26px!important;}
+    dt{ width: 30%; text-align: left;margin: 0px; padding: 0px; float: right;line-height: 26px!important; font-weight: normal}
+</style>
 </body>
 </html>

@@ -60,6 +60,8 @@ public class OfferSaleController extends AdminController {
             ArrayList<HashMap<String, String>> subRes = M("offer").where("parent_id=" + list.get(i).get("id")).select();
             for(int j=0;j<subRes.size();j++){
                 subRes.get(j).put("create_time", TimeUtil.stampToDate(subRes.get(j).get("create_time"), "yyyy-MM-dd HH:mm:ss"));
+                subRes.get(j).put("status", statusTypes.get(Integer.parseInt(subRes.get(j).get("status"))));
+
             }
             mp.put("sub",subRes);
             slist.add(mp);
@@ -94,6 +96,11 @@ public class OfferSaleController extends AdminController {
         String cat_id = I("cat_id").toString();
         assign("cat_id", cat_id);
         assign("parent_id",0);
+
+        assign("products","[]");
+        assign("client","[]");
+        assign("attrs","[]");
+
         toHtml("admin_tpl/start_offer");
     }
 
