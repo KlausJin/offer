@@ -72,11 +72,13 @@
                     </div>
 
                     <legend>汇总</legend>
-                    <div class="form-group" style=" font-size: 16px; background-color: #ccc; padding-bottom: 10px">
+                    <div class="form-group" style=" font-size: 14px; background-color: #ccc; padding-bottom: 10px">
                         <label class="col-md-2 control-label" >数量：<span class="h_num"></span></label>
 
                         <label class="col-md-2 control-label" >单价：<span class="h_price"></span></label>
                         <label class="col-md-2 control-label" >总价：<span class="h_all"></span></label>
+                        <label class="col-md-2 control-label" >利润率：<span class="h_ll"></span></label>
+                        <label class="col-md-2 control-label" >最终价格：<span class="h_sale"></span></label>
                     </div>
 
 
@@ -511,7 +513,10 @@
                         $("#all_price_"+id).val(a);
 
                     }
-                    s+='<div class="col-md-2"><input id="all_price_'+data['id']+'" readonly type="text" value="'+atts[0].price.toFixed(4)+'" class="form-control all_price"></div>'
+                    if(atts[0].price==-2){
+                        s+='<div class="col-md-2"><input oninput="make_price()" id="all_price_'+data['id']+'" type="text" value="0" class="form-control all_price"></div>'
+                    }
+                    else s+='<div class="col-md-2"><input id="all_price_'+data['id']+'" readonly type="text" value="'+atts[0].price.toFixed(4)+'" class="form-control all_price"></div>'
 
                 }
 
@@ -554,7 +559,8 @@
             var price = 0;
             $(".all_price").each(function () {
                 var t = $(this);
-                price = add(price,parseFloat(t.val()))
+                var v = t.val() || 0;
+                price = add(price,parseFloat(v))
             })
 
             $(".h_price").html(price.toFixed(2));
@@ -616,8 +622,16 @@
                 return;
             }
             var d = {"offer_id":"${offer_id}","manage_id":"${id}","products":JSON.stringify(save_data)};
-
             alert(JSON.stringify(d))
+            $.post("/v1/offerManage/do_edit", {"data": JSON.stringify(d)}, function (res) {
+                var ret = JSON.parse(res);
+                if (ret.code == "success") {
+                    alert("报价成功")
+                    window.location.href = "list";
+                } else {
+                    alert(ret.msg);
+                }
+            })
 
         }
 
@@ -706,6 +720,7 @@
 
     }
 
+
     $(function () {
         $.getdata("/v1/offerManage/getProduct", {"id":${offer_id}}, function (res) {
             initProducts(res)
@@ -713,6 +728,8 @@
                 initCommonProducts(res);
             })
         })
+        //获取利润率
+
 
 
 

@@ -104,6 +104,7 @@ public class OfferManageController extends AdminController {
             quoteData.put("manage_id",manage_id);
             quoteData.put("create_time",TimeUtil.getShortTimeStamp()+"");
             offerData.put("status",Dictionary.ISOFFER+"");
+            offerData.put("m_id",manage_id);
             offerData.put("quote_time",TimeUtil.getShortTimeStamp()+"");
             long id=M("quote").add(quoteData);
             M("offer").where("id="+offer_id).save_string(offerData);
@@ -123,15 +124,16 @@ public class OfferManageController extends AdminController {
                 HashMap<String, String> res = new HashMap<>();
                 HashMap<String, String> data = JSON.parseObject(product.get("data").toString(), new HashMap<String, Object>().getClass());
                 for (String key:data.keySet()) {
-                    res.put(key,data.get("key"));
+                    res.put("kind",key);
+                    res.put("value",data.get(key));
                     res.put("pro_id",pro_id+"");
                     long t=M("quote_detail").add(res);
                 }
             }
-
-
+            success("1");
         }catch (Exception e){
-
+            e.printStackTrace();
+            error("报价失败");
         }
     }
 
