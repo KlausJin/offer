@@ -106,6 +106,10 @@
         tohtml();
     }
 
+    function reoffer(id) {
+       window.location.href="/v1/offerSale/re_offer?id="+id;
+    }
+
 
     var key;
 
@@ -153,8 +157,8 @@
                         '\t\t\t\t\t\t\t  <td>' + data[i]['client_name'] + '</td>\n' +
                         '\t\t\t\t\t\t\t  <td>' + data[i]['create_time'] + '</td>\n' +
                         '\t\t\t\t\t\t\t  <td> ' + data[i]['status'] + '</td>' +
-                        '\t\t\t\t\t\t\t  <td class="center"> <button onclick="detail(' + data[i]['id'] + ')">查看详情</button>'+
-                        '									<button onclick="edit(' + data[i]['id'] + ')">编辑</button></td>' +
+                        '\t\t\t\t\t\t\t  <td class="center">'+
+                        '									<button onclick="reoffer(' + data[i]['id'] + ')">修改报价需求</button></td>' +
                         '\t\t\t\t\t\t  </tr>'
                 }
                 $("#tlist").html(s);
