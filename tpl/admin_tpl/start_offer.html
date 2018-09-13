@@ -646,7 +646,7 @@
         data['sale_id'] =${id};
         data['parent_id']=${parent_id}
         console.log(JSON.stringify(data))
-        return;
+
         $.post("/v1/offerSale/do_offer", {"data": JSON.stringify(data)}, function (res) {
             var ret = JSON.parse(res);
             if (ret.code == "success") {
