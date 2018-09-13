@@ -76,9 +76,9 @@
                         <label class="col-md-2 control-label" >数量：<span class="h_num"></span></label>
 
                         <label class="col-md-2 control-label" >单价：<span class="h_price"></span></label>
-                        <label class="col-md-2 control-label" >总价：<span class="h_all"></span></label>
+                        <label class="col-md-2 control-label" >总成本：<span class="h_all"></span></label>
                         <label class="col-md-2 control-label" >利润率：<span class="h_ll"></span></label>
-                        <label class="col-md-2 control-label" >最终价格：<span class="h_sale"></span></label>
+                        <label class="col-md-2 control-label" >总价：<span class="h_rate"></span><span class="h_sale"></span></label>
                     </div>
 
 
@@ -109,6 +109,7 @@
     var custom_id = 0;
     var product={},products = [],oids={},rids={},common_spares=[],save_data=[],attrs=[];
     cb = {};
+    var lls = {},is_tax;
     (function (_w, $) {
 
         $.extend({
@@ -354,6 +355,10 @@
                     $(".h_num").html(atts[0].num);
                 }
 
+                if(this.data.name.indexOf("是否含税")>-1){
+                    is_tax = atts[0].code;
+                }
+
                 var s = '<div class="form-group" >\n' +
                     '                <label class="col-md-2 control-label d_spare" for="text-field">' + this.data.name + '</label>\n' +
                     '            <div class="col-md-2">';
@@ -574,6 +579,17 @@
             var all_price = price.toFixed(2) * parseFloat($(".h_num").html());
 
             $(".h_all").html(all_price.toFixed(2));
+
+
+                $.getdata("/v1/profit/getProfit",{"num":num,"offer_id":${offer_id},"price":all_price.toFixed(2),"is_tax":is_tax},function (data) {
+                   $(".h_sale").html(data.total)
+                    $(".h_ll").html(data.profit)
+                    $(".h_rate").html(data.rate)
+                })
+
+
+
+
         }
 
         _w['save_product']=function () {
@@ -600,6 +616,9 @@
                 "num":$(".h_num").html(),
                 "price":$(".h_price").html(),
                 "all_price":$(".h_all").html(),
+                "profit":$(".h_ll").html(),
+                "rate":$(".h_rate").html(),
+                "sale":$(".h_sale").html(),
                 "data":data
             }
             save_data[index] = sa;
@@ -622,7 +641,7 @@
                 return;
             }
             var d = {"offer_id":"${offer_id}","manage_id":"${id}","products":JSON.stringify(save_data)};
-            alert(JSON.stringify(d))
+
             $.post("/v1/offerManage/do_edit", {"data": JSON.stringify(d)}, function (res) {
                 var ret = JSON.parse(res);
                 if (ret.code == "success") {
