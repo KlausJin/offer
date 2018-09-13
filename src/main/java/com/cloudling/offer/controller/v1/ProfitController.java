@@ -8,8 +8,8 @@ import com.cloudling.offer.server.ControllerContext;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class GetProfitController extends Controller {
-    public GetProfitController(ControllerContext context) {
+public class ProfitController extends Controller {
+    public ProfitController(ControllerContext context) {
         super(context);
     }
 
