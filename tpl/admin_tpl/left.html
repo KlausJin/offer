@@ -7,20 +7,24 @@
     <div class="sidebar content-box" style="display: block;">
         <ul class="nav">
             <li class="submenu">
+                <% if(admin_type<=1){ %>
                 <a href="#">
                     <i class="glyphicon glyphicon-user"></i> 主管理员
                     <span class="caret pull-right"></span>
                 </a>
+                <% }%>
                 <ul>
                     <li><a href="/v1/welcome/list"><i class="glyphicon glyphicon-list"></i>首页</a></li>
                     <li><a href="/v1/log/list"><i class="glyphicon glyphicon-home"></i> 日志查看</a></li>
                 </ul>
             </li>
             <li class="submenu">
+                <% if(admin_type<=2){ %>
                 <a href="#">
                     <i class="glyphicon glyphicon-book"></i> 人员管理
                     <span class="caret pull-right"></span>
                 </a>
+                <% }%>
                 <ul>
                     <li><a href="/v1/person/adminList"><i class="glyphicon glyphicon-list"></i> 管理员管理</a></li>
                     <li><a href="/v1/person/managerList"><i class="glyphicon glyphicon-list"></i> 经理管理</a></li>
@@ -37,16 +41,18 @@
                 </a>
                 <ul>
                     <li><a href="/v1/client/list"><i class="glyphicon glyphicon-list"></i> 客户列表</a></li>
-                    <li><a href="/v1/client/add"><i class="glyphicon glyphicon-list"></i> 客户录入</a></li>
-                    </li>
+                    <% if(admin_type<=2){ %><li><a href="/v1/client/add"><i class="glyphicon glyphicon-list"></i> 客户录入</a></li>
+                    <% }%>
                 </ul>
             </li>
 
             <li class="submenu">
+                <% if(admin_type<=2){ %>
                 <a href="#">
                     <i class="glyphicon glyphicon-book"></i> 产品管理
                     <span class="caret pull-right"></span>
                 </a>
+                <% }%>
                 <ul>
                     <li><a href="/v1/product/list"><i class="glyphicon glyphicon-list"></i> 产品型号</a></li>
                     <li><a href="/v1/material/list"><i class="glyphicon glyphicon-list"></i> 原材料管理</a></li>
@@ -55,20 +61,24 @@
             </li>
 
             <li class="submenu">
+                <% if(admin_type<=1){ %>
                 <a href="#">
-                    <i class="glyphicon glyphicon-book"></i> 报价管理(管理员)
+                    <i class="glyphicon glyphicon-book"></i> 报价管理
                     <span class="caret pull-right"></span>
                 </a>
+                <% }%>
                 <ul>
                     <li><a href="/v1/offerAdmin/list"><i class="glyphicon glyphicon-list"></i> 报价管理</a></li>
                 </ul>
             </li>
 
             <li class="submenu">
+                <% if(admin_type>=3){ %>
                 <a href="#">
-                    <i class="glyphicon glyphicon-book"></i> 报价管理（业务员）
+                    <i class="glyphicon glyphicon-book"></i> 报价管理
                     <span class="caret pull-right"></span>
                 </a>
+                <% }%>
                 <ul>
                     <li><a href="/v1/offerSale/list"><i class="glyphicon glyphicon-list"></i> 报价管理</a></li>
                     <li><a href="/v1/offerSale/offer_choose"><i class="glyphicon glyphicon-list"></i> 新建报价</a></li>
@@ -76,30 +86,36 @@
             </li>
 
             <li class="submenu">
+                <% if(admin_type<=2 && admin_type>=1 ){ %>
                 <a href="#">
-                    <i class="glyphicon glyphicon-book"></i> 报价管理(经理)
+                    <i class="glyphicon glyphicon-book"></i> 报价管理
                     <span class="caret pull-right"></span>
                 </a>
+                <% }%>
                 <ul>
                     <li><a href="/v1/offerManage/list"><i class="glyphicon glyphicon-list"></i> 报价管理</a></li>
                 </ul>
             </li>
 
             <li class="submenu">
+                <% if(admin_type<=2){ %>
                 <a href="#">
                     <i class="glyphicon glyphicon-book"></i> 系统业务字典
                     <span class="caret pull-right"></span>
                 </a>
+                <% }%>
                 <ul>
                     <li><a href="/v1/dictionary/profit_list"><i class="glyphicon glyphicon-list"></i>汇率税率管理</a></li>
                 </ul>
             </li>
 
             <li class="submenu">
+                <% if(admin_type<=2){ %>
                 <a href="#">
                     <i class="glyphicon glyphicon-book"></i> 系统录入
                     <span class="caret pull-right"></span>
                 </a>
+                <% }%>
                 <ul>
                     <li><a href="/v1/product/add_product"><i class="glyphicon glyphicon-list"></i>产品(配件)Excel模板导入</a></li>
                     <li><a href="/v1/material/add_materialByExcel"><i class="glyphicon glyphicon-list"></i>原材料Excel模板导入</a>
