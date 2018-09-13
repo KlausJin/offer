@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>后台系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- styles -->
+    <link href="/css/styles.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<%include("head.html"){}%>
+<div class="page-content">
+    <div class="row">
+        <%include("left.html"){}%>
+        <div class="col-md-6">
+            <div class="content-box-large">
+                <div class="panel-heading">
+                    <div class="panel-title"><a href="list" style="margin-right: 15px">返回汇率税率列表</a></div>
+                </div>
+                <style type="text/css">
+                    .panel-body .pic {
+                        width: 300px;
+                        height: 150px;
+                        margin-bottom: 20px
+                    }
+                </style>
+                <div class="panel-body form-horizontal">
+
+                    <!--<div class="form-group">-->
+                    <!--<label  class="col-sm-2 control-label">图片</label>-->
+                    <!--<div class="col-sm-10">-->
+                    <!--<input type="file" name="img" class="form-control" id="img" placeholder="">-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">名称</label>
+                        <div class="col-sm-3">
+                            <label class="form-control" readonly="">${info.key}</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">数值</label>
+                        <div class="col-sm-3">
+                            <input value="" type="text" class="form-control" id="value" name="material_price"
+                                   placeholder="注意:精确到小数点后两位">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button id="sub" type="submit" class="btn btn-primary">提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+
+        <!--<div class="copy text-center">-->
+        <!--Copyright 2014 <a href='#'>Website</a>-->
+        <!--</div>-->
+
+    </div>
+</footer>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="/js/jquery.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/js/custom.js"></script>
+
+<script>
+
+    var data = {};
+    var getTimestamp = new Date().getTime();
+    $(function () {
+        var info =${info};
+        if (info) {
+            $("#key").val(info.key);
+            $("#value").val(info.value)
+
+        }
+
+        $("#sub").on("click", function () {
+            data['key'] = $("#key").val();
+            data['value'] = $("#value").val();
+            data['id']=info.id;
+            if (!data['value'] || data['value'] == " ") {
+                alert("数值不能为空，请输入正确的数值");
+                return;
+            }
+
+            var post_url = '/v1/dictionary/do_edit';
+            $.post(post_url, data, function (res) {
+                var ret = JSON.parse(res)
+                if (ret.code == "success") {
+                    alert("修改成功");
+                    window.location.href="profit_list";
+                } else {
+                    alert(ret.msg);
+                }
+            })
+        })
+    })
+
+
+</script>
+
+</body>
+</html>

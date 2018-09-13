@@ -50,9 +50,10 @@ public class OfferManageController extends AdminController {
                 put(Dictionary.NOOFFER, "待报价");
             }
         };
-        String sql="select a.*,b.name as client_name,c.name as sale_name from offer a left join client b on a.client_id=b.id left join person c on a.sale_id=c.id";
+        String sql="select a.*,b.name as client_name,c.name as sale_name from offer a left join client b on a.client_id=b.id left join person c on a.sale_id=c.id order by id desc";
         StringBuffer sb=new StringBuffer(sql);
         String sqls=sb.append(" limit "+limit).toString();
+        ArrayList<HashMap<String, String>> list1 = M("offer").query(sql);
         ArrayList<HashMap<String, String>> list = M("offer").query(sqls);
         for (int i=0;i<list.size();i++){
             list.get(i).put("create_time",
@@ -60,7 +61,7 @@ public class OfferManageController extends AdminController {
             list.get(i).put("status",statusTypes.get(Integer.parseInt(list.get(i).get("status"))));
         }
         res.put("list", list);
-        res.put("num", list.size());
+        res.put("num", list1.size());
         success(res);
     }
 
