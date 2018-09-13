@@ -109,7 +109,15 @@ public class OfferManageController extends AdminController {
         OfferModel offerModel = new OfferModel();
         Bean t=offerModel.getProductBean(id);
         HashMap<String, Object> b =t.getData();
-        success(b);
+        try {
+
+            success(b);
+        } catch (Exception e) {
+            // TODO: handle exception
+            error("报价参数有误");
+        }
+
+
         long ms =TimeUtil.getLongTimeStamp()-s;
         System.out.println("-------------------"+ms+"ms");
 
@@ -125,7 +133,14 @@ public class OfferManageController extends AdminController {
         OfferModel offerModel = new OfferModel();
         Bean t=offerModel.getProductBean_real(id);
         HashMap<String, Object> b =t.getData();
-        success(b);
+        try {
+
+            success(b);
+        } catch (Exception e) {
+            // TODO: handle exception
+            error("报价参数有误");
+        }
+
     }
 
 }
