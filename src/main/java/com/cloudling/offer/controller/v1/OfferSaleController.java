@@ -48,6 +48,7 @@ public class OfferSaleController extends AdminController {
         String sql = "select a.*,b.name as client_name from offer a left join client b on a.client_id=b.id where a.parent_id = 0 and a.sale_id=" + user.get("id")+" order by id desc";
         StringBuffer sb = new StringBuffer(sql);
         String sqls = sb.append(" limit " + limit).toString();
+        ArrayList<HashMap<String, String>> list1 = M("offer").query(sql);
         ArrayList<HashMap<String, String>> list = M("offer").query(sqls);
         ArrayList<HashMap<String, Object>> slist = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
@@ -68,7 +69,7 @@ public class OfferSaleController extends AdminController {
 
         }
         res.put("list", slist);
-        res.put("num", list.size());
+        res.put("num", list1.size());
         success(res);
     }
 

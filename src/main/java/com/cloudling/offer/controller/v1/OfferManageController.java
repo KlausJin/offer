@@ -50,9 +50,10 @@ public class OfferManageController extends AdminController {
                 put(Dictionary.NOOFFER, "待报价");
             }
         };
-        String sql="select a.*,b.name as client_name,c.name as sale_name from offer a left join client b on a.client_id=b.id left join person c on a.sale_id=c.id";
+        String sql="select a.*,b.name as client_name,c.name as sale_name from offer a left join client b on a.client_id=b.id left join person c on a.sale_id=c.id order by id desc";
         StringBuffer sb=new StringBuffer(sql);
         String sqls=sb.append(" limit "+limit).toString();
+        ArrayList<HashMap<String, String>> list1 = M("offer").query(sql);
         ArrayList<HashMap<String, String>> list = M("offer").query(sqls);
         for (int i=0;i<list.size();i++){
             list.get(i).put("create_time",
@@ -60,7 +61,7 @@ public class OfferManageController extends AdminController {
             list.get(i).put("status",statusTypes.get(Integer.parseInt(list.get(i).get("status"))));
         }
         res.put("list", list);
-        res.put("num", list.size());
+        res.put("num", list1.size());
         success(res);
     }
 
@@ -115,11 +116,19 @@ public class OfferManageController extends AdminController {
                 HashMap<String, Object> product = products.get(i);
                 String pro_name=product.get("product").toString();
                 String pro_num=product.get("num").toString();
-                String pro_price=product.get("price").toString();
+                String per_price=product.get("per_price").toString();
+                String all_price=product.get("all_price").toString();
+                String sale=product.get("sale").toString();
+                String rate=product.get("rate").toString();
+                String profit=product.get("profit").toString();
                 proData.put("quote_id",id+"");
                 proData.put("pro_name",pro_name);
                 proData.put("pro_num",pro_num);
-                proData.put("pro_price",pro_price);
+                proData.put("per_price",per_price);
+                proData.put("all_price",all_price);
+                proData.put("sale",sale);
+                proData.put("rate",rate);
+                proData.put("profit",profit);
                 long pro_id=M("quote_pro").add(proData);
                 HashMap<String, String> res = new HashMap<>();
                 HashMap<String, String> data = JSON.parseObject(product.get("data").toString(), new HashMap<String, Object>().getClass());
