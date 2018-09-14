@@ -32,4 +32,12 @@ public class PictureModel extends  Model {
          return list;
 
      }
+
+     public ArrayList<HashMap<String,String>> getPictureByName(String name,String id){
+         String sql="SELECT * from (SELECT * from picture where name like '%"+name+"%' ) b where sale_id = "+id+" or sale_id =0";
+
+         ArrayList<HashMap<String, String>> list = query(sql);
+
+        return  list;
+     }
 }

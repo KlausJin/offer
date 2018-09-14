@@ -78,6 +78,7 @@
                         <label class="col-md-2 control-label" >单价：<span class="h_price"></span></label>
                         <label class="col-md-2 control-label" >总成本：<span class="h_all"></span></label>
                         <label class="col-md-2 control-label" >利润率：<span class="h_ll"></span></label>
+                        <label class="col-md-2 control-label" >利润：<span class="h_pro"></span></label>
                         <label class="col-md-2 control-label" >总价：<span class="h_rate"></span><span class="h_sale"></span></label>
                     </div>
 
@@ -641,6 +642,7 @@
                 $(".btn-sub").hide()
                 return;
             }
+
             var all_price = price.toFixed(2) * parseFloat($(".h_num").html());
 
             $(".h_all").html(all_price.toFixed(2));
@@ -649,6 +651,7 @@
                 $.getdata("/v1/profit/getProfit",{"num":num,"offer_id":${offer_id},"price":all_price.toFixed(2),"is_tax":is_tax},function (data) {
                    $(".h_sale").html(data.total)
                     $(".h_ll").html(data.profit)
+                    $(".h_pro").html(data.pro_price);
                     $(".h_rate").html(data.rate)
                 })
 

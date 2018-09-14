@@ -33,16 +33,22 @@ public class ProfitController extends AdminController {
                pro.put("profit",res.get("watchle5k"));
                if (is_tax.equals("03")){
                    Double total= DoubleUtil.div( DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("watchle5k")))),dollar,2);
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("watchle5k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","$");
                }
                if (is_tax.equals("01")){
                   Double total= DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("watchle5k"))));
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("watchle5k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","￥");
                }
                if (is_tax.equals("02")){
                    Double total= DoubleUtil.mul( DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("watchle5k")))),1+tax);
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("watchle5k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","￥");
                }
@@ -52,16 +58,22 @@ public class ProfitController extends AdminController {
                pro.put("profit",res.get("watch5k_10k"));
                if (is_tax.equals("03")){
                    Double total= DoubleUtil.div( DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("watch5k_10k")))),dollar,2);
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("watch5k_10k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","$");
                }
                if (is_tax.equals("01")){
                    Double total= DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("watch5k_10k"))));
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("watch5k_10k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","￥");
                }
                if (is_tax.equals("02")){
                    Double total= DoubleUtil.mul( DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("watch5k_10k")))),1+tax);
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("watch5k_10k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","￥");
                }
@@ -70,16 +82,22 @@ public class ProfitController extends AdminController {
                pro.put("profit",res.get("watch10k_50k"));
                if (is_tax.equals("03")){
                    Double total= DoubleUtil.div( DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("watch10k_50k")))),dollar,2);
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("watch10k_50k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","$");
                }
                if (is_tax.equals("01")){
                    Double total= DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("watch10k_50k"))));
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("watch10k_50k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","￥");
                }
                if (is_tax.equals("02")){
                    Double total= DoubleUtil.mul( DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("watch10k_50k")))),1+tax);
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("watch10k_50k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","￥");
                }
@@ -88,16 +106,22 @@ public class ProfitController extends AdminController {
                pro.put("profit",res.get("watch50k_100k"));
                if (is_tax.equals("03")){
                    Double total= DoubleUtil.div( DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("watch50k_100k")))),dollar,2);
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("watch50k_100k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","$");
                }
                if (is_tax.equals("01")){
                    Double total= DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("watch50k_100k"))));
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("watch50k_100k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","￥");
                }
                if (is_tax.equals("02")){
                    Double total= DoubleUtil.mul( DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("watch50k_100k")))),1+tax);
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("watch50k_100k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","￥");
                }
@@ -109,16 +133,22 @@ public class ProfitController extends AdminController {
                pro.put("profit",res.get("clockle500"));
                if (is_tax.equals("03")){
                    Double total= DoubleUtil.div( DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("clockle500")))),dollar,2);
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("clockle500"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","$");
                }
                if (is_tax.equals("01")){
                    Double total= DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("clockle500"))));
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("clockle500"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","￥");
                }
                if (is_tax.equals("02")){
                    Double total= DoubleUtil.mul( DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("clockle500")))),1+tax);
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("clockle500"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","￥");
                }
@@ -127,16 +157,22 @@ public class ProfitController extends AdminController {
                pro.put("profit",res.get("clock500_1k"));
                if (is_tax.equals("03")){
                    Double total= DoubleUtil.div( DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("clock500_1k")))),dollar,2);
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("clock500_1k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","$");
                }
                if (is_tax.equals("01")){
                    Double total= DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("clock500_1k"))));
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("clock500_1k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","￥");
                }
                if (is_tax.equals("02")){
                    Double total= DoubleUtil.mul( DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("clock500_1k")))),1+tax);
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("clock500_1k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","￥");
                }
@@ -145,16 +181,22 @@ public class ProfitController extends AdminController {
                pro.put("profit",res.get("clock1k_3k"));
                if (is_tax.equals("03")){
                    Double total= DoubleUtil.div( DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("clock1k_3k")))),dollar,2);
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("clock1k_3k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","$");
                }
                if (is_tax.equals("01")){
                    Double total= DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("clock1k_3k"))));
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("clock1k_3k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","￥");
                }
                if (is_tax.equals("02")){
                    Double total= DoubleUtil.mul( DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("clock1k_3k")))),1+tax);
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("clock1k_3k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","￥");
                }
@@ -163,16 +205,22 @@ public class ProfitController extends AdminController {
                pro.put("profit",res.get("clock3k_5k"));
                if (is_tax.equals("03")){
                    Double total= DoubleUtil.div( DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("clock3k_5k")))),dollar,2);
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("clock3k_5k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","$");
                }
                if (is_tax.equals("01")){
                    Double total= DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("clock3k_5k"))));
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("clock3k_5k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","￥");
                }
                if (is_tax.equals("02")){
                    Double total= DoubleUtil.mul( DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("clock3k_5k")))),1+tax);
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("clock3k_5k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","￥");
                }
@@ -181,16 +229,22 @@ public class ProfitController extends AdminController {
                pro.put("profit",res.get("clock5k_10k"));
                if (is_tax.equals("03")){
                    Double total= DoubleUtil.div( DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("clock5k_10k")))),dollar,2);
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("clock5k_10k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","$");
                }
                if (is_tax.equals("01")){
                    Double total= DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("clock5k_10k"))));
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("clock5k_10k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","￥");
                }
                if (is_tax.equals("02")){
                    Double total= DoubleUtil.mul( DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("clock5k_10k")))),1+tax);
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("clock5k_10k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","￥");
                }
@@ -199,16 +253,22 @@ public class ProfitController extends AdminController {
                pro.put("profit",res.get("clock10k_20k"));
                if (is_tax.equals("03")){
                    Double total= DoubleUtil.div( DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("clock10k_20k")))),dollar,2);
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("clock10k_20k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","$");
                }
                if (is_tax.equals("01")){
                    Double total= DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("clock10k_20k"))));
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("clock10k_20k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","￥");
                }
                if (is_tax.equals("02")){
                    Double total= DoubleUtil.mul( DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("clock10k_20k")))),1+tax);
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("clock10k_20k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","￥");
                }
@@ -217,16 +277,22 @@ public class ProfitController extends AdminController {
                pro.put("profit",res.get("clockme20k"));
                if (is_tax.equals("03")){
                    Double total= DoubleUtil.div( DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("clockme20k")))),dollar,2);
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("clockme20k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","$");
                }
                if (is_tax.equals("01")){
                    Double total= DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("clockme20k"))));
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("clockme20k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","￥");
                }
                if (is_tax.equals("02")){
                    Double total= DoubleUtil.mul( DoubleUtil.mul(Double.parseDouble(price),(1+Double.parseDouble(res.get("clockme20k")))),1+tax);
+                   Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("clockme20k"))) ,2);
+                   pro.put("pro_price",pro_price+"");
                    pro.put("total",total+"");
                    pro.put("rate","￥");
                }
