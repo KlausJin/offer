@@ -301,15 +301,14 @@
 
             $("select").on("change", function () {
                 var t = $(this), id = t.attr("data-id"), v = $(this).find("option:selected").attr("data-code"),
-                    price = $(this).find("option:selected").attr("data-price"),num = $(this).find("option:selected").attr("data-num")
+                    price = $(this).find("option:selected").attr("data-price"),num = $(this).find("option:selected").attr("data-num") || 0
+
 
                 $("#price_"+id).html(price)
                 $("#num_"+id).html(num)
+                var f =  t.find("option:selected").attr("data-for") || 0;
 
-                var f = cb["cb_"+id] || function (a,b) {
-
-                };
-                f(price,num)
+                make_for(price,num,f,id)
 
                 make_price();
 
@@ -391,8 +390,8 @@
                     oids[or_id] = data['id'];
                     s += '<select data-or-id="' + or_id + '" data-relate-id="' + relate_id + '" data-id="' + data["id"] + '" class="form-control d_attr">'
                     for (var i = 0; i < atts.length; i++) {
-
-                        s += '<option data-num="'+atts[i].num+'" data-price="'+atts[i].price+'" data-code="' + atts[i].code + '" value="' + atts[i].id + '">' + atts[i].name + '</option>'
+                        var num = atts[i].num || 0;
+                        s += '<option data-for="'+atts[i].formula+'" data-num="'+num+'" data-price="'+atts[i].price+'" data-code="' + atts[i].code + '" value="' + atts[i].id + '">' + atts[i].name + '</option>'
                     }
                     s += '</select>'
                 }
@@ -418,15 +417,24 @@
 
                 s+='<label class="control-label">';
                 var is_m = atts[0].is_material || 0;
-                if(is_m){
+
                     s+='单价：'
-                }
+
                 s+='<span id="price_'+data['id']+'">'+atts[0].price+'</label>'
 
 
                 s+='</div>'
                 }else{
-                    s+='<div class="col-md-2"></div>';
+                    s+='<div class="col-md-2">';
+
+                    s+='<label class="control-label">';
+
+                        s+='单价：'
+
+                    s+='<span id="price_'+data['id']+'">'+atts[0].price+'</label>'
+
+
+                    s+='</div>'
                 }
 
 
@@ -434,7 +442,7 @@
                 if(num>0){
                     s+='<div class="col-md-2"><label class="control-label">数量：<span id="num_'+data['id']+'">'+num+'</span></label></div>'
                 }else{
-                    s+='<div class="col-md-2"></div>';
+                    s+='<div class="col-md-2"><label class="control-label">数量：<span id="num_'+data['id']+'">'+num+'</span></label></div>'
                 }
 
 
@@ -539,6 +547,61 @@
             }
 
 
+        }
+
+        _w['make_for']=function(a,b,f,sid) {
+            var sf = parseInt(f)
+            b = b || 0.00;
+            a = a || 0.00;
+            switch (sf) {
+                case 0:
+                    $("#all_price_" + sid).val(a);
+                    break;
+                case 1:
+                    var nv = mul(a,b);
+                    $("#all_price_" + sid).val(nv.toFixed(4));
+                    break;
+                case 2:
+
+                    var nv = mul(mul(b, b), a) / 10000;
+
+                    $("#all_price_" + sid).val(nv.toFixed(4));
+
+                    break;
+                case 6:
+
+                    var nv = mul(a, b);
+
+                    $("#all_price_" + sid).val(nv.toFixed(4));
+
+                    break;
+                case 3:
+                case 4:
+                    v = mul(atts[0].num, atts[0].price);
+
+                    var nv = mul(a, b);
+                    v = div(v, 10000);
+
+                    $("#all_price_" + sid).val(nv.toFixed(4));
+
+                    break;
+                case 7:
+
+
+                    var nv = div(a, b)
+
+
+                    $("#all_price_" + sid).val(nv.toFixed(4));
+
+                    break;
+                case 8:
+
+
+                    break;
+                case 9:
+
+                    break;
+            }
         }
 
         _w['switch_pro'] = function (pos) {
@@ -731,13 +794,14 @@
                 t.val(v)
                 var price = t.find("option:selected").attr("data-price");
                 $("#price_"+id).html(price)
-                var num = t.find("option:selected").attr("data-num");
+                var num = t.find("option:selected").attr("data-num") || 0;
 
                 $("#num_"+id).html(num)
-                var f = cb["cb_"+attr_id] || function (a,b) {
+                var f =  t.find("option:selected").attr("data-for") || 0;
 
-                };
-                f(price,num)
+                make_for(price,num,f,attr_id)
+
+
             }
         })
 
