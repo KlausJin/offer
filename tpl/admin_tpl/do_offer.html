@@ -300,13 +300,15 @@
 
             $("select").on("change", function () {
                 var t = $(this), id = t.attr("data-id"), v = $(this).find("option:selected").attr("data-code"),
-                    price = $(this).find("option:selected").attr("data-price")
+                    price = $(this).find("option:selected").attr("data-price"),num = $(this).find("option:selected").attr("data-num")
 
                 $("#price_"+id).html(price)
-                var f = cb["cb_"+id] || function (a) {
+                $("#num_"+id).html(num)
+
+                var f = cb["cb_"+id] || function (a,b) {
 
                 };
-                f(price)
+                f(price,num)
 
                 make_price();
 
@@ -385,7 +387,7 @@
                     s += '<select data-or-id="' + or_id + '" data-relate-id="' + relate_id + '" data-id="' + data["id"] + '" class="form-control d_attr">'
                     for (var i = 0; i < atts.length; i++) {
 
-                        s += '<option data-price="'+atts[i].price+'" data-code="' + atts[i].code + '" value="' + atts[i].id + '">' + atts[i].name + '</option>'
+                        s += '<option data-num="'+atts[i].num+'" data-price="'+atts[i].price+'" data-code="' + atts[i].code + '" value="' + atts[i].id + '">' + atts[i].name + '</option>'
                     }
                     s += '</select>'
                 }
@@ -425,7 +427,7 @@
 
 
                 if(num>0){
-                    s+='<div class="col-md-2"><label class="control-label">数量：'+num+'</label></div>'
+                    s+='<div class="col-md-2"><label class="control-label">数量：<span id="num_'+data['id']+'">'+num+'</span></label></div>'
                 }else{
                     s+='<div class="col-md-2"></div>';
                 }
@@ -441,8 +443,8 @@
                             v=mul(atts[0].num,atts[0].price);
                             var id = data['id'];
 
-                            cb["cb_"+id]=function (a) {
-                                var nv = a*atts[0].num;
+                            cb["cb_"+id]=function (a,b) {
+                                var nv = mul(a,b);
 
                                 $("#all_price_"+id).val(nv.toFixed(4));
                             }
@@ -451,8 +453,8 @@
                             v=mul(mul(atts[0].num,atts[0].num),atts[0].price)/10000;
                             var id = data['id'];
 
-                            cb["cb_"+id]=function (a) {
-                                var nv = mul(mul(atts[0].num,atts[0].num),a)/10000;
+                            cb["cb_"+id]=function (a,b) {
+                                var nv = mul(mul(b,b),a)/10000;
 
                                 $("#all_price_"+id).val(nv.toFixed(4));
                             }
@@ -461,8 +463,8 @@
                             v=mul(atts[0].num,atts[0].price);
                             var id = data['id'];
 
-                            cb["cb_"+id]=function (a) {
-                                var nv = a*atts[0].num;
+                            cb["cb_"+id]=function (a,b) {
+                                var nv = mul(a,b);
 
                                 $("#all_price_"+id).val(nv.toFixed(4));
                             }
@@ -473,8 +475,8 @@
                             v = div(v,10000);
                             var id = data['id'];
 
-                            cb["cb_"+id]=function (a) {
-                                var nv = a*atts[0].num;
+                            cb["cb_"+id]=function (a,b) {
+                                var nv = mul(a,b);
                                 v = div(v,10000);
 
                                 $("#all_price_"+id).val(nv.toFixed(4));
@@ -486,8 +488,8 @@
 
                             var id = data['id'];
 
-                            cb["cb_"+id]=function (a) {
-                                var nv =div(a,atts[0].num)
+                            cb["cb_"+id]=function (a,b) {
+                                var nv =div(a,b)
 
 
                                 $("#all_price_"+id).val(nv.toFixed(4));
@@ -710,11 +712,13 @@
                 t.val(v)
                 var price = t.find("option:selected").attr("data-price");
                 $("#price_"+id).html(price)
+                var num = t.find("option:selected").attr("data-num");
 
-                var f = cb["cb_"+attr_id] || function (a) {
+                $("#num_"+id).html(num)
+                var f = cb["cb_"+attr_id] || function (a,b) {
 
                 };
-                f(price)
+                f(price,num)
             }
         })
 
