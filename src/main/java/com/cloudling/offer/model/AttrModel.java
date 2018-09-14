@@ -66,22 +66,22 @@ public class AttrModel extends Model {
 
     public List<AttrBean> getlistBySpareId1(String spare_id,String offer_id,String product_id,String cat_id){
         List<AttrBean> list =new ArrayList<>();
-        ArrayList<HashMap<String, String>> map =getspareId(spare_id);
+        ArrayList<HashMap<String, String>> map =getspareId(spare_id);    // 根据传入的spareid 查attr表的父属性
         OfferAttrModel offerAttrModel = OfferAttrModel.getInstance(offer_id);
         for (int i=0;i<map.size();i++){
             HashMap<String,String> res= map.get(i);
             HashMap<String, String> data= offerAttrModel.getMapBySpareId(res.get("id"), offer_id);
-            if (data==null){
+            if (data==null){                                     //查找对业务员隐藏的属性
                 AttrBean bean =new AttrBean(res);
                 bean.f_attrBeans=new AttrModel().getBeanByAttrId(bean.id,offer_id,product_id,cat_id);
                 list.add(bean);
             }
-            else{
-                res.replace("id",data.get("attr_id"));
+            else{                                            //查找业务员选择的属性
+                res.replace("id",data.get("attr_id"));     //把输出的attrid替换为offerattr里的attrid（主要针对attrid为-1）
                 AttrBean bean =new AttrBean(res);
                 HashMap<String,String> emptyData = new HashMap<>();
                 AttrBean emptyBean = new AttrBean(emptyData);
-                if(data.get("attr_id").equals("-1")){
+                if(data.get("attr_id").equals("-1")){     //attrid为-1的显示不启用
                     emptyBean.id = "-1";
                     emptyBean.name = "不启用";
                     bean.f_attrBeans=new ArrayList<>();
@@ -100,11 +100,11 @@ public class AttrModel extends Model {
         ProductModel productModel = new ProductModel();
         MaterialModel materialModel = new MaterialModel();
         OfferAttrModel offerAttrModel = OfferAttrModel.getInstance(offer_id);
-        HashMap<String, String> catid = productModel.getCatId(product_id);
-        HashMap<String, String> res = offerAttrModel.getMapBySpareId(spare_id, offer_id);
+        HashMap<String, String> catid = productModel.getCatId(product_id);   //查找产品编号
+        HashMap<String, String> res = offerAttrModel.getMapBySpareId(spare_id, offer_id);//查找offerattr的父属性id
 
         List<AttrBean> list = new ArrayList<>();
-        if (res==null|| res.get("attr_id").equals("-1")) {
+        if (res==null|| res.get("attr_id").equals("-1")) {    //spareid为空的或者attrid为-1的进入循环
             ArrayList<HashMap<String, String>> data = getListByParentId(spare_id);
             for (int i = 0; i < data.size(); i++) {
                 HashMap<String, String> res1 = data.get(i);
@@ -392,7 +392,7 @@ public class AttrModel extends Model {
             double chang=(Double.parseDouble(hnum)*Double.parseDouble(num))+2.5;
             if (name.equals("有")){
                 double gao=Double.parseDouble(gnum)+2;
-                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(chang,gao),3)),2);
+                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(kuan,gao),3)),2);
                 CBM=DoubleUtil.div(DoubleUtil.mul(DoubleUtil.mul(chang,kuan),gao),1000000);
                 res.put("长",chang+"");
                 res.put("宽",kuan+"");
@@ -404,7 +404,7 @@ public class AttrModel extends Model {
             }
             else {
                 double gao=Double.parseDouble(gnum)+1.5;
-                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(chang,gao),3)),2);
+                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(kuan,gao),3)),2);
                 CBM=DoubleUtil.div(DoubleUtil.mul(DoubleUtil.mul(chang,kuan),gao),1000000);
                 res.put("长",chang+"");
                 res.put("宽",kuan+"");
@@ -419,7 +419,7 @@ public class AttrModel extends Model {
             double chang=(Double.parseDouble(hnum)*(Double.parseDouble(num)/2))+2.5;
             if (name.equals("有")){
                 double gao=Double.parseDouble(gnum)*2+2;
-                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(chang,gao),3)),2);
+                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(kuan,gao),3)),2);
                 CBM=DoubleUtil.div(DoubleUtil.mul(DoubleUtil.mul(chang,kuan),gao),1000000);
 
                 res.put("长",chang+"");
@@ -431,7 +431,7 @@ public class AttrModel extends Model {
             }
             else {
                 double gao=Double.parseDouble(gnum)*2+1.5;
-                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(chang,gao),3)),2);
+                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(kuan,gao),3)),2);
                 CBM=DoubleUtil.div(DoubleUtil.mul(DoubleUtil.mul(chang,kuan),gao),1000000);
                 res.put("长",chang+"");
                 res.put("宽",kuan+"");
@@ -445,7 +445,7 @@ public class AttrModel extends Model {
             double chang=(Double.parseDouble(hnum)*(Double.parseDouble(num)/4))+2.5;
             if (name.equals("有")){
                 double gao=Double.parseDouble(gnum)*2+2;
-                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(chang,gao),3)),2);
+                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(kuan,gao),3)),2);
                 CBM=DoubleUtil.div(DoubleUtil.mul(DoubleUtil.mul(chang,kuan),gao),1000000);
                 res.put("长",chang+"");
                 res.put("宽",kuan+"");
@@ -456,7 +456,7 @@ public class AttrModel extends Model {
             }
             else {
                 double gao=Double.parseDouble(gnum)*2+1.5;
-                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(chang,gao),3)),2);
+                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(kuan,gao),3)),2);
                 CBM=DoubleUtil.div(DoubleUtil.mul(DoubleUtil.mul(chang,kuan),gao),1000000);
                 res.put("长",chang+"");
                 res.put("宽",kuan+"");
@@ -470,7 +470,7 @@ public class AttrModel extends Model {
             double chang=(Double.parseDouble(hnum)*(Double.parseDouble(num)/6))+2.5;
             if (name.equals("有")){
                 double gao=Double.parseDouble(gnum)*2+2;
-                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(chang,gao),3)),2);
+                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(kuan,gao),3)),2);
                 CBM=DoubleUtil.div(DoubleUtil.mul(DoubleUtil.mul(chang,kuan),gao),1000000);
                 res.put("长",chang+"");
                 res.put("宽",kuan+"");
@@ -481,7 +481,7 @@ public class AttrModel extends Model {
             }
             else {
                 double gao=Double.parseDouble(gnum)*2+1.5;
-                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(chang,gao),3)),2);
+                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(kuan,gao),3)),2);
                 CBM=DoubleUtil.div(DoubleUtil.mul(DoubleUtil.mul(chang,kuan),gao),1000000);
                 res.put("长",chang+"");
                 res.put("宽",kuan+"");
@@ -495,7 +495,7 @@ public class AttrModel extends Model {
             double chang=(Double.parseDouble(hnum)*(Double.parseDouble(num)/8))+2.5;
             if (name.equals("有")){
                 double gao=Double.parseDouble(gnum)*2+2;
-                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(chang,gao),3)),2);
+                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(kuan,gao),3)),2);
                 CBM=DoubleUtil.div(DoubleUtil.mul(DoubleUtil.mul(chang,kuan),gao),1000000);
                 res.put("长",chang+"");
                 res.put("宽",kuan+"");
@@ -506,7 +506,7 @@ public class AttrModel extends Model {
             }
             else {
                 double gao=Double.parseDouble(gnum)*2+1.5;
-                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(chang,gao),3)),2);
+                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(kuan,gao),3)),2);
                 CBM=DoubleUtil.div(DoubleUtil.mul(DoubleUtil.mul(chang,kuan),gao),1000000);
                 res.put("长",chang+"");
                 res.put("宽",kuan+"");
@@ -520,7 +520,7 @@ public class AttrModel extends Model {
             double chang=(Double.parseDouble(hnum)*(Double.parseDouble(num)/10))+2.5;
             if (name.equals("有")){
                 double gao=Double.parseDouble(gnum)*2+2;
-                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(chang,gao),3)),2);
+                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(kuan,gao),3)),2);
                 CBM=DoubleUtil.div(DoubleUtil.mul(DoubleUtil.mul(chang,kuan),gao),1000000);
                 res.put("长",chang+"");
                 res.put("宽",kuan+"");
@@ -531,7 +531,7 @@ public class AttrModel extends Model {
             }
             else {
                 double gao=Double.parseDouble(gnum)*2+1.5;
-                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(chang,gao),3)),2);
+                area=DoubleUtil.mul( DoubleUtil.mul(DoubleUtil.add(DoubleUtil.add(kuan,chang),5),DoubleUtil.add(DoubleUtil.add(kuan,gao),3)),2);
                 CBM=DoubleUtil.div(DoubleUtil.mul(DoubleUtil.mul(chang,kuan),gao),1000000);
                 res.put("长",chang+"");
                 res.put("宽",kuan+"");

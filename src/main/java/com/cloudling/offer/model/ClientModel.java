@@ -19,6 +19,10 @@ public class ClientModel extends  Model {
     public ArrayList list() {
         return select();
     }
+    public HashMap<String,String> getClientProfit(String client_id){
+        HashMap<String,String> map=where("id="+client_id).find();
+        return map;
+    }
 
 
 }

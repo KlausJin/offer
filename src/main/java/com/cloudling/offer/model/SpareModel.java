@@ -54,7 +54,7 @@ public class SpareModel extends Model {
         for (int i=0;i<map.size();i++){                                          //遍历找出的spare
             HashMap<String,String> res =map.get(i);
             SpareBean bean =new SpareBean( res);                                 //放入bean
-            bean.attrBeans= new AttrModel().getlistBySpareId1(bean.id,offer_id,product_id,cat_id);
+            bean.attrBeans= new AttrModel().getlistBySpareId1(bean.id,offer_id,product_id,cat_id); //传值到下一层
             list.add(bean);
         }
         return list;
@@ -97,10 +97,10 @@ public class SpareModel extends Model {
 
         List<SpareBean> list =new ArrayList<>();
         OfferAttrModel offerAttrModel = OfferAttrModel.getInstance(offer_id);
-        ArrayList<HashMap<String, String>> map = offerAttrModel.getSpareByOn(product_id,offer_id);
+        ArrayList<HashMap<String, String>> map = offerAttrModel.getSpareByOn(product_id,offer_id);//查到选择的常用配件（attr_id=on）
 
         for (int i=0;i<map.size();i++){
-            HashMap<String,String> res=getSpare_real(map.get(i).get("spare_id"));
+            HashMap<String,String> res=getSpare_real(map.get(i).get("spare_id")); //根据spareid（offerattr表）差 （spare表）id
             SpareBean bean =new SpareBean( res);
             bean.attrBeans= new AttrModel().getSpareId_real(bean.id,offer_id,product_id);
             list.add(bean);

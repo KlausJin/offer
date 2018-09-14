@@ -37,4 +37,9 @@ public class Dictionary {
 	public static final int ISOFFER=1;
 	public static final int NOOFFER=0;
 
+	// 含税不含税
+	public static final int ISTAX=02;
+	public static final int NOTAX=01;
+	public static final int ISOUT=03;
+
 }

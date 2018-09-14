@@ -31,5 +31,15 @@ public class CommonController extends AdminController {
             error(e.getMessage());
         }
     }
+    @action
+    public void upload() {
+        try {
+            success(UploadUtil.upload(context));
+        } catch (IOException | ServletException | FileUploadException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            error("上传失败");
+        }
+    }
 
 }

@@ -8,9 +8,9 @@ import java.util.List;
         public OfferBean(HashMap<String,String> data){
             super(data);
         }
-       public String id,sale_id,m_id,client_id,status;
+        public String id,sale_id,m_id,client_id,status;
         public List<ProductBean> productBeans;
-
+        public String profit;
 
 }
 

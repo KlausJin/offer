@@ -9,7 +9,7 @@ import com.cloudling.offer.util.DoubleUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ProfitController extends Controller {
+public class ProfitController extends AdminController {
     public ProfitController(ControllerContext context) {
         super(context);
     }

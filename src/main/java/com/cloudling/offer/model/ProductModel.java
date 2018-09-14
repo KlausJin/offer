@@ -105,11 +105,11 @@ public class ProductModel extends Model {
     public List<ProductBean> getBean_real1(String offer_id){
         OfferProductModel offerProductModel=new OfferProductModel();
        List<ProductBean> list =new ArrayList<>();
-        ArrayList<HashMap<String, String>>res = offerProductModel.getProductByOfferId(offer_id);
+        ArrayList<HashMap<String, String>>res = offerProductModel.getProductByOfferId(offer_id);//查报价里的product
         for (int i=0;i<res.size();i++){
-            HashMap<String, String> map= where("id="+res.get(i).get("product_id")).find();
-            ProductBean bean = new ProductBean(map);
-            bean.spareBeans = new SpareModel().getBeansByCat_id_real1(bean.id,offer_id);
+            HashMap<String, String> map= where("id="+res.get(i).get("product_id")).find(); //遍历
+            ProductBean bean = new ProductBean(map);//放入bean
+            bean.spareBeans = new SpareModel().getBeansByCat_id_real1(bean.id,offer_id);//传值到下一层
            list.add(bean);
 
        }
