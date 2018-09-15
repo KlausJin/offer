@@ -17,23 +17,23 @@ import static com.cloudling.offer.util.ExcelUtil.parseExcel;
 
 
 
-public class AreaExcelModel extends Model {
+public class EnglishReferModel extends Model {
 
     String url;
-    public AreaExcelModel(String url) {
-        super("area");
+    public EnglishReferModel(String url) {
+        super("english_refer");
         this.url=url;
     }
 
 
 
-    public List<HashMap<String, String>>  do_excel() throws Exception {
+    public List<HashMap<String, String>> do_excel() throws Exception {
         File file = new File("assets/"+url+"");
         FileInputStream fis = null;
         fis = new FileInputStream(file);
         Map<String, String> m = new HashMap<String, String>();
-        m.put("地区", "area_name");
-        m.put("国家编号","country_id");
+        m.put("中文", "name");
+        m.put("英文","e_name");
         List<HashMap<String, String>> ls = null;
         ls = parseExcel(fis, file.getName(), m);
         return ls;

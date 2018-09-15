@@ -103,10 +103,12 @@ public class ExcelUtil {
 //                System.out.println(row.getLastCellNum());
 //                System.out.println("测试1");
                 // 遍历所有的列
+                row.getFirstCellNum();
+                row.getLastCellNum();
                 for (int y = row.getFirstCellNum(); y < row.getLastCellNum(); y++) {
-                    cell = row.getCell(y);//国内外贸   1
-                    String key = title[y];//地区  国家编号
-                    m.put(mapping.get(key), cell.toString());//(area_name,"国内外贸"),(country_id,"1")
+                    cell = row.getCell(y);
+                    String key = title[y];
+                    m.put(mapping.get(key), cell.toString());
                 }
 
                 ls.add(m);

@@ -18,7 +18,7 @@ public class LoginOutController extends Controller {
 
     @action
     public void exit(){
-        String id=I("get.id").toString();
+        String id=I("id").toString();
         try{
             M("session").where("id="+id).delete();
             redirect("/v1/access/login");

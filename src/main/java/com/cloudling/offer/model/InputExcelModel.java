@@ -1,5 +1,8 @@
 package com.cloudling.offer.model;
 
+import com.cloudling.offer.export.ExcelExprtAdapter;
+import com.cloudling.offer.util.ExcelToOfferUtil;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.HashMap;
@@ -17,25 +20,25 @@ import static com.cloudling.offer.util.ExcelUtil.parseExcel;
 
 
 
-public class AreaExcelModel extends Model {
+public class InputExcelModel extends Model {
 
     String url;
-    public AreaExcelModel(String url) {
-        super("area");
+    String id;
+
+    public InputExcelModel(String url,String id) {
+        super("material");
         this.url=url;
+        this.id = id;
     }
 
 
 
-    public List<HashMap<String, String>>  do_excel() throws Exception {
-        File file = new File("assets/"+url+"");
+    public String  do_excel() throws Exception {
+        File file = new File("assets/"+url);
         FileInputStream fis = null;
         fis = new FileInputStream(file);
-        Map<String, String> m = new HashMap<String, String>();
-        m.put("地区", "area_name");
-        m.put("国家编号","country_id");
         List<HashMap<String, String>> ls = null;
-        ls = parseExcel(fis, file.getName(), m);
-        return ls;
+        return  ExcelToOfferUtil.parseExcel(fis, file.getName(), new ExcelExprtAdapter(id));
+
     }
 }

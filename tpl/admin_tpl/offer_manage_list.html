@@ -25,9 +25,20 @@
                 <div class="panel-heading">
                     <div class="panel-title">报价管理</div>
                     <div class="col-sm-2">
-                        <input value="" type="text" class="form-control" id="search" name="search"
-                               placeholder="搜索客户或者报价编号"/>
+                        <input value="" type="text" class="form-control" id="name" name="name"
+                               placeholder="按客户名称"/>
                     </div>
+                    <div class="col-sm-2">
+                        <select id="status" class="form-control">
+                            <option value="2">按报价状态</option>
+                            <option value="0">待报价</option>
+                            <option value="1">已报价</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <button class="btn btn-primary" type="button" onclick="search()">搜索</button>
+                    </div>
+
                 </div>
 
                 <div class="panel-body">
@@ -113,19 +124,19 @@
     }
 
 
-    var key;
+    function search() {
+        tohtml();
+    }
+
 
 
     function tohtml() {
-        $("#search").change(function () {
-            key = $("#search").val();
-        })
+        var search_name,search_status;
+        search_name=$("#name").val();
+        search_status=$("#status option:selected").val();
         var d = {"page": current_page}
-
-        if (key) {
-            d['key'] = key;
-        }
-
+        d['search_name'] = search_name;
+        d['search_status'] = search_status;
         $.getJSON("getManageOfferList", d, function (res) {
             if (res.code == "success") {
                 var da = res.data, s = '', data = da['list'], num = da['num'], pi = "";

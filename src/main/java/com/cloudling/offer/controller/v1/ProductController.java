@@ -107,9 +107,8 @@ public class ProductController extends AdminController {
 
     @action
     public void getProductInfo() {
-        String cat_id=I("cat_id").toString();
         ProductModel pm = new ProductModel();
-        ArrayList<HashMap<String, String>> list = pm.field("id,code").where("cat_id="+cat_id).select();
+        ArrayList<HashMap<String, String>> list = pm.field("id,code").select();
         success(list);
     }
 

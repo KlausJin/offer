@@ -2,6 +2,7 @@ package com.cloudling.offer.controller.v1;
 
 import com.cloudling.offer.annotation.action;
 import com.cloudling.offer.model.AreaExcelModel;
+import com.cloudling.offer.model.EnglishReferModel;
 import com.cloudling.offer.server.Controller;
 import com.cloudling.offer.server.ControllerContext;
 import com.cloudling.offer.util.Md5Util;
@@ -37,6 +38,29 @@ public class AreaController extends AdminController {
             for (int i = 0; i < ls.size(); i++) {
                 data = ls.get(i);
                 long t = aem.add(data);
+            }
+            success("导入数据库成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            error("导入数据库失败");
+        }
+    }
+
+    @action
+    public void add_english_refer(){
+        toHtml("admin_tpl/add_english_refer");
+    }
+
+    @action
+    public void do_add_english_refer(){
+        String url = I("url").toString();
+        EnglishReferModel erm=new EnglishReferModel(url);
+        try {
+            List<HashMap<String, String>> ls = erm.do_excel();
+            HashMap<String, String> data = new HashMap<>();
+            for (int i = 0; i < ls.size(); i++) {
+                data = ls.get(i);
+                long t = erm.add(data);
             }
             success("导入数据库成功");
         } catch (Exception e) {

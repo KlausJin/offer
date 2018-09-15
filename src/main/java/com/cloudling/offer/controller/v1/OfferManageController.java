@@ -36,8 +36,10 @@ public class OfferManageController extends AdminController {
 
     @action
     public void getManageOfferList() {
-        String page = I("get.page").toString();
+        String page = I("page").toString();
         String limit = Integer.parseInt(page) * 10 + ",10";
+        String search_name=I("search_name")==""?"":I("search_name").toString();
+        String search_status=I("search_status").equals("2")?"":I("search_status").toString();
         HashMap<String, Object> res = new HashMap<>();
         HashMap<Integer, String> statusTypes = new HashMap<Integer, String>() {
             /**
@@ -50,11 +52,21 @@ public class OfferManageController extends AdminController {
                 put(Dictionary.NOOFFER, "待报价");
             }
         };
-        String sql="select a.*,b.name as client_name,c.name as sale_name from offer a left join client b on a.client_id=b.id left join person c on a.sale_id=c.id order by id desc";
+        String sql="select a.*,b.name as client_name,c.name as sale_name from offer a left join client b on a.client_id=b.id left join person c on a.sale_id=c.id where 1=1 ";
         StringBuffer sb=new StringBuffer(sql);
-        String sqls=sb.append(" limit "+limit).toString();
-        ArrayList<HashMap<String, String>> list1 = M("offer").query(sql);
-        ArrayList<HashMap<String, String>> list = M("offer").query(sqls);
+        StringBuffer snum=new StringBuffer(sql);
+        if (search_name.length()>0){
+            sb.append(" and b.name like '%"+search_name+"%'");
+            snum.append(" and b.name like '%"+search_name+"%'");
+        }
+        if (search_status.length()>0){
+            sb.append(" and a.status="+search_status);
+            snum.append(" and a.status="+search_status);
+        }
+        sb.append(" order by id desc ");
+        sb.append(" limit "+limit);
+        ArrayList<HashMap<String, String>> list = M("offer").query(sb.toString());
+        ArrayList<HashMap<String, String>> list1 = M("offer").query(snum.toString());
         for (int i=0;i<list.size();i++){
             list.get(i).put("create_time",
                     TimeUtil.stampToDate(list.get(i).get("create_time"), "yyyy-MM-dd HH:mm:ss"));

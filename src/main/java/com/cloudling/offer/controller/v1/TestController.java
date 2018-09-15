@@ -3,9 +3,11 @@ package com.cloudling.offer.controller.v1;
 
 import com.alibaba.fastjson.JSON;
 import com.cloudling.offer.annotation.action;
+import com.cloudling.offer.model.InputExcelModel;
 import com.cloudling.offer.model.PartCatModel;
 import com.cloudling.offer.server.Controller;
 import com.cloudling.offer.server.ControllerContext;
+import com.cloudling.offer.util.InputExcelUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -76,16 +78,35 @@ public class TestController extends Controller {
 //        System.out.println(b);
 //    }
 
+//    @action
+//    public void test4(){
+//        ArrayList<HashMap<String, String>> list = M("attr").field("id,parent_id").where(" parent_id !=0 and num=-2").select();
+//        HashMap<String, String> spe=new HashMap<>();
+//        for(int j=0;j<list.size();j++){
+//            String x=list.get(j).get("id");
+//            String y=list.get(j).get("parent_id");
+//            spe.put(x,y);
+//        }
+//        success(spe);
+//    }
+
     @action
-    public void test4(){
-        ArrayList<HashMap<String, String>> list = M("attr").field("id,parent_id").where(" parent_id !=0 and num=-2").select();
-        HashMap<String, String> spe=new HashMap<>();
-        for(int j=0;j<list.size();j++){
-            String x=list.get(j).get("id");
-            String y=list.get(j).get("parent_id");
-            spe.put(x,y);
+    public void test5(){
+        InputExcelUtil.copyExcel("assets/resourses/watch/英姿、万思刻-所有业务员.xls","assets/resourses/watch/test.xls");
+        System.out.println("1");
+    }
+
+    @action
+    public void test6(){
+
+        InputExcelModel iem=new InputExcelModel("工作簿1.xlsx","8");
+        try{
+            String data = iem.do_excel();
+            success(data);
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        success(spe);
+
     }
 
 

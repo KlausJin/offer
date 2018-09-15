@@ -37,7 +37,7 @@ public class AdminController extends Controller {
             return;
         }
         try {
-            assign("id", map.get("id"));
+            assign("session_id", map.get("id"));
             user = JSON.parseObject(map.get("object"), new HashMap<>().getClass());
             admin_type = Integer.parseInt(user.get("status"));
             assign("admin_type", admin_type);

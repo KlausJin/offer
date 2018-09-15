@@ -74,7 +74,7 @@
             </li>
 
             <li class="submenu">
-                <% if(admin_type>=3){ %>
+                <% if(admin_type==3){ %>
                 <a href="#">
                     <i class="glyphicon glyphicon-book"></i> 报价管理
                     <span class="caret pull-right"></span>
@@ -87,7 +87,7 @@
             </li>
 
             <li class="submenu">
-                <% if(admin_type<=2 && admin_type>=1 ){ %>
+                <% if(admin_type==2 ){ %>
                 <a href="#">
                     <i class="glyphicon glyphicon-book"></i> 报价管理
                     <span class="caret pull-right"></span>
@@ -119,9 +119,10 @@
                 <% }%>
                 <ul>
                     <li><a href="/v1/product/add_product"><i class="glyphicon glyphicon-list"></i>产品(配件)Excel模板导入</a></li>
-                    <li><a href="/v1/material/add_materialByExcel"><i class="glyphicon glyphicon-list"></i>原材料Excel模板导入</a>
-                    <li><a href="/v1/person/add_personByExcel"><i class="glyphicon glyphicon-list"></i> 员工Excel模板导入</a>
-                    <li><a href="/v1/client/add_clientByExcel"><i class="glyphicon glyphicon-list"></i> 客户Excel模板导入</a>
+                    <li><a href="/v1/material/add_materialByExcel"><i class="glyphicon glyphicon-list"></i>原材料Excel模板导入</a></li>
+                    <li><a href="/v1/person/add_personByExcel"><i class="glyphicon glyphicon-list"></i> 员工Excel模板导入</a></li>
+                    <li><a href="/v1/client/add_clientByExcel"><i class="glyphicon glyphicon-list"></i> 客户Excel模板导入</a></li>
+                    <li><a href="/v1/area/add_english_refer"><i class="glyphicon glyphicon-list"></i> 中英文对照Excel模板导入</a></li>
                 </ul>
             </li>
 
