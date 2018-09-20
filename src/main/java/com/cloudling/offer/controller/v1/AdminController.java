@@ -45,7 +45,7 @@ public class AdminController extends Controller {
             e.printStackTrace();
         }
         assign("user", user.get("name"));
-        assign("id", user.get("id"));
+        assign("id", admin_type==4?user.get("follow_id"):user.get("id"));
         String role = "";
         switch (admin_type) {
             case 1:

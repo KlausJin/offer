@@ -22,7 +22,7 @@ public class ExportDictonary {
             put("单价","per_price");
             put("总价","sale");
             put("数量","num");
-
+            put("cbm","cbm");
         }
     };
 

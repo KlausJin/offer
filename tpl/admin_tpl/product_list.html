@@ -22,29 +22,24 @@
         <div class="row">
             <%include("left.html"){}%>
             <div class="col-md-10">
-                <!--<div class="panel-heading">-->
-                <!--<div class="panel-title">产品型号</div>-->
-                <!--</div>-->
-                <div class="col-md-4">
                     <div class="content-box-large">
                         <div class="panel-heading">
-                            <div class="panel-title">产品型号</div>
-                        </div>
-                        <div class="panel-body">
-                            <div class="form-group">
-                                <div class="col-md-10">
-                                    <input class="form-control" placeholder="请输入产品型号" type="text" list="productlist">
-                                    <datalist id="productlist">
-                                    </datalist>
-                                </div>
-
+                            <div class="panel-title">报价管理</div>
+                            <div class="col-sm-2">
+                                <input value="" type="text" class="form-control" id="name" name="name"
+                                       placeholder="按产品名称"/>
                             </div>
-
+                            <div class="col-sm-2">
+                                <select id="cat" class="form-control">
+                                    <option value="0">按产品型号</option>
+                                    <option value="22">手表</option>
+                                    <option value="32">时钟</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <button class="btn btn-primary" type="button" onclick="search()">搜索</button>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="content-box-large">
 
                         <div class="panel-body">
                             <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered"
@@ -114,11 +109,9 @@
                     window.open("detail.html?id=" + id, "newwindow", "height=100, width=400, toolbar =no, menubar=no, scrollbars=no, resizable=no, location=no, status=no")
                 }
 
-                var key;
 
-                function searchbyname() {
-                    current_page = 0;
-                    key = $("#search").val();
+
+                function search() {
                     tohtml();
                 }
 
@@ -130,21 +123,12 @@
 
                 function tohtml() {
 
+                    var search_name,search_cat;
+                    search_name=$("#name").val();
+                    search_cat=$("#cat option:selected").val();
                     var d = {"page": current_page}
-
-                    if (key) {
-                        d['key'] = key;
-                    }
-
-                    $.getJSON("getProductInfo", {}, function (res) {
-                        if (res.code == "success")
-                            var da = res.data, s = '';
-                        for (var i = 0; i < da.length; i++) {
-                            s += '<option id="'+da[i].id+'" value="' + da[i].code + '"></option>'
-                        }
-                        $("#productlist").html(s);
-                    })
-
+                    d['search_name'] = search_name;
+                    d['search_cat'] = search_cat;
                     $.getJSON("getList", d, function (res) {
                         if (res.code == "success") {
                             var da = res.data, s = '', data = da['list'], num = da['num'], pi = "";

@@ -24,5 +24,9 @@ public interface OnGetExcelKey {
 
     int getEndRow(Sheet sheet);
 
+    boolean isPicture(Cell cell);
+
+    String getPictures(int pos);
+
 
 }

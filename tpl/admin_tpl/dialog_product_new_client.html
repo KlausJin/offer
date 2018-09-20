@@ -91,8 +91,9 @@
         $.post('/v1/client/do_add', data, function (res) {
             var ret = JSON.parse(res);
             if (ret.code == "success") {
+                var inner_data = ret.data;
                 var cb = window.opener['open_cb'];
-                cb(ret.data);
+                cb(inner_data.id);
                 window.close();
                 return;
             } else {

@@ -103,6 +103,7 @@
                 if(ret.code == "success"){
                     $('#loading').hide();
                     alert("模板导入成功");
+                    window.location.href="/v1/offerManage/list";
                 }else{
                     alert(ret.msg);
                 }

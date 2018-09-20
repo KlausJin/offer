@@ -24,19 +24,22 @@ public class ExcelExprtAdapter implements OnGetExcelKey {
 
     List<HashMap<String,String>> products = new ArrayList<>();
     List<HashMap<String,String>> products_attrs = new ArrayList<>();
+    List<HashMap<String,String>> pics=new ArrayList<>();
+
 
 
     HashMap<String,String> normalData;
 
     HashMap<String,String> changeData;
 
+    HashMap<String,String> picData;
 
     public ExcelExprtAdapter(String id){
         this.qid = id;
         //获取业务员相关数据
         String sql = "select a.*,c.* from quote a left join offer b on a.offer_id = b.id left join person c on b.sale_id = c.id where a.id ="+id;
         normalData = ModelUtil.getModel("quote").query(sql).get(0);
-        normalData.put("create_time",TimeUtil.stampToDate(normalData.get("create_time"),"Y-m-d"));
+        normalData.put("create_time",TimeUtil.stampToDate(normalData.get("create_time"),"yyyy-MM-dd"));
 
         //获取产品
         products = ModelUtil.getModel("quote_pro").where("quote_id=" + qid).select();
@@ -79,9 +82,11 @@ public class ExcelExprtAdapter implements OnGetExcelKey {
        for(int i=0;i<keys.size();i++){
            String k = keys.get(i);
            String kv = ExportDictonary.dic.containsKey(k)?ExportDictonary.dic.get(k):k;
-           kv = normalData.containsKey(kv)?normalData.get(kv):kv;
-           String old_char  = "$${"+k+"}";
-           v = v.replace(old_char,kv);
+
+               kv = normalData.containsKey(kv) ? normalData.get(kv) : kv;
+               String old_char = "$${" + k + "}";
+               v = v.replace(old_char, kv);
+
        }
 
        return Lang.getEn(v);
@@ -97,9 +102,14 @@ public class ExcelExprtAdapter implements OnGetExcelKey {
      */
     @Override
     public String getProductKey(Cell cell, int pos) {
+        String v = cell.toString();
+        if(v.indexOf("${序列号}")>-1){
+            return  pos+1+"";
+        }
+
         HashMap<String, String> product_attr = products_attrs.get(pos);
         HashMap<String, String> product = products.get(pos);
-        String v = cell.toString();
+
         List<String> keys = new ArrayList<>();
         String t1[] = v.split("\\$\\{");
         if(t1.length<2) return cell.toString();
@@ -194,5 +204,19 @@ public class ExcelExprtAdapter implements OnGetExcelKey {
 
         }
         return res;
+    }
+
+    @Override
+    public boolean isPicture(Cell cell) {
+        String s = cell.toString();
+        if(s.indexOf("${图片}")>-1){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String getPictures(int pos) {
+        return products.get(pos).get("pic_url");
     }
 }

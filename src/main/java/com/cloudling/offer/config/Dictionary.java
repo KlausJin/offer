@@ -2,9 +2,7 @@ package com.cloudling.offer.config;
 
 public class Dictionary {
 
-	//一级分类
-	public static final String WATCH="W3";
-	public static final String CLOCK="C4";
+
 
 	//公司分类
 	public static final int YINGZI=1;
@@ -41,5 +39,9 @@ public class Dictionary {
 	public static final int ISTAX=02;
 	public static final int NOTAX=01;
 	public static final int ISOUT=03;
+
+	//报价产品类型
+	public static final int WATCH=22;
+	public static final int CLOCK=32;
 
 }

@@ -41,8 +41,7 @@
                 </a>
                 <ul>
                     <li><a href="/v1/client/list"><i class="glyphicon glyphicon-list"></i> 客户列表</a></li>
-                    <% if(admin_type<=2){ %><li><a href="/v1/client/add"><i class="glyphicon glyphicon-list"></i> 客户录入</a></li>
-                    <% }%>
+                    <li><a href="/v1/client/add"><i class="glyphicon glyphicon-list"></i> 客户录入</a></li>
                 </ul>
             </li>
 
@@ -55,8 +54,7 @@
                 <% }%>
                 <ul>
                     <li><a href="/v1/product/list"><i class="glyphicon glyphicon-list"></i> 产品型号</a></li>
-                    <li><a href="/v1/material/list"><i class="glyphicon glyphicon-list"></i> 原材料管理</a></li>
-                    <li><a href="/v1/partCat/add"><i class="glyphicon glyphicon-list"></i>添加配件分类</a></li>
+                    <li><a href="/v1/material/list"><i class="glyphicon glyphicon-list"></i>原材料管理</a></li>
                     <li><a href="/v1/picture/add"><i class="glyphicon glyphicon-list"></i>添加产品图片</a></li>
                 </ul>
             </li>
@@ -74,7 +72,7 @@
             </li>
 
             <li class="submenu">
-                <% if(admin_type==3){ %>
+                <% if(admin_type>=3){ %>
                 <a href="#">
                     <i class="glyphicon glyphicon-book"></i> 报价管理
                     <span class="caret pull-right"></span>
@@ -95,6 +93,7 @@
                 <% }%>
                 <ul>
                     <li><a href="/v1/offerManage/list"><i class="glyphicon glyphicon-list"></i> 报价管理</a></li>
+                    <li><a href="/v1/templet/templet_list"><i class="glyphicon glyphicon-list"></i> 报价模板管理</a></li>
                 </ul>
             </li>
 

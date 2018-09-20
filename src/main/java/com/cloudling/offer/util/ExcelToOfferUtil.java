@@ -2,20 +2,18 @@ package com.cloudling.offer.util;
 
 import com.cloudling.offer.export.OnGetExcelKey;
 import com.cloudling.offer.export.ProData;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFDateUtil;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellAddress;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.openxmlformats.schemas.drawingml.x2006.spreadsheetDrawing.CTMarker;
 
+import javax.imageio.ImageIO;
 import javax.rmi.CORBA.Util;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -115,8 +113,6 @@ public class ExcelToOfferUtil {
                         sheet.getRow(j).getCell(y).setCellValue(key);
                     }
                 }
-
-
             }
             //修改产品
             int size = onGetExcelKey.getSize();
@@ -144,8 +140,14 @@ public class ExcelToOfferUtil {
                     if(row!=null) {
                         for (int y = row.getFirstCellNum(); y < row.getLastCellNum(); y++) {
                             cell = row.getCell(y);
-                            String key = onGetExcelKey.getProductKey(cell,proData.pos);
-                            sheet.getRow(k).getCell(y).setCellValue(key);
+                            if(onGetExcelKey.isPicture(cell)){
+                                String pic = onGetExcelKey.getPictures(proData.pos);
+                                insertPic(cell,pic);
+                            }else{
+                                String key = onGetExcelKey.getProductKey(cell,proData.pos);
+                                sheet.getRow(k).getCell(y).setCellValue(key);
+                            }
+
                         }
                     }
 
@@ -153,25 +155,6 @@ public class ExcelToOfferUtil {
                 }
 
             }
-
-
-
-
-
-//            for (int j = 1; j < sheet.getLastRowNum()+1; j++) {
-//                row = sheet.getRow(j);
-//                HashMap<String, String> m = new HashMap<>();
-//                if(row!=null) {
-//                    for (int y = row.getFirstCellNum(); y < row.getLastCellNum(); y++) {
-//                        cell = row.getCell(y);
-//                        String key = onGetExcelKey.getNormalKey(cell);
-//                        sheet.getRow(j).getCell(y).setCellValue(key);
-//                    }
-//                }
-//
-//
-//            }
-
         }
         String res_url = "out/"+onGetExcelKey.getId()+"_"+TimeUtil.getShortTimeStamp()+".xls";
         FileOutputStream excelFileOutPutStream = new FileOutputStream("assets/"+res_url);
@@ -181,6 +164,59 @@ public class ExcelToOfferUtil {
     }
 
 
+    /**
+     * @Description:把图片输入到单元格
+     * @param:
+     * @return:
+     * @auther: CodyLongo
+     * @modified:
+     */
+
+    static CellRangeAddress getCellRange (Cell cell){
+        List<CellRangeAddress> s = cell.getSheet().getMergedRegions();
+        for(int i=0;i<s.size();i++){
+            if(s.get(i).getFirstColumn()==cell.getColumnIndex() && s.get(i).getFirstRow()==cell.getRowIndex()){
+                return  s.get(i);
+            }
+        }
+        return null;
+    }
+
+    public static void insertPic(Cell cell,String pic){
+        ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();
+        //将图片读到BufferedImage
+        BufferedImage bufferImg = null;
+        try {
+            bufferImg = ImageIO.read(new File(pic));
+            if(pic.indexOf("jpg")>-1) {
+                ImageIO.write(bufferImg, "jpg", byteArrayOut);
+            }else if(pic.indexOf("png")>-1){
+                ImageIO.write(bufferImg, "png", byteArrayOut);
+            }else if(pic.indexOf("PNG")>-1){
+                ImageIO.write(bufferImg, "PNG", byteArrayOut);
+            }
+
+            CellRangeAddress cellRangeAddress = getCellRange(cell);
+            XSSFClientAnchor anchor;
+            if(cellRangeAddress==null){
+                anchor = new XSSFClientAnchor(10, 10, 10, 10,
+                        cell.getColumnIndex(), cell.getRowIndex(), cell.getColumnIndex()+1, cell.getRowIndex()+1);
+            }else{
+                anchor = new XSSFClientAnchor(10, 10, 10, 10,
+                        cell.getColumnIndex(), cell.getRowIndex(), cellRangeAddress.getLastColumn()+1, cellRangeAddress.getLastRow()+1);
+            }
+
+
+            // 插入图片
+            Drawing patriarch = cell.getSheet().createDrawingPatriarch();
+
+            patriarch.createPicture(anchor, cell.getSheet().getWorkbook().addPicture(byteArrayOut
+                    .toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     /**
      * 复制行

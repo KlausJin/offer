@@ -39,7 +39,7 @@ public class PictureController extends AdminController {
     @action
     public void addAllPicture(){
         HashMap<String, String> res = new HashMap<>();
-        String path = "assets/images/offer_picture1";	//要遍历的路径
+        String path = "assets/images/clock_pic";	//要遍历的路径
         File file = new File(path);		//获取其file对象
         File[] fs = file.listFiles();	//遍历path下的文件和目录，放在File数组中
                for (int i=0;i<fs.length;i++){
@@ -55,11 +55,6 @@ public class PictureController extends AdminController {
                        error("数据加载到数据库失败");
                    }
                }
-
-
-
-
-
     }
 
     @action
@@ -67,7 +62,7 @@ public class PictureController extends AdminController {
         PictureModel pictureModel=new PictureModel();
 
         String name = I("name") == null ? "" : I("name").toString();
-        ArrayList<HashMap<String, String>> list = pictureModel.getPictureByName(name,user.get("id"));
+        ArrayList<HashMap<String, String>> list = pictureModel.getPictureByName(name,user.get("id")); //跟单员未做
         try {
 
             success(list);

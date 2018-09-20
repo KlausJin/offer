@@ -55,10 +55,16 @@ public class PersonController extends AdminController {
         PersonModel person = new PersonModel();
         if ("".equals(key)) {
             ArrayList<HashMap<String, String>> list = person.list("status=1", limit);
+            for (int i=0;i<list.size();i++) {
+                list.get(i).put("last_login_time", list.get(i).get("last_login_time").equals("0") ? "" : TimeUtil.stampToDate(list.get(i).get("last_login_time"), "yyyy-MM-dd HH:mm:ss"));
+            }
             res.put("list", list);
             res.put("num", person.list("status=1").size());
         } else {
             ArrayList<HashMap<String, String>> list = person.list("status=1 and name like '%" + key + "%'", limit);
+            for (int i=0;i<list.size();i++) {
+                list.get(i).put("last_login_time", list.get(i).get("last_login_time").equals("0") ? "" : TimeUtil.stampToDate(list.get(i).get("last_login_time"), "yyyy-MM-dd HH:mm:ss"));
+            }
             res.put("list", list);
             res.put("num", person.list("status=1 and name like '%"+key+"%'").size());
         }
@@ -75,10 +81,16 @@ public class PersonController extends AdminController {
         PersonModel person = new PersonModel();
         if ("".equals(key)) {
             ArrayList<HashMap<String, String>> list = person.list("status=2", limit);
+            for (int i=0;i<list.size();i++) {
+                list.get(i).put("last_login_time", list.get(i).get("last_login_time").equals("0") ? "" : TimeUtil.stampToDate(list.get(i).get("last_login_time"), "yyyy-MM-dd HH:mm:ss"));
+            }
             res.put("list", list);
             res.put("num", person.list("status=2").size());
         } else {
             ArrayList<HashMap<String, String>> list = person.list("status=2 and name like '%" + key + "%'", limit);
+            for (int i=0;i<list.size();i++) {
+                list.get(i).put("last_login_time", list.get(i).get("last_login_time").equals("0") ? "" : TimeUtil.stampToDate(list.get(i).get("last_login_time"), "yyyy-MM-dd HH:mm:ss"));
+            }
             res.put("list", list);
             res.put("num", person.list("status=2  and name like '%" + key + "%'").size());
         }

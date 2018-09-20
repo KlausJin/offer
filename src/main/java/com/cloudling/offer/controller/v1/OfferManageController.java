@@ -52,6 +52,17 @@ public class OfferManageController extends AdminController {
                 put(Dictionary.NOOFFER, "待报价");
             }
         };
+        HashMap<Integer, String> catTypes = new HashMap<Integer, String>() {
+            /**
+             *
+             */
+            private static final long serialVersionUID = 2L;
+
+            {
+                put(Dictionary.WATCH, "手表");
+                put(Dictionary.CLOCK, "时钟");
+            }
+        };
         String sql="select a.*,b.name as client_name,c.name as sale_name from offer a left join client b on a.client_id=b.id left join person c on a.sale_id=c.id where 1=1 ";
         StringBuffer sb=new StringBuffer(sql);
         StringBuffer snum=new StringBuffer(sql);
@@ -71,6 +82,7 @@ public class OfferManageController extends AdminController {
             list.get(i).put("create_time",
                     TimeUtil.stampToDate(list.get(i).get("create_time"), "yyyy-MM-dd HH:mm:ss"));
             list.get(i).put("status",statusTypes.get(Integer.parseInt(list.get(i).get("status"))));
+            list.get(i).put("cat_id",catTypes.get(Integer.parseInt(list.get(i).get("cat_id"))));
         }
         res.put("list", list);
         res.put("num", list1.size());

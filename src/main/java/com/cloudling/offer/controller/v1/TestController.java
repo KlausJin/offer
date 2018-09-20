@@ -1,22 +1,11 @@
 package com.cloudling.offer.controller.v1;
 
 
-import com.alibaba.fastjson.JSON;
 import com.cloudling.offer.annotation.action;
 import com.cloudling.offer.model.InputExcelModel;
-import com.cloudling.offer.model.PartCatModel;
 import com.cloudling.offer.server.Controller;
 import com.cloudling.offer.server.ControllerContext;
 import com.cloudling.offer.util.InputExcelUtil;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import static com.cloudling.offer.util.ExcelUtil.parseExcel;
 
 /**
  * @Description TODO
@@ -99,7 +88,7 @@ public class TestController extends Controller {
     @action
     public void test6(){
 
-        InputExcelModel iem=new InputExcelModel("工作簿1.xlsx","8");
+        InputExcelModel iem=new InputExcelModel("工作簿1.xlsx","9");
         try{
             String data = iem.do_excel();
             success(data);
@@ -108,6 +97,8 @@ public class TestController extends Controller {
         }
 
     }
+
+
 
 
 }
