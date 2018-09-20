@@ -218,5 +218,23 @@ public class OfferManageController extends AdminController {
         }
 
     }
+    /**
+     * 根据id查找业务员选择的图片       
+     *
+     * @param
+     */
+    @action
+    public void getPictureById(){
+        String id = I("id") == null ? "" : I("id").toString();
+        HashMap<String, String> map = M("picture").where("id=" + id).find();
+        try {
+
+            success(map);
+        } catch (Exception e) {
+            // TODO: handle exception
+            error("报价参数有误");
+        }
+    }
+
 
 }
