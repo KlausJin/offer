@@ -154,7 +154,11 @@ public class PartExcelModel extends Model {
                 int index = j - col;
                 String filed = row.getCell(j) == null ? "" : row.getCell(j).toString();
                 if (!filed.equals("") && index < ATTR_FIELDS.length)
-                    data.put(ATTR_FIELDS[index], filed);
+                    if (ATTR_FIELDS[index].equals("name")){
+                        data.put(ATTR_FIELDS[index], filed.contains(".")?filed.substring(0,filed.indexOf(".")):filed);
+                    }else {
+                        data.put(ATTR_FIELDS[index], filed);
+                    }
             }
             if ((!data.containsKey("price") || data.get("price").equals("")) && (!data.containsKey("name") || data.get("name").equals(""))) {
                 continue;

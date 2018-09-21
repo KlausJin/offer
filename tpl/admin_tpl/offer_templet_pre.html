@@ -114,12 +114,22 @@
     $("#sub").on("click", function () {
         data['cat_id']= $("#product_cat_id").val();
         data['quote_id'] =${quote_id};
-        data['offer_templet'] = $("#offer_templet").val();
+        data['offer_templet_id'] = $("#offer_templet").val();
         if (data['cat_id']=="0") {
             alert("请选择导出报价的产品分类");
             return;
         }
         alert(JSON.stringify(data))
+
+        $.post("/v1/offerSale/do_offer_templet", data, function (res) {
+            var ret = JSON.parse(res);
+            if (ret.code == "success") {
+                alert("导出模板成功")
+                window.location.href = "list";
+            } else {
+                alert(ret.msg);
+            }
+        })
     })
 
 

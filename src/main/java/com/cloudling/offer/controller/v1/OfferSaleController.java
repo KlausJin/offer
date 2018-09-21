@@ -259,14 +259,15 @@ public class OfferSaleController extends AdminController {
      */
     @action
     public void offer_templet() {
-        String quote_id = I("quote_id") == null || I("quote_id").equals("") ? "0" : I("quote_id").toString();
+        //String quote_id = I("quote_id") == null || I("quote_id").equals("") ? "0" : I("quote_id").toString();
+        String quote_id="11";
         assign("quote_id", quote_id);
         toHtml("admin_tpl/offer_templet_pre");
     }
 
     @action
     public void do_offer_templet() {
-        String quote_id = I("quote").toString();
+        String quote_id = I("quote_id").toString();
         String offer_templet_id = I("offer_templet_id").toString();
         String templet_url = M("offer_templet").where("id=" + offer_templet_id).find().get("url");
         InputExcelModel iem = new InputExcelModel(templet_url, quote_id);

@@ -26,7 +26,7 @@ public class InputExcelModel extends Model {
     String id;
 
     public InputExcelModel(String url,String id) {
-        super("material");
+        super("offer_templet");
         this.url=url;
         this.id = id;
     }
@@ -34,7 +34,7 @@ public class InputExcelModel extends Model {
 
 
     public String  do_excel() throws Exception {
-        File file = new File("assets/"+url);
+        File file = new File(url);
         FileInputStream fis = null;
         fis = new FileInputStream(file);
         List<HashMap<String, String>> ls = null;

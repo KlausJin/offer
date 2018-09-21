@@ -21,7 +21,7 @@ public class ExportDictonary {
             put("产品型号","pro_name");
             put("单价","per_price");
             put("总价","sale");
-            put("数量","num");
+            put("数量","pro_num");
             put("cbm","cbm");
         }
     };
