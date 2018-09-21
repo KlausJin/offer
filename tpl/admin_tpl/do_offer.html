@@ -79,12 +79,11 @@
                     <legend>汇总</legend>
                     <div class="form-group" style=" font-size: 14px; background-color: #ccc; padding-bottom: 10px">
                         <label class="col-md-2 control-label" >数量：<span class="h_num"></span></label>
-
                         <label class="col-md-2 control-label" >单价：<span class="h_price"></span></label>
-                        <label class="col-md-2 control-label" >总成本：<span class="h_all"></span></label>
                         <label class="col-md-2 control-label" >利润率：<span class="h_ll"></span></label>
                         <label class="col-md-2 control-label" >利润：<span class="h_pro"></span></label>
-                        <label class="col-md-2 control-label" >总价：<span class="h_rate"></span><span class="h_sale"></span></label>
+                        <label class="col-md-2 control-label" >CBM：<span class="cbm"></span></label>
+                        <label class="col-md-2 control-label" >客户价：<span class="c_price"></span></label>
                     </div>
 
 
@@ -117,6 +116,7 @@
     cb = {};
     var lls = {},is_tax;
     (function (_w, $) {
+
 
         $.extend({
             "warn": function (msg) {
@@ -380,7 +380,9 @@
                         s+='</label>';
                     }
 
-                } else {
+                }
+
+                else {
 
                     var name = atts[0].name || this.data.name;
                     if (atts[0].num == -2) {
@@ -406,6 +408,7 @@
 
                 var price = atts[0].price;
 
+
                 if(price==0){
                     if(atts.length==1) {
                         s +=
@@ -419,17 +422,17 @@
 
                 if(formula>0){
 
-                s+='<div class="col-md-2">';
+                    s+='<div class="col-md-2">';
 
-                s+='<label class="control-label">';
-                var is_m = atts[0].is_material || 0;
+                    s+='<label class="control-label">';
+                    var is_m = atts[0].is_material || 0;
 
                     s+='单价：'
 
-                s+='<span id="price_'+data['id']+'">'+atts[0].price+'</label>'
+                    s+='<span id="price_'+data['id']+'">'+atts[0].price+'</label>'
 
 
-                s+='</div>'
+                    s+='</div>'
                 }else{
                     s+='<div class="col-md-2">';
 
@@ -658,13 +661,14 @@
             $(".h_all").html(all_price.toFixed(2));
 
 
-                $.getdata("/v1/profit/getProfit",{"id":products[index]['id'],"num":num,"offer_id":${offer_id},"price":all_price.toFixed(2),"is_tax":is_tax},function (data) {
-                   alert(JSON.stringify(data))
-                    $(".h_sale").html(data.total)
-                    $(".h_ll").html(data.profit)
-                    $(".h_pro").html(data.pro_price);
-                    $(".h_rate").html(data.rate)
-                })
+            $.getdata("/v1/profit/getProfit",{"id":products[index]['id'],"num":num,"offer_id":${offer_id},"price":all_price.toFixed(2),"is_tax":is_tax},function (data) {
+                $(".h_sale").html(data.total)
+                $(".h_ll").html(data.profit)
+                $(".h_pro").html(data.pro_price);
+                $(".cbm").html(data.cbm);
+                $(".h_rate").html(data.rate)
+                $(".c_price").html(data.c_price)
+            })
 
 
 
