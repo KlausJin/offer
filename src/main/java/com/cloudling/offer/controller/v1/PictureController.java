@@ -104,6 +104,9 @@ public class PictureController extends AdminController {
      */
     @action
     public void select_picture() {
+        String name = I("name") == null ? "" : I("name").toString();
+        PictureModel pictureModel =new PictureModel();
+        ArrayList<HashMap<String, String>> res = pictureModel.getPictureByName(name, user.get("id"));
         toHtml("admin_tpl/picture_edit_sale");
     }
 
@@ -132,9 +135,9 @@ public class PictureController extends AdminController {
     @action
     public void addProductPic(){
         String id = I("id") == null ? "" : I("id").toString();
-        String pic_id = I("pic_id") == null ? "" : I("pic_id").toString();
+        String url = I("url") == null ? "" : I("url").toString();
         HashMap<String, String> res = new HashMap<>();
-        res.put("picture_id", pic_id);
+        res.put("url", url);
         try {
             M("offer_product").where("id="+id).add(res);
             success("数据库更新成功");

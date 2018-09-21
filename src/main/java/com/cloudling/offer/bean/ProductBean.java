@@ -19,9 +19,9 @@ public class ProductBean extends Bean {
     }
     public String cat_id;
     public String id;
-public String profit;
+    public String profit;
     String code;
-
+    public String url;
     public float getPrice() {
         return price;
     }
