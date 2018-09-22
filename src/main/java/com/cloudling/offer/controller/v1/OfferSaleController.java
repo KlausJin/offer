@@ -83,6 +83,7 @@ public class OfferSaleController extends AdminController {
             mp.put("cat_id", catTypes.get(Integer.parseInt(list.get(i).get("cat_id"))));
             mp.put("client_name", list.get(i).get("client_name"));
             mp.put("id", list.get(i).get("id"));
+            mp.put("quote_id",list.get(i).get("quote_id"));
             ArrayList<HashMap<String, String>> subRes = M("offer").where("parent_id=" + list.get(i).get("id")).select();
             for (int j = 0; j < subRes.size(); j++) {
                 subRes.get(j).put("create_time", TimeUtil.stampToDate(subRes.get(j).get("create_time"), "yyyy-MM-dd HH:mm:ss"));
@@ -259,8 +260,7 @@ public class OfferSaleController extends AdminController {
      */
     @action
     public void offer_templet() {
-        //String quote_id = I("quote_id") == null || I("quote_id").equals("") ? "0" : I("quote_id").toString();
-        String quote_id="11";
+        String quote_id = I("quote_id") == null || I("quote_id").equals("") ? "0" : I("quote_id").toString();
         assign("quote_id", quote_id);
         toHtml("admin_tpl/offer_templet_pre");
     }

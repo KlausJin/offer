@@ -128,11 +128,7 @@ public class OfferManageController extends AdminController {
             quoteData.put("offer_id",offer_id);
             quoteData.put("manage_id",manage_id);
             quoteData.put("create_time",TimeUtil.getShortTimeStamp()+"");
-            offerData.put("status",Dictionary.ISOFFER+"");
-            offerData.put("m_id",manage_id);
-            offerData.put("quote_time",TimeUtil.getShortTimeStamp()+"");
             long id=M("quote").add(quoteData);
-            M("offer").where("id="+offer_id).save_string(offerData);
             List<HashMap<String, Object>> products =
                     (List<HashMap<String, Object>>) JSON.parseArray(d.get("products").toString(), new HashMap<String, Object>().getClass());
             HashMap<String, String> proData = new HashMap<>();
@@ -141,7 +137,7 @@ public class OfferManageController extends AdminController {
                 String pro_name=product.get("product").toString();
                 String pro_num=product.get("num").toString();
                 String per_price=product.get("per_price").toString();
-                String sale=product.get("sale").toString();
+                String c_price=product.get("c_price").toString();
                 String rate=product.get("rate").toString();
                 String profit=product.get("profit").toString();
                 String cbm=product.get("cbm").toString();
@@ -149,7 +145,7 @@ public class OfferManageController extends AdminController {
                 proData.put("pro_name",pro_name);
                 proData.put("pro_num",pro_num);
                 proData.put("per_price",per_price);
-                proData.put("sale",sale);
+                proData.put("c_price",c_price);
                 proData.put("rate",rate);
                 proData.put("profit",profit);
                 proData.put("cbm",cbm);
@@ -163,6 +159,11 @@ public class OfferManageController extends AdminController {
                     long t=M("quote_detail").add(res);
                 }
             }
+            offerData.put("status",Dictionary.ISOFFER+"");
+            offerData.put("m_id",manage_id);
+            offerData.put("quote_time",TimeUtil.getShortTimeStamp()+"");
+            offerData.put("quote_id",id+"");
+            M("offer").where("id="+offer_id).save_string(offerData);
             success("1");
         }catch (Exception e){
             e.printStackTrace();

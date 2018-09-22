@@ -156,7 +156,7 @@ public class ExcelToOfferUtil {
 
             }
         }
-        String res_url = "out/"+onGetExcelKey.getId()+"_"+TimeUtil.getShortTimeStamp()+".xls";
+        String res_url = "/out/"+onGetExcelKey.getId()+"_"+TimeUtil.getShortTimeStamp()+".xlsx";
         FileOutputStream excelFileOutPutStream = new FileOutputStream("assets/"+res_url);
         work.write(excelFileOutPutStream);
         work.close();

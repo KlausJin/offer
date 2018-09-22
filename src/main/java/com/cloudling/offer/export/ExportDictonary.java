@@ -19,8 +19,7 @@ public class ExportDictonary {
             put("业务员英文名_wsk","wsk_name");
             put("报价时间","create_time");
             put("产品型号","pro_name");
-            put("单价","per_price");
-            put("总价","sale");
+            put("单价","c_price");
             put("数量","pro_num");
             put("cbm","cbm");
         }

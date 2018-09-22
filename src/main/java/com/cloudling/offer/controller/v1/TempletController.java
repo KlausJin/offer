@@ -5,8 +5,12 @@ import com.cloudling.offer.config.Dictionary;
 import com.cloudling.offer.server.Controller;
 import com.cloudling.offer.server.ControllerContext;
 import com.cloudling.offer.util.TimeUtil;
+import com.cloudling.offer.util.UploadUtil;
+import org.apache.commons.fileupload.FileUploadException;
 
+import javax.servlet.ServletException;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -27,14 +31,15 @@ public class TempletController extends AdminController {
     @action
     public void addAllTemplet() {
         HashMap<String, String> res = new HashMap<>();
-        String path = "assets/templet/clock";//"assets/templet/watch"   //要遍历的路径
+        String path = "assets/templet";
         File file = new File(path);        //获取其file对象
         File[] fs = file.listFiles();    //遍历path下的文件和目录，放在File数组中
         for (int i = 0; i < fs.length; i++) {
             String[] pic_name = (fs[i] + "").split("\\\\|\\.");
-            res.put("url", fs[i]+"");
-            res.put("name",pic_name[3]);
-            res.put("cat_id", Dictionary.CLOCK + "");//Dictionary.WATCH
+            String x=fs[i]+"";
+            res.put("url", x.replaceAll("\\\\","/"));
+            res.put("name",pic_name[2]);
+            res.put("cat_id", Dictionary.WATCH + "");//Dictionary.WATCH
             try {
                 long t = M("offer_templet").add(res);
                 if(t>0){
@@ -44,6 +49,47 @@ public class TempletController extends AdminController {
                 e.printStackTrace();
                 error("0");
             }
+        }
+    }
+
+    @action
+    public void addTemplet(){
+        toHtml("admin_tpl/add_templet");
+    }
+
+
+    @action
+    public void upload() {
+        try {
+            success(UploadUtil.uploadOffer(context));
+        } catch (IOException | ServletException | FileUploadException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            error("上传失败");
+        }
+    }
+
+    @action
+    public void do_addTemplet(){
+        String cat_id=I("cat_id").toString();
+        String sale_id=I("sale_id").toString();
+        String file_name=I("url").toString();
+        String name=file_name.substring(0,file_name.indexOf("."));
+        String file_url="assets/templet/"+file_name;
+        HashMap<String,String> data=new HashMap<>();
+        data.put("cat_id",cat_id);
+        data.put("url",file_url);
+        data.put("sale_id",sale_id);
+        data.put("name",name);
+        data.put("create_time",TimeUtil.getShortTimeStamp()+"");
+        try {
+            long t = M("offer_templet").add(data);
+            if(t>0){
+                success("1");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            error("报价模板新增失败");
         }
     }
 
@@ -61,7 +107,7 @@ public class TempletController extends AdminController {
         StringBuffer sb=new StringBuffer(sql);
         try {
             ArrayList<HashMap<String, String>> snum = M("offer_templet").query(sb.toString());
-            ArrayList<HashMap<String, String>> list = M("offer_templet").query(sb.append(" limit "+limit).toString());
+            ArrayList<HashMap<String, String>> list = M("offer_templet").query(sb.append(" order by create_time desc limit "+limit).toString());
             for (int i = 0; i < list.size(); i++) {
                 list.get(i).put("create_time",
                         TimeUtil.stampToDate(list.get(i).get("create_time"), "yyyy-MM-dd HH:mm:ss"));
@@ -92,6 +138,19 @@ public class TempletController extends AdminController {
         }
     }
 
+
+    @action
+     public void getSaleList(){
+        ArrayList<HashMap<String, String>> list = M("person").field("id,name").where("status=" + Dictionary.SALESMAN).select();
+        success(list);
+    }
+
+
+    @action
+    public void getCatInfo() {
+        ArrayList<HashMap<String, String>> list = M("part_cat").field("id,name").select();
+        success(list);
+    }
 
 
 

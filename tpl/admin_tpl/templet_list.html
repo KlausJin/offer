@@ -35,6 +35,7 @@
 							  <th>模板来源</th>
 							  <th>模板名称</th>
 							  <th>模板所在地址</th>
+							  <th>模板导入时间</th>
 							  <th>操作</th>
 						  </tr>
 						  </thead>
@@ -151,6 +152,7 @@
                           '\t\t\t\t\t\t\t  <td>' + data[i]['sale_name'] + '</td>\n' +
                           '\t\t\t\t\t\t\t  <td>' + data[i]['name'] + '</td>\n' +
                           '\t\t\t\t\t\t\t  <td>' + data[i]['url'] + '</td>\n' +
+                          '\t\t\t\t\t\t\t  <td>' + data[i]['create_time'] + '</td>\n' +
                           '\t\t\t\t\t\t\t  <td class="center"><button onclick="del(' + data[i]['id'] + ')">删除</button></td>' +
                           '\t\t\t\t\t\t  </tr>'
                   }

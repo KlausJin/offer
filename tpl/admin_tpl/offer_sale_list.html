@@ -173,6 +173,7 @@
                         s+='<dl><dd><a href="javascript:void()" onclick="show_offer('+data[i]['id']+')">'+data[i]['create_time']+'</a></dd><dt>'
                     if(data[i]['status']=="已报价"){
                         s+='<a href="javascript:void()">查看报价</a>'
+                        s+='<a href="/v1/offerSale/offer_templet?quote_id=' + data[i]['quote_id'] + '">导出报价</a>'
                     }else{
                         s+=data[i]['status']
                     }

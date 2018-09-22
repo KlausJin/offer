@@ -84,6 +84,7 @@
                         <label class="col-md-2 control-label" >利润：<span class="h_pro"></span></label>
                         <label class="col-md-2 control-label" >CBM：<span class="cbm"></span></label>
                         <label class="col-md-2 control-label" >客户价：<span class="c_price"></span></label>
+                        <label class="col-md-2 control-label" style="display: none">rate：<span class="h_rate"></span></label>
                     </div>
 
 
@@ -106,6 +107,7 @@
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="/js/jquery.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/js/custom.js"></script>
 
 
 <script>
@@ -662,6 +664,7 @@
 
 
             $.getdata("/v1/profit/getProfit",{"id":products[index]['id'],"num":num,"offer_id":${offer_id},"price":all_price.toFixed(2),"is_tax":is_tax},function (data) {
+                alert(JSON.stringify(data))
                 $(".h_sale").html(data.total)
                 $(".h_ll").html(data.profit)
                 $(".h_pro").html(data.pro_price);
@@ -699,10 +702,11 @@
                 "num":$(".h_num").html(),
                 "per_price":$(".h_price").html(),
                 "profit":$(".h_ll").html(),
-                "rate":$(".h_rate").html(),
                 "sale":$(".h_sale").html(),
                 "data":data,
-                "cbm":$(".cbm").html()
+                "cbm":$(".cbm").html(),
+                "c_price":$(".c_price").html(),
+                "rate":$(".h_rate").html(),
             }
             save_data[index] = sa;
             console.log(save_data);
@@ -724,7 +728,7 @@
                 return;
             }
             var d = {"offer_id":"${offer_id}","manage_id":"${id}","products":JSON.stringify(save_data)};
-
+            alert(JSON.stringify(d))
             $.post("/v1/offerManage/do_edit", {"data": JSON.stringify(d)}, function (res) {
                 var ret = JSON.parse(res);
                 if (ret.code == "success") {
