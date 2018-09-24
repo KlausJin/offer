@@ -582,11 +582,13 @@
 
 
     function search_picture() {
-        $.open('/v1/picture/select_picture', function (id, name) {
-            $.getdata("/v1/picture/addPicture_sale", {"id": id, "name": name}, function (res) {
-                search_cli(res);
-                custom_id = id;
-            })
+
+        if(list[index-1]==null){
+            alert("请先添加产品")
+            return
+        }
+        $.open('/v1/picture/select_picture?code='+list[index-1]['code']+'',function (code) {
+
         })
     }
 

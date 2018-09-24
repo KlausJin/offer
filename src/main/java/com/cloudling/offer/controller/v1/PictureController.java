@@ -1,5 +1,6 @@
 package com.cloudling.offer.controller.v1;
 
+import com.alibaba.fastjson.JSON;
 import com.cloudling.offer.annotation.action;
 import com.cloudling.offer.model.PictureModel;
 import com.cloudling.offer.server.Controller;
@@ -79,8 +80,9 @@ public class PictureController extends AdminController {
         File[] fs = file.listFiles();	//遍历path下的文件和目录，放在File数组中
                for (int i=0;i<fs.length;i++){
                    String[] pic_name=(fs[i]+"").split("\\\\|\\.");
+                   String p=fs[i]+"";
                    res.put("name",pic_name[3]);
-                   res.put("pic",fs[i]+"");
+                   res.put("pic",p.replaceAll("\\\\","/"));
                    try {
                        M("picture").add(res);
                    } catch (Exception e) {
@@ -104,9 +106,10 @@ public class PictureController extends AdminController {
      */
     @action
     public void select_picture() {
-        String name = I("name") == null ? "" : I("name").toString();
+        String code = I("code") == null ? "" : I("code").toString();
         PictureModel pictureModel =new PictureModel();
-        ArrayList<HashMap<String, String>> res = pictureModel.getPictureByName(name, user.get("id"));
+        ArrayList<HashMap<String, String>> res = pictureModel.getPictureByName(code, user.get("id"));
+        assign("pic",JSON.toJSON(res));
         toHtml("admin_tpl/picture_edit_sale");
     }
 
@@ -115,8 +118,8 @@ public class PictureController extends AdminController {
     public void getPicture(){
         PictureModel pictureModel=new PictureModel();
 
-        String name = I("name") == null ? "" : I("name").toString();
-        ArrayList<HashMap<String, String>> list = pictureModel.getPictureByName(name,user.get("id"));
+        String code = I("code") == null ? "" : I("code").toString();
+        ArrayList<HashMap<String, String>> list = pictureModel.getPictureByName(code,user.get("id"));
         try {
 
             success(list);
