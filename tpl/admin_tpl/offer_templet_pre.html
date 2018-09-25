@@ -119,7 +119,6 @@
             alert("请选择导出报价的产品分类");
             return;
         }
-        alert(JSON.stringify(data))
 
         $.post("/v1/offerSale/do_offer_templet", data, function (res) {
             var ret = JSON.parse(res);

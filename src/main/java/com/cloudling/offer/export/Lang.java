@@ -22,6 +22,11 @@ public class Lang {
     }
 
     public static String getEn(String key){
-        return langs.containsKey(key)?langs.get(key):key;
+        if(langs.containsKey(key)){
+            return langs.get(key);
+        }else{
+            return key;
+        }
+
     }
 }

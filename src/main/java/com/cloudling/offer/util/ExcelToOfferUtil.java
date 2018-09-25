@@ -89,18 +89,18 @@ public class ExcelToOfferUtil {
                 continue;
 
             // 取第一行标题
-            row = sheet.getRow(0);
-            String title[] = null;
-            if (row != null) {
-                title = new String[row.getLastCellNum()];
-
-                for (int y = row.getFirstCellNum(); y < row.getLastCellNum(); y++) {
-                    cell = row.getCell(y);
-                    title[y] = cell.getStringCellValue();
-                }
-
-            } else
-                continue;
+//            row = sheet.getRow(0);
+//            String title[] = null;
+//            if (row != null) {
+//                title = new String[row.getLastCellNum()];
+//
+//                for (int y = row.getFirstCellNum(); y < row.getLastCellNum(); y++) {
+//                    cell = row.getCell(y);
+//                    title[y] = cell.getStringCellValue();
+//                }
+//
+//            } else
+//                continue;
             // 遍历当前sheet中的所有行
             //修改静态数据
             for (int j = 1; j < sheet.getLastRowNum()+1; j++) {
@@ -122,6 +122,7 @@ public class ExcelToOfferUtil {
             List<ProData> proDataList = new ArrayList<>();
 
             int start = onGetExcelKey.getStartRow(sheet);
+            if(start==-1) continue;
             int end = onGetExcelKey.getEndRow(sheet);
             sheet.removeRow(sheet.getRow(start));
             sheet.removeRow(sheet.getRow(end));
@@ -262,7 +263,7 @@ public class ExcelToOfferUtil {
             try {
                 columnCount = sourceRow.getLastCellNum();
             }catch (Exception e){
-                e.printStackTrace();
+              //  e.printStackTrace();
             }
 
             if (sourceRow != null) {
@@ -271,7 +272,7 @@ public class ExcelToOfferUtil {
                     currentSheet.shiftRows(pPosition - pStartRow
                             + i, lastRowNo, 1);
                 }catch (Exception e){
-                    e.printStackTrace();
+                   // e.printStackTrace();
                 }
 
                 Row newRow = currentSheet.createRow(pPosition - pStartRow

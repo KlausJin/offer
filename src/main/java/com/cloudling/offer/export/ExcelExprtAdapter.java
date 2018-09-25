@@ -83,11 +83,12 @@ public class ExcelExprtAdapter implements OnGetExcelKey {
 
             kv = normalData.containsKey(kv) ? normalData.get(kv) : kv;
             String old_char = "$${" + k + "}";
+            kv = Lang.getEn(kv);
             v = v.replace(old_char, kv);
 
         }
 
-        return Lang.getEn(v);
+        return v;
     }
 
 
@@ -137,12 +138,12 @@ public class ExcelExprtAdapter implements OnGetExcelKey {
                 }
             }
 
-
+            kv = Lang.getEn(kv);
             String old_char = "${" + k + "}";
             v = v.replace(old_char, kv);
         }
 
-        return Lang.getEn(v);
+        return v;
     }
 
     /**
