@@ -38,6 +38,14 @@ public class PictureModel extends  Model {
 
          ArrayList<HashMap<String, String>> list = query(sql);
 
+         for(int i=0;i< list.size();i++){
+             String pic = list.get(i).get("pic");
+             pic = pic.replace("\\","/");
+             pic = pic.replace("assets","");
+             list.get(i).put("pic",pic);
+
+         }
+
         return  list;
      }
 }

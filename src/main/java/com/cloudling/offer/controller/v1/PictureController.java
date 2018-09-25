@@ -110,6 +110,7 @@ public class PictureController extends AdminController {
         PictureModel pictureModel =new PictureModel();
         ArrayList<HashMap<String, String>> res = pictureModel.getPictureByName(code, user.get("id"));
         assign("pic",JSON.toJSON(res));
+        assign("code",code);
         toHtml("admin_tpl/picture_edit_sale");
     }
 

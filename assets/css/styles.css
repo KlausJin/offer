@@ -194,6 +194,9 @@ footer .copy {
     border-bottom-right-radius: 5px;
     font-size: 12px;
 }
+.panel-title{ position: relative}
+.panel-title:before{ height: 20px; width: 5px; top: 2px; left: 3px; background-color: #3276b1; content: ''; position: absolute; left: 0px}
+
 
 .header .dropdown-big .dropdown-foot a {
     color: #888;

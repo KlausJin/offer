@@ -112,6 +112,13 @@ public class OfferManageController extends AdminController {
     public void edit(){
         String offer_id=I("id").toString();
         assign("offer_id",offer_id);
+        HashMap<String, String> offer = M("offer").where("id=" + offer_id).find();
+        if(offer==null){
+            error("不存在该报价");
+            return;
+        }
+        assign("note",offer.get("note"));
+
         toHtml("admin_tpl/do_offer");
     }
 
