@@ -170,10 +170,20 @@ public class OfferSaleController extends AdminController {
             HashMap<String, String> as = new HashMap<>();
             for (int j = 0; j < t.size(); j++) {
 
-                as.put(t.get(j).get("spare_id"), t.get(j).get("attr_id"));
+
                 int num = Integer.parseInt(t.get(j).get("num"));
                 if (num > 0) {
-                    as.put("n_" + t.get(j).get("spare_id"), num + "");
+                    //判断父属性是否有多个子属性
+                    int count = M("attr").where("parent_id=" + t.get(j).get("spare_id")).count();
+                    if(count==1){
+                        as.put(t.get(j).get("spare_id")+"__"+t.get(j).get("attr_id"),num+"");
+                    }
+                    else {
+                        as.put("n_" + t.get(j).get("spare_id"), num + "");
+                        as.put(t.get(j).get("spare_id"), t.get(j).get("attr_id"));
+                    }
+                }else{
+                    as.put(t.get(j).get("spare_id"), t.get(j).get("attr_id"));
                 }
 
             }
@@ -251,6 +261,8 @@ public class OfferSaleController extends AdminController {
                     res.put("product_id", product_id);
                     res.put("offer_id", offer_id + "");
                     long t = M("offer_attr").add(res);
+
+
                 }
             }
             success("1");
