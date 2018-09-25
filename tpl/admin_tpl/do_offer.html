@@ -559,7 +559,7 @@
 
                     }
 
-                    s+='<div class="col-md-2"><input id="all_price_'+data['id']+'" readonly type="text" value="'+v.toFixed(4)+'" ' +
+                    s+='<div class="col-md-2"><input id="all_price_'+data['id']+'" type="text" value="'+v.toFixed(4)+'" ' +
                         'class="form-control all_price"></div>'
                 }else{
                     var id = data['id'];
@@ -572,7 +572,7 @@
                         s+='<div class="col-md-2"><input oninput="make_price()" id="all_price_'+data['id']+'" type="text" value="0" class="form-control all_price"></div>'
                     }
 
-                    else s+='<div class="col-md-2"><input id="all_price_'+data['id']+'" readonly type="text" value="'+atts[0].price.toFixed(4)+'" class="form-control all_price"></div>'
+                    else s+='<div class="col-md-2"><input id="all_price_'+data['id']+'"  type="text" value="'+atts[0].price.toFixed(4)+'" class="form-control all_price"></div>'
 
                 }
 
