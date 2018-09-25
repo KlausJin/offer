@@ -63,7 +63,7 @@
                             <legend>报价产品</legend>
                         </div>
                         <div class="col-md-2" style="text-align: right">
-                            <button class="btn_pro" style="padding-bottom: 0px; padding: 5px 10px" onclick="sub()">
+                            <button class="btn_pro" id="sub" style="padding-bottom: 0px; padding: 5px 10px" onclick="sub()">
                                 提交报价需求
                             </button>
 
@@ -718,12 +718,16 @@
 
         console.log(JSON.stringify(data))
 
+
+        $("#sub").attr("disabled",true).html('正在提交，请稍后')
+
         $.post("/v1/offerSale/do_offer", {"data": JSON.stringify(data)}, function (res) {
             var ret = JSON.parse(res);
             if (ret.code == "success") {
                 alert("提交报价信息成功")
                 window.location.href = "list";
             } else {
+                $("#sub").attr("disabled",false).html('提交报价需求')
                 alert(ret.msg);
             }
         })
