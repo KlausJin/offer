@@ -196,6 +196,8 @@ public class OfferSaleController extends AdminController {
             String sale_id = d.get("sale_id").toString();
             String parent_id = d.get("parent_id").toString();
             String cat_id = d.get("cat_id").toString();
+            String note = d.get("note").toString();
+
             int create_time = TimeUtil.getShortTimeStamp();
             HashMap<String, String> data = new HashMap<>();
             data.put("sale_id", sale_id);
@@ -203,6 +205,7 @@ public class OfferSaleController extends AdminController {
             data.put("create_time", create_time + "");
             data.put("parent_id", parent_id);
             data.put("cat_id", cat_id);
+            data.put("note",note);
             OfferModel om = new OfferModel();
             long offer_id = om.add(data);
             List<HashMap<String, Object>> products =
@@ -213,6 +216,7 @@ public class OfferSaleController extends AdminController {
                 String product_id = product.get("id").toString();
                 numdata.put("offer_id", offer_id + "");
                 numdata.put("product_id", product_id);
+                numdata.put("url",product.get("photo").toString());
                 M("offer_product").add(numdata);
                 HashMap<String, String> res = new HashMap<>();
                 HashMap<String, String> attrs = JSON.parseObject(product.get("attrs").toString(), new HashMap<String, Object>().getClass());
@@ -276,6 +280,7 @@ public class OfferSaleController extends AdminController {
             success(data);
         } catch (Exception e) {
             e.printStackTrace();
+            error("导出失败");
         }
     }
 

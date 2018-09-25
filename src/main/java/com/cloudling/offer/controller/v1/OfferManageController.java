@@ -112,6 +112,13 @@ public class OfferManageController extends AdminController {
     public void edit(){
         String offer_id=I("id").toString();
         assign("offer_id",offer_id);
+        HashMap<String, String> offer = M("offer").where("id=" + offer_id).find();
+        if(offer==null){
+            error("不存在该报价");
+            return;
+        }
+        assign("note",offer.get("note"));
+
         toHtml("admin_tpl/do_offer");
     }
 
@@ -218,5 +225,23 @@ public class OfferManageController extends AdminController {
         }
 
     }
+    /**
+     * 根据id查找业务员选择的图片       
+     *
+     * @param
+     */
+    @action
+    public void getPictureById(){
+        String id = I("id") == null ? "" : I("id").toString();
+        HashMap<String, String> map = M("picture").where("id=" + id).find();
+        try {
+
+            success(map);
+        } catch (Exception e) {
+            // TODO: handle exception
+            error("报价参数有误");
+        }
+    }
+
 
 }

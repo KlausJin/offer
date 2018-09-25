@@ -8,6 +8,7 @@
     <!-- styles -->
     <link href="/css/styles.css" rel="stylesheet">
 
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -76,6 +77,15 @@
                         <!--配件内容-->
                     </div>
 
+                    <legend>客户备注</legend>
+                    <div class="row" id="note" style="margin-bottom: 20px">
+                        <div class="col-md-8" style="font-size: 16px">
+                        ${note}
+                        </div>
+                    </div>
+
+
+
                     <legend>汇总</legend>
                     <div class="form-group" style=" font-size: 14px; background-color: #ccc; padding-bottom: 10px">
                         <label class="col-md-2 control-label" >数量：<span class="h_num"></span></label>
@@ -106,8 +116,9 @@
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="/js/jquery.js"></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/bootstrap/js/bootstrap.min.js"></script>
 <script src="/js/custom.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
 
 
 <script>
@@ -663,14 +674,13 @@
             $(".h_all").html(all_price.toFixed(2));
 
 
-            $.getdata("/v1/profit/getProfit",{"id":products[index]['id'],"num":num,"offer_id":${offer_id},"price":all_price.toFixed(2),"is_tax":is_tax},function (data) {
-                alert(JSON.stringify(data))
+            $.getdata("/v1/profit/getProfit",{"product_id":products[index]['id'],"num":num,"offer_id":${offer_id},"price":all_price.toFixed(2),"is_tax":is_tax},function (data) {
                 $(".h_sale").html(data.total)
                 $(".h_ll").html(data.profit)
                 $(".h_pro").html(data.pro_price);
                 $(".cbm").html(data.cbm);
                 $(".h_rate").html(data.rate)
-                $(".c_price").html(data.c_price)
+                $(".c_price").html(data.total)
             })
 
 
@@ -728,7 +738,7 @@
                 return;
             }
             var d = {"offer_id":"${offer_id}","manage_id":"${id}","products":JSON.stringify(save_data)};
-            alert(JSON.stringify(d))
+
             $.post("/v1/offerManage/do_edit", {"data": JSON.stringify(d)}, function (res) {
                 var ret = JSON.parse(res);
                 if (ret.code == "success") {
@@ -851,6 +861,6 @@
 
 
 </script>
-</div>
+
 </body>
 </html>
