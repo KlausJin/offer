@@ -22,6 +22,10 @@ public class OfferSaleController extends AdminController {
 
     public OfferSaleController(ControllerContext context) {
         super(context);
+        if (admin_type<=MANAGER){
+            pri=false;
+            return;
+        }
     }
 
     @action

@@ -17,6 +17,10 @@ import java.util.HashMap;
 public class OfferAdminController extends AdminController {
     public OfferAdminController(ControllerContext context) {
         super(context);
+        if (admin_type>ADMIN){
+            pri=false;
+            return;
+        }
     }
 
     @action

@@ -13,6 +13,10 @@ import java.util.HashMap;
 public class PictureController extends AdminController {
     public PictureController(ControllerContext context) {
         super(context);
+        if (admin_type>MANAGER){
+            pri=false;
+            return;
+        }
     }
 
     @action

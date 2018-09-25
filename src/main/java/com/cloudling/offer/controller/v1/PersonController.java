@@ -28,6 +28,10 @@ import java.util.List;
 public class PersonController extends AdminController {
     public PersonController(ControllerContext context) {
         super(context);
+        if (admin_type>MANAGER){
+            pri=false;
+            return;
+        }
     }
 
 

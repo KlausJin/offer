@@ -20,6 +20,10 @@ import java.util.List;
 public class AreaController extends AdminController {
     public AreaController(ControllerContext context) {
         super(context);
+        if (admin_type>MANAGER){
+            pri=false;
+            return;
+        }
     }
 
 

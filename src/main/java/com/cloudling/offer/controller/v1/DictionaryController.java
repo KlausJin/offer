@@ -18,6 +18,10 @@ import java.util.HashMap;
 public class DictionaryController extends AdminController {
     public DictionaryController(ControllerContext context) {
         super(context);
+        if (admin_type>MANAGER){
+            pri=false;
+            return;
+        }
     }
 
 

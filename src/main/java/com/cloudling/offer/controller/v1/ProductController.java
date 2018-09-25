@@ -28,6 +28,10 @@ import java.util.List;
 public class ProductController extends AdminController {
     public ProductController(ControllerContext context) {
         super(context);
+        if (admin_type>MANAGER){
+            pri=false;
+            return;
+        }
     }
 
     @action

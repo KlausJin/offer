@@ -13,6 +13,10 @@ import com.cloudling.offer.server.ControllerContext;
 public class WelcomeController extends AdminController {
     public WelcomeController(ControllerContext context) {
         super(context);
+        if (admin_type>ADMIN){
+            pri=false;
+            return;
+        }
     }
 
     @action

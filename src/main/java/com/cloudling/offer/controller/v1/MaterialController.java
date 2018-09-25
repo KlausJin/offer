@@ -22,6 +22,10 @@ import java.util.List;
 public class MaterialController  extends AdminController {
     public MaterialController(ControllerContext context) {
         super(context);
+        if (admin_type>MANAGER){
+            pri=false;
+            return;
+        }
     }
 
 

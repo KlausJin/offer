@@ -24,6 +24,10 @@ import java.util.HashMap;
 public class TempletController extends AdminController {
     public TempletController(ControllerContext context) {
         super(context);
+        if (admin_type!=MANAGER){
+            pri=false;
+            return;
+        }
     }
 
 
