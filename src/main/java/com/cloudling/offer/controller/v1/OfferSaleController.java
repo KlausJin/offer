@@ -131,7 +131,7 @@ public class OfferSaleController extends AdminController {
         assign("products", "[]");
         assign("client", "[]");
         assign("attrs", "[]");
-
+        assign("note","");
         toHtml("admin_tpl/start_offer");
     }
 
@@ -146,6 +146,9 @@ public class OfferSaleController extends AdminController {
         assign("parent_id", id);
 
         HashMap<String, String> offer = M("offer").where("id=" + id).find();
+
+        assign("note",offer.get("note"));
+
         //客户
         HashMap<String, String> client = M("client").where("id=" + offer.get("client_id")).find();
         assign("client", JSON.toJSONString(client));

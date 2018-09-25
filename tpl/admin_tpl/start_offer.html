@@ -496,6 +496,12 @@
             search_cli(client);
         custom_id = client['id'];
 
+        for(var i=0;i<ps.length;i++){
+            products[i]['photo'] = ps[i]['url']
+        }
+
+        $("#note").html("${note}")
+
 
     }
 
