@@ -109,8 +109,11 @@ public class ExcelToOfferUtil {
                 if(row!=null) {
                     for (int y = row.getFirstCellNum(); y < row.getLastCellNum(); y++) {
                         cell = row.getCell(y);
-                        String key = onGetExcelKey.getNormalKey(cell);
-                        sheet.getRow(j).getCell(y).setCellValue(key);
+                        if(cell!=null){
+                            String key = onGetExcelKey.getNormalKey(cell);
+                            sheet.getRow(j).getCell(y).setCellValue(key);
+                        }
+
                     }
                 }
             }
@@ -125,11 +128,14 @@ public class ExcelToOfferUtil {
 
             proDataList.add(new ProData(start,end,0));
 
+            int lastRow = end +1;
+
             for(int j=1;j<size;j++){
-                int s = sheet.getLastRowNum()+1;
-                copyRows(sheet,start+1,end,sheet.getLastRowNum()+1);
-                int e = sheet.getLastRowNum()+1;
+                int s = lastRow;
+                copyRows(sheet,start+1,end,lastRow);
+                int e = lastRow + (end-start);
                 proDataList.add(new ProData(s,e,j));
+                lastRow = e+1;
             }
 
 
