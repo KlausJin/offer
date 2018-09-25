@@ -55,6 +55,13 @@ public class ProductController extends AdminController {
 
     @action
     public void dialog_new_client() {
+        HashMap<String, String> data = null;
+        if (admin_type == 4) {
+            data = M("person").where("id=" + user.get("follow_id")).find();
+        } else {
+            data = M("person").where("id=" + user.get("id")).find();
+        }
+        assign("info", JSON.toJSON(data));
         toHtml("admin_tpl/dialog_product_new_client");
     }
 

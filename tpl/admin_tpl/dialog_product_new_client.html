@@ -36,7 +36,7 @@
     <div class="form-group">
         <label class="col-sm-2 control-label">客户所属业务员</label>
         <div class="col-sm-4">
-            <label id="sale" class="control-label">${user}</label>
+            <label id="sale" class="control-label">${info.name}</label>
         </div>
     </div>
 
@@ -53,6 +53,7 @@
 <script src="/js/custom.js"></script>
 <script>
     var data = {};
+    var info= ${info};
     $(function () {
         $.getJSON("getClientFrom", {}, function (res) {
             if (res.code == "success")
