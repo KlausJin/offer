@@ -67,7 +67,7 @@
                     </div>
 
 
-                    <legend>固定配件</legend>
+                    <!--<legend>固定配件</legend>-->
                     <div class="spare_list s_list">
                         <!--配件内容-->
                     </div>
@@ -81,6 +81,13 @@
                     <div class="row" id="note" style="margin-bottom: 20px">
                         <div class="col-md-8" style="font-size: 16px">
                         ${note}
+                        </div>
+                    </div>
+
+                    <legend>产品图片</legend>
+                    <div class="row"style="margin-bottom: 20px">
+                        <div   class="col-md-8" style="font-size: 16px">
+                            <img id="photo" style="width: 100px;height: 100px">
                         </div>
                     </div>
 
@@ -122,6 +129,8 @@
 
 
 <script>
+    var photos = ${photos};
+
     var list = [];
     var index = 0;
     var custom_id = 0;
@@ -162,12 +171,14 @@
             products = product.productBeans;
             initTab();
             Offer.show_spare(products[0],$(".spare_list"))
+            Offer.show_photo(photos[0])
 
         }
         //初始化常用配件
         _w['initCommonProducts']=function(data){
             common_spares = data.productBeans;
             Offer.show_spare(common_spares[0],$(".s_spare_list"))
+            Offer.show_photo(photos[0])
             make_price();
         }
 
@@ -218,7 +229,7 @@
 
             },
             "show_spare": function (data, t) {
-                var spares = data.spareBeans, s = '';
+                var spares = data.spareBeans || [], s = '';
                 for (var i = 0; i < spares.length; i++) {
 
                     s += '<h5>' + spares[i].name + '</h5>'
@@ -234,6 +245,9 @@
                 t.append(s)
                 bindAttr();
 
+            },
+            "show_photo":function (s) {
+                $("#photo").attr("src",s)
             },
             "show_common_spare": function (data, t) {
                 var spares = data.spareBeans, s = '';
@@ -642,6 +656,7 @@
                 $("#pro_btn_" + pos).addClass("btn-primary")
                 Offer.show_spare(products[index],$(".spare_list"))
                 Offer.show_spare(common_spares[index],$(".s_spare_list"))
+                Offer.show_photo(photos[index])
                 make_price();
                 //
                 var has_data = attrs[pos] || false;

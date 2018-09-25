@@ -149,6 +149,15 @@ public class OfferManageController extends AdminController {
         }
         assign("note",offer.get("note"));
 
+        ArrayList<HashMap<String, String>> offer_products = M("offer_product").where("offer_id=" + offer_id).select();
+
+        List<String> photos = new ArrayList<>();
+
+        for(int i=0;i<offer_products.size();i++){
+            photos.add(offer_products.get(i).get("url"));
+        }
+
+        assign("photos",JSON.toJSONString(photos));
 
         toHtml("admin_tpl/do_offer");
     }

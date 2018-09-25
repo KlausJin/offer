@@ -30,6 +30,7 @@ public class AdminController extends Controller {
     public AdminController(ControllerContext context) {
         super(context);
         assign("controller", context.CONTROLLER);
+        assign("action", context.ACTION);
         HashMap<String, String> map = M("session").where("sessionid='" + sessionID + "'").find();
         if (map == null) {
             redirect("/v1/access/login");

@@ -6,25 +6,28 @@
 <div class="col-md-2">
     <div class="sidebar content-box" style="display: block;">
         <ul class="nav">
+            <% if(admin_type<=1){ %>
             <li class="submenu">
-                <% if(admin_type<=1){ %>
+
                 <a href="#">
                     <i class="glyphicon glyphicon-user"></i> 主管理员
                     <span class="caret pull-right"></span>
                 </a>
-                <% }%>
+
                 <ul>
                     <li><a href="/v1/welcome/list"><i class="glyphicon glyphicon-list"></i>首页</a></li>
                     <li><a href="/v1/log/list"><i class="glyphicon glyphicon-home"></i> 日志查看</a></li>
                 </ul>
             </li>
+            <% }%>
+            <% if(admin_type<=2){ %>
             <li class="submenu">
-                <% if(admin_type<=2){ %>
+
                 <a href="#">
                     <i class="glyphicon glyphicon-book"></i> 人员管理
                     <span class="caret pull-right"></span>
                 </a>
-                <% }%>
+
                 <ul>
                     <li><a href="/v1/person/adminList"><i class="glyphicon glyphicon-list"></i> 管理员管理</a></li>
                     <li><a href="/v1/person/managerList"><i class="glyphicon glyphicon-list"></i> 经理管理</a></li>
@@ -33,6 +36,7 @@
                     </li>
                 </ul>
             </li>
+            <% }%>
 
             <li class="submenu">
                 <a href="#">
@@ -44,79 +48,88 @@
                     <li><a href="/v1/client/add"><i class="glyphicon glyphicon-list"></i> 客户录入</a></li>
                 </ul>
             </li>
-
+            <% if(admin_type<=2){ %>
             <li class="submenu">
-                <% if(admin_type<=2){ %>
+
                 <a href="#">
                     <i class="glyphicon glyphicon-book"></i> 产品管理
                     <span class="caret pull-right"></span>
                 </a>
-                <% }%>
+
                 <ul>
                     <li><a href="/v1/product/list"><i class="glyphicon glyphicon-list"></i> 产品型号</a></li>
                     <li><a href="/v1/material/list"><i class="glyphicon glyphicon-list"></i>原材料管理</a></li>
                     <li><a href="/v1/picture/add"><i class="glyphicon glyphicon-list"></i>添加产品图片</a></li>
                 </ul>
             </li>
-
+            <% }%>
+            <% if(admin_type<=1){ %>
             <li class="submenu">
-                <% if(admin_type<=1){ %>
+
                 <a href="#">
                     <i class="glyphicon glyphicon-book"></i> 报价管理
                     <span class="caret pull-right"></span>
                 </a>
-                <% }%>
+
                 <ul>
                     <li><a href="/v1/offerAdmin/list"><i class="glyphicon glyphicon-list"></i> 报价管理</a></li>
                 </ul>
             </li>
-
+            <% }%>
+            <% if(admin_type>=3){ %>
             <li class="submenu">
-                <% if(admin_type>=3){ %>
+
                 <a href="#">
                     <i class="glyphicon glyphicon-book"></i> 报价管理
                     <span class="caret pull-right"></span>
                 </a>
-                <% }%>
+
                 <ul>
                     <li><a href="/v1/offerSale/list"><i class="glyphicon glyphicon-list"></i> 报价管理</a></li>
                     <li><a href="/v1/offerSale/offer_choose"><i class="glyphicon glyphicon-list"></i> 新建报价</a></li>
                 </ul>
             </li>
 
+            <% }%>
+
+            <% if(admin_type==2 ){ %>
             <li class="submenu">
-                <% if(admin_type==2 ){ %>
+
                 <a href="#">
                     <i class="glyphicon glyphicon-book"></i> 报价管理
                     <span class="caret pull-right"></span>
                 </a>
-                <% }%>
+
                 <ul>
                     <li><a href="/v1/offerManage/list"><i class="glyphicon glyphicon-list"></i> 报价管理</a></li>
                     <li><a href="/v1/templet/templet_list"><i class="glyphicon glyphicon-list"></i> 报价模板管理</a></li>
                     <li><a href="/v1/templet/addTemplet"><i class="glyphicon glyphicon-list"></i> 报价模板新增</a></li>
                 </ul>
             </li>
+            <% }%>
 
+            <% if(admin_type<=2){ %>
             <li class="submenu">
-                <% if(admin_type<=2){ %>
+
                 <a href="#">
                     <i class="glyphicon glyphicon-book"></i> 系统业务字典
                     <span class="caret pull-right"></span>
                 </a>
-                <% }%>
+
                 <ul>
                     <li><a href="/v1/dictionary/profit_list"><i class="glyphicon glyphicon-list"></i>汇率税率管理</a></li>
                 </ul>
             </li>
+            <% }%>
 
+            <% if(admin_type<=2){ %>
             <li class="submenu">
-                <% if(admin_type<=2){ %>
+
                 <a href="#">
                     <i class="glyphicon glyphicon-book"></i> 系统录入
                     <span class="caret pull-right"></span>
                 </a>
-                <% }%>
+
                 <ul>
                     <li><a href="/v1/product/add_product"><i class="glyphicon glyphicon-list"></i>产品(配件)Excel模板导入</a></li>
                     <li><a href="/v1/material/add_materialByExcel"><i class="glyphicon glyphicon-list"></i>原材料Excel模板导入</a></li>
@@ -125,6 +138,7 @@
                     <li><a href="/v1/area/add_english_refer"><i class="glyphicon glyphicon-list"></i> 中英文对照Excel模板导入</a></li>
                 </ul>
             </li>
+            <% }%>
 
             <li class="submenu">
                 <a href="#">
@@ -140,3 +154,27 @@
         </ul>
     </div>
 </div>
+
+<script src="/js/jquery.js"></script>
+
+<script>
+    $(function () {
+        var controller = "${controller}"
+        var action = "${action}"
+
+        $(".nav").find("a").each(function () {
+            var th = $(this),src= th.attr("href");
+            src = src.replace("/v1/","");
+           var t = src.split("/")
+            if(t.length==2){
+               var c = t[0];
+               var a = t[1];
+               if(c==controller && a==action){
+
+                   th.parent("").parent("").parent("").addClass("open")
+                   th.parent("").addClass("open")
+               }
+            }
+        })
+    })
+</script>

@@ -32,6 +32,7 @@ public class Controller {
 		this.context = context;
 		assigns = new HashMap<>();
 		sessionID =context.request.getSession().getId();//"1b8nnnh5ooibu1qui4csxgwd8";//"186j5ki2ux6fdhl3am4efcikw";
+
 	}
 
 	protected void session(Object object) throws Exception {
