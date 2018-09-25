@@ -138,7 +138,7 @@ public class ClientController extends AdminController {
         String client_name = I("client_name").toString();
         String client_area = I("client_area").toString();
         String client_from = I("client_from").toString();
-        String sale_id = user.get("id");
+        String sale_id = admin_type==FOLLOW?user.get("follow_id"):user.get("id");
         ClientModel cm = new ClientModel();
         HashMap<String, String> data = new HashMap<>();
         HashMap<String, String> cp = M("default_client_profit").where("status=" + Dictionary.COUNTRYTRADE).find();

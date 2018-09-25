@@ -65,27 +65,28 @@ public class AdminController extends Controller {
                 break;
         }
         assign("role", role);
-//        setLog();
+        setLog();
     }
 
-//    public void setLog() {
-//        new Thread() {
-//            public void run() {
-//                Model logModel = ModelUtil.getModel("log");
-//                HashMap<String, String> res = new HashMap<>();
-//                res.put("controller", context.CONTROLLER);
-//                res.put("action", context.ACTION);
-//                res.put("create_time", TimeUtil.getShortTimeStamp() + "");
-//                res.put("getdata", JSON.toJSONString(context.GET));
-//                res.put("postdata", JSON.toJSONString(context.POST));
-//                try {
-//                    logModel.add(res);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    error("日志记录失败");
-//                }
-//            }
-//        }.start();
-//    }
+    public void setLog() {
+        new Thread() {
+            public void run() {
+                Model logModel = ModelUtil.getModel("log");
+                HashMap<String, String> res = new HashMap<>();
+                res.put("controller", context.CONTROLLER);
+                res.put("name",user.get("name"));
+                res.put("action", context.ACTION);
+                res.put("create_time", TimeUtil.getShortTimeStamp() + "");
+                res.put("getdata", JSON.toJSONString(context.GET));
+                res.put("postdata", JSON.toJSONString(context.POST));
+                try {
+                    logModel.add(res);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    error("日志记录失败");
+                }
+            }
+        }.start();
+    }
 
 }

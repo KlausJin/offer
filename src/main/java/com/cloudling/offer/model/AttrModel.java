@@ -2,7 +2,7 @@ package com.cloudling.offer.model;
 
 import com.cloudling.offer.bean.AttrBean;
 import com.cloudling.offer.util.DoubleUtil;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -125,7 +125,6 @@ public class AttrModel extends Model {
                 } else {
                     if (res1.get("code").equals("0")) {
                         if (res1.get("price").equals("-2.0000")) {
-                            res1.replace("price", null);
                             AttrBean bean = new AttrBean(res1);
                             list.add(bean);
                         } else {
@@ -140,11 +139,18 @@ public class AttrModel extends Model {
                             list.add(bean);
 
                         } else {
-                            HashMap<String, String> pri = where("parent_id=" + res1.get("parent_id") + " and code=" + "01").field("price").find();
-                            double price = Double.parseDouble(pri.get("price")) + Double.parseDouble(res1.get("price"));
-                            res1.replace("price", String.valueOf(price));
-                            AttrBean bean = new AttrBean(res1);
-                            list.add(bean);
+                            if (res1.get("price").equals("-2.0000")) {
+                                AttrBean bean = new AttrBean(res1);
+                                list.add(bean);
+                            }
+                            else{
+                                HashMap<String, String> pri = where("parent_id=" + res1.get("parent_id") + " and code=" + "01").field("price").find();
+                                double price = Double.parseDouble(pri.get("price")) + Double.parseDouble(res1.get("price"));
+                                res1.replace("price", String.valueOf(price));
+                                AttrBean bean = new AttrBean(res1);
+                                list.add(bean);
+                            }
+
                         }
 
 
@@ -166,17 +172,27 @@ public class AttrModel extends Model {
 
             if(map.get("formula").equals("4")){
                 map.put("num",carton_area(map,offer_id).get("area")+"");
-               }
+            }
+
             if (cat_id.equals("32")) {
 
                 if (map.get("price").equals("-2.0000")) {
-                    map.replace("price", materialModel.getMaterial(map.get("name")).get("price"));
-                    map.put("is_material","1");
+                    HashMap<String, String> mat_map = materialModel.getMaterial(map.get("name"));
 
+                    if (mat_map==null){
+                        map.replace("price","-3");
+                        AttrBean bean = new AttrBean(map);
+                        list.add(bean);
+                    }
+                    else{
+                        map.replace("price",mat_map .get("price"));
+                        map.put("is_material","1");
+                        AttrBean bean = new AttrBean(map);
+                        list.add(bean);
+                    }
 
-                    AttrBean bean = new AttrBean(map);
-                    list.add(bean);
                 }
+
 
                 else {
                     AttrBean bean = new AttrBean(map);
@@ -190,13 +206,18 @@ public class AttrModel extends Model {
                     AttrBean bean = new AttrBean(map);
                     list.add(bean);
                 } else {
-                    HashMap<String, String> pri = where("parent_id=" + map.get("parent_id") + " and code=" + "01").field("price").find();
-                    double price = Double.parseDouble(pri.get("price")) + Double.parseDouble(map.get("price"));
-                    map.replace("price", String.valueOf(price));
+                    if (map.get("price").equals("-2.0000")){
+                        AttrBean bean = new AttrBean(map);
+                        list.add(bean);
+                    }
+                    else{ HashMap<String, String> pri = where("parent_id=" + map.get("parent_id") + " and code=" + "01").field("price").find();
+                        double price = Double.parseDouble(pri.get("price")) + Double.parseDouble(map.get("price"));
+                        map.replace("price", String.valueOf(price));
 
 
-                    AttrBean bean = new AttrBean(map);
-                    list.add(bean);
+                        AttrBean bean = new AttrBean(map);
+                        list.add(bean);}
+
                 }
 
             }
@@ -216,27 +237,27 @@ public class AttrModel extends Model {
      * @modified:
      */
     public List<AttrBean> getSpareId_real(String spare_id,String offer_id,String product_id){
-           ArrayList<HashMap<String,String>> map=getspareId(spare_id);
+        ArrayList<HashMap<String,String>> map=getspareId(spare_id);
         OfferAttrModel offerAttrModel = OfferAttrModel.getInstance(offer_id);
         List<AttrBean> list =new ArrayList<>();
-           for (int i=0;i<map.size();i++){
-               HashMap<String,String> res= map.get(i);
-               HashMap<String ,String> data=offerAttrModel.getOfferAttrBySpareId(map.get(i).get("id"),offer_id,product_id);
-               if (data==null){
-                   continue;
-               }
-               else{
-                   AttrBean bean =new AttrBean(res);
-                   bean.f_attrBeans=new AttrModel().getBeanByParentId_real(bean.id,offer_id,product_id);
-                   list.add(bean);
-               }
+        for (int i=0;i<map.size();i++){
+            HashMap<String,String> res= map.get(i);
+            HashMap<String ,String> data=offerAttrModel.getOfferAttrBySpareId(map.get(i).get("id"),offer_id,product_id);
+            if (data==null){
+                continue;
+            }
+            else{
+                AttrBean bean =new AttrBean(res);
+                bean.f_attrBeans=new AttrModel().getBeanByParentId_real(bean.id,offer_id,product_id);
+                list.add(bean);
+            }
 
-           }
+        }
         return list;
 
     }
     public List<AttrBean> getBeanByParentId_real(String spare_id,String offer_id,String product_id){
-      OfferProductModel offerProductModel =new OfferProductModel();
+        OfferProductModel offerProductModel =new OfferProductModel();
         OfferAttrModel offerAttrModel = OfferAttrModel.getInstance(offer_id);
         HashMap<String ,String> map=offerAttrModel.getOfferAttrBySpareId(spare_id,offer_id,product_id);
         List<AttrBean> list =new ArrayList<>();
@@ -317,7 +338,7 @@ public class AttrModel extends Model {
         hnum = size[2];
 
         return  DoubleUtil.round( DoubleUtil.mul((DoubleUtil.add(DoubleUtil.mul(DoubleUtil.add(knum,hnum),2),3.7)),
-        ((DoubleUtil.add(DoubleUtil.add(gnum,hnum),DoubleUtil.mul(hnum,0.5)))+5.4)),2);
+                ((DoubleUtil.add(DoubleUtil.add(gnum,hnum),DoubleUtil.mul(hnum,0.5)))+5.4)),2);
     }
 
     private double[] getXYZ(String spare_id){

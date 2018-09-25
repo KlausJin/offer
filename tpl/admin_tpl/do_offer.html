@@ -723,7 +723,7 @@
                 })
             })
             var sa = {
-                "product":products[0]['code'],
+                "product":products[index]['code'],
                 "num":$(".h_num").html(),
                 "per_price":$(".h_price").html(),
                 "profit":$(".h_ll").html(),
@@ -754,6 +754,7 @@
                 return;
             }
             var d = {"offer_id":"${offer_id}","manage_id":"${id}","products":JSON.stringify(save_data)};
+
 
             $.post("/v1/offerManage/do_edit", {"data": JSON.stringify(d)}, function (res) {
                 var ret = JSON.parse(res);

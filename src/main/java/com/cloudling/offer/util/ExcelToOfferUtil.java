@@ -128,14 +128,14 @@ public class ExcelToOfferUtil {
 
             proDataList.add(new ProData(start,end,0));
 
-            int lastRow = end +1;
+            int lastRow = end-1;
 
             for(int j=1;j<size;j++){
                 int s = lastRow;
                 copyRows(sheet,start+1,end,lastRow);
                 int e = lastRow + (end-start);
                 proDataList.add(new ProData(s,e,j));
-                lastRow = e+1;
+                lastRow = e-1;
             }
 
 
@@ -266,6 +266,14 @@ public class ExcelToOfferUtil {
             }
 
             if (sourceRow != null) {
+                int lastRowNo = currentSheet.getLastRowNum();
+                try {
+                    currentSheet.shiftRows(pPosition - pStartRow
+                            + i, lastRowNo, 1);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
                 Row newRow = currentSheet.createRow(pPosition - pStartRow
                         + i);
                 newRow.setHeight(sourceRow.getHeight());
@@ -276,6 +284,8 @@ public class ExcelToOfferUtil {
                         copyCell(templateCell, newCell);
                     }
                 }
+
+
             }
         }
     }

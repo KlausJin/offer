@@ -29,7 +29,7 @@ public class IndexController extends AdminController {
         String isadmin = user.get("status");
         switch (isadmin) {
             case "1":
-                redirect("/v1/welcome/list");
+                redirect("/v1/offerAdmin/list");
                 break;
             case "2":
                 redirect("/v1/offerManage/list");

@@ -15,24 +15,21 @@
                 </a>
 
                 <ul>
-                    <li><a href="/v1/welcome/list"><i class="glyphicon glyphicon-list"></i>首页</a></li>
                     <li><a href="/v1/log/list"><i class="glyphicon glyphicon-home"></i> 日志查看</a></li>
                 </ul>
             </li>
             <% }%>
             <% if(admin_type<=2){ %>
             <li class="submenu">
-
                 <a href="#">
                     <i class="glyphicon glyphicon-book"></i> 人员管理
                     <span class="caret pull-right"></span>
                 </a>
-
                 <ul>
-                    <li><a href="/v1/person/adminList"><i class="glyphicon glyphicon-list"></i> 管理员管理</a></li>
-                    <li><a href="/v1/person/managerList"><i class="glyphicon glyphicon-list"></i> 经理管理</a></li>
+                    <% if(admin_type<=1){ %><li><a href="/v1/person/adminList"><i class="glyphicon glyphicon-list"></i> 管理员管理</a></li><% }%>
+                    <% if(admin_type<=1){ %><li><a href="/v1/person/managerList"><i class="glyphicon glyphicon-list"></i> 经理管理</a></li><% }%>
                     <li><a href="/v1/person/salesmanList"><i class="glyphicon glyphicon-list"></i> 业务员管理</a></li>
-                    <li><a href="/v1/person/add"><i class="glyphicon glyphicon-list"></i> 员工录入</a></li>
+                    <% if(admin_type<=1){ %><li><a href="/v1/person/add"><i class="glyphicon glyphicon-list"></i> 员工录入</a></li><% }%>
                     </li>
                 </ul>
             </li>
