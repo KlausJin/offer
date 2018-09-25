@@ -102,6 +102,32 @@ public class OfferManageController extends AdminController {
      */
     @action
     public void detail(){
+        String offer_id=I("id").toString();
+        assign("offer_id",offer_id);
+        HashMap<String, String> offer = M("offer").where("id=" + offer_id).find();
+        if(offer==null){
+            error("不存在该报价");
+            return;
+        }
+        assign("note",offer.get("note"));
+
+        HashMap<String, String> client = M("client").where("id=" + offer.get("client_id")).find();
+        assign("client",JSON.toJSONString(client));
+
+        HashMap<String, String> quote = M("quote").where("offer_id=" + offer_id).find();
+        String qid = quote.get("id");
+
+        ArrayList<HashMap<String, String>> products = M("quote_pro").where("quote_id=" + qid).select();
+
+        for (int i=0;i<products.size();i++){
+            ArrayList<HashMap<String, String>> details = M("quote_detail").where("pro_id=" + products.get(i).get("id")).select();
+            products.get(i).put("detail",JSON.toJSONString(details));
+        }
+        assign("products",JSON.toJSONString(products));
+
+
+        toHtml("admin_tpl/show_offer");
+
 
     }
 
@@ -123,8 +149,43 @@ public class OfferManageController extends AdminController {
         }
         assign("note",offer.get("note"));
 
+
         toHtml("admin_tpl/do_offer");
     }
+
+    /**
+     * 删除报价
+     */
+    @action
+    public void remove(){
+        String offer_id = I("id").toString();
+        HashMap<String, String> quote = M("quote").where("offer_id=" + offer_id).find();
+        if(quote == null){
+            error("不存在该报价");
+            return;
+        }
+        String qid = quote.get("id");
+
+        ArrayList<HashMap<String, String>> pros = M("quote_pro").where("quote_id=" + qid).select();
+        //删除细节
+        for(int i=0;i<pros.size();i++){
+            M("quote_detail").where("pro_id="+pros.get(i).get("id")).delete();
+        }
+        //删除产品
+        M("quote_pro").where("quote_id=" + qid).delete();
+        //删除报价
+        M("quote").where("id=" + qid).delete();
+
+        HashMap<String,String> data = new HashMap<>();
+        data.put("status","0");
+        M("offer").where("id="+offer_id).save_string(data);
+
+        success(1);
+
+
+    }
+
+
 
 
     @action

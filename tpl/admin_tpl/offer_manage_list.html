@@ -129,6 +129,18 @@
         tohtml();
     }
 
+    function remove(id) {
+        if(window.confirm("是否删除该报价")){
+            $.getJSON("remove",{"id":id},function (res) {
+                if(res.code=="success"){
+                    tohtml();
+                }else{
+                    alert(res.msg)
+                }
+            })
+        }
+    }
+
 
 
     function tohtml() {
@@ -179,7 +191,8 @@
                     if (data[i]["status"] == "待报价") {
                         s+='<button onclick="edit(' + data[i]['id'] + ')" class="edit">报价</button>';
                     }else{
-                        s+='<button onclick="detail(' + data[i]['id'] + ')" class="detail">查看报价详情</button>';
+                        s+='<button onclick="detail(' + data[i]['id'] + ')" class="detail">查看报价</button>';
+                        s+='&nbsp;&nbsp;<button onclick="remove(' + data[i]['id'] + ')" class="detail">删除报价</button>';
                     }
 
                     s+='</td>'+

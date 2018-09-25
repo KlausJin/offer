@@ -172,7 +172,7 @@
 
                         s+='<dl><dd><a href="javascript:void()" onclick="show_offer('+data[i]['id']+')">'+data[i]['create_time']+'</a></dd><dt>'
                     if(data[i]['status']=="已报价"){
-                        s+='<a href="javascript:void()">查看报价</a>'
+
                         s+='<a href="/v1/offerSale/offer_templet?quote_id=' + data[i]['quote_id'] + '">导出报价</a>'
                     }else{
                         s+=data[i]['status']
@@ -183,7 +183,7 @@
                         for(var j=0;j<subs.length;j++){
                             s+='<dl><dd><a onclick="show_offer('+subs[j]['id']+')" href="javascript:void()">'+subs[j]['create_time']+'(修改)</a></dd><dt>';
                             if(subs[j]['status']=="已报价"){
-                                s+=subs[j]['status']='<a href="javascript:void()">查看报价</a>'
+                                s+=subs[j]['status']='<a href="/v1/offerSale/offer_templet?quote_id='+subs[j]['quote_id']+'">导出报价</a>'
                             }else{
                                 s+=subs[j]['status']
                             }
@@ -201,7 +201,7 @@
     }
 
     function show_offer(id) {
-        window.location.href="/v1/offerSale/show?id="+id;
+        window.location.href="/v1/offerSale/re_offer?id="+id;
     }
 </script>
 <style type="text/css">

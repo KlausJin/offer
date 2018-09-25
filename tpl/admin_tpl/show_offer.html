@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>后台系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- styles -->
+    <link href="/css/styles.css" rel="stylesheet">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<style type="text/css">
+    .form-control {
+        padding: 0px 5px;
+        height: 28px;
+        font-size: 13px;
+    }
+
+    .brs {
+        width: 100px;
+        display: inline;
+        border-radius: 0px
+    }
+
+    .btn_pro {
+        padding-bottom: 20px
+    }
+    .loading{ padding-left: 30px; position: relative; font-size: 14px; color: #999; margin-left: 40%; margin-top: 200px}
+    .loading:after{content: ''; left: 5px; position: absolute; background-image: url("/images/sloading.gif");
+        background-size: 20px 20px; width: 20px; height: 20px; top: 15px}
+
+    /*.attr_diabled{ position: relative}*/
+    /*.attr_diabled:after{ content: ''; position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 99; background-color: #dedede; opacity: 0.6}*/
+
+</style>
+<%include("head.html"){}%>
+<div class="page-content" >
+    <div class="row">
+        <%include("left.html"){}%>
+        <div class="col-md-10" >
+            <div class="content-box-large" style="min-height: 650px">
+                <div class="panel-heading">
+                    <div class="panel-title">报价详情</div>
+                </div>
+
+
+
+                <div  class="panel-body data-content form-horizontal" >
+                    <div class="row btn_pro" style="display: none; ">
+                        <div class="col-md-8">
+                            <span class="btn_pro_list">
+                            </span>
+                        </div>
+                    </div>
+
+                    <style type="text/css">
+                        .spare_list .row{ border-bottom: 1px dashed #dedede}
+                        .spare_list .row span{ line-height: 35px}
+                    </style>
+
+
+                    <div class="spare_list s_list">
+
+                    </div>
+
+
+                    <legend style="margin-top: 20px">客户备注</legend>
+                    <div class="row" id="note" style="margin-bottom: 20px">
+                        <div class="col-md-8" style="font-size: 16px">
+                        ${note}
+                        </div>
+                    </div>
+
+
+
+                    <legend>汇总</legend>
+                    <div class="form-group" style=" font-size: 14px; background-color: #ccc; padding-bottom: 10px">
+                        <label class="col-md-2 control-label" >数量：<span class="h_num"></span></label>
+                        <label class="col-md-2 control-label" >单价：<span class="h_price"></span></label>
+                        <label class="col-md-2 control-label" >利润率：<span class="h_ll"></span></label>
+                        <label class="col-md-2 control-label" >CBM：<span class="cbm"></span></label>
+                        <label class="col-md-2 control-label" >客户价：<span class="c_price"></span></label>
+                        <label class="col-md-2 control-label" style="display: none">rate：<span class="h_rate"></span></label>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+
+        <!--<div class="copy text-center">-->
+        <!--Copyright 2014 <a href='#'>Website</a>-->
+        <!--</div>-->
+
+    </div>
+</footer>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="/js/jquery.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/js/custom.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+
+
+<script>
+    var index = 0;
+    var products=${products};
+    (function (_w, $) {
+
+
+        $.extend({
+            "warn": function (msg) {
+                alert(msg)
+            },
+            "getdata": function (a, b, c) {
+                $.getJSON(a, b, function (res) {
+                    if (res.code == "success") {
+                        c(res.data)
+                    } else {
+                        $.warn(res.msg)
+                    }
+                })
+            }
+        })
+
+
+
+
+        //初始化产品
+        _w['initProducts']=function(){
+
+            initTab();
+            Offer.show_spare(products[0],$(".spare_list"))
+            make_price()
+
+        }
+
+
+        //初始化导航
+        _w['initTab']=function(){
+            $(".btn_pro").show();
+            var p = '';
+
+            for(var i=0;i<products.length;i++){
+                p += '<button id="pro_btn_' + i + '" onclick="switch_pro(' + i + ')" class="btn-default form-control brs">' + products[i].pro_name + '</button>';
+            }
+
+            $(".btn_pro").find(".btn_pro_list").append(p)
+            $(".btn_pro").find(".btn_pro_list").find("button").removeClass("btn-primary")
+            $("#pro_btn_0").addClass("btn-primary")
+
+        }
+
+
+
+
+
+
+        _w['Offer'] = {
+            "show_pro_btn": function (data) {
+                $(".btn_pro").show();
+                var products = data.productBeans, p = '';
+                for (var i = 0; i < products.length; i++) {
+                    var p = '<button id="pro_btn_' + index + '" onclick="switch_pro(' + index + ')" class="btn-primary btn-default form-control brs">' + products[i].code + '</button>';
+                    $(".btn_pro").find(".btn_pro_list").find("button").removeClass("btn-primary")
+                    $(".btn_pro").find(".btn_pro_list").append(p)
+
+                    var spares = products[i].spareBeans, s = '';
+
+                    for (var j = 0; j < spares.length; j++) {
+                        s += '<h5>' + spares[j].name + '</h5>'
+                        s += '<div class="product_attr">';
+                        var attrBeans = spares[j].attrBeans;
+                        for (var z = 0; z < attrBeans.length; z++) {
+                            var attr = new Attr(attrBeans[z]);
+                            s += attr.getHtml();
+                        }
+                        s += '</div>'
+                    }
+                    $(".spare_list").append(s)
+                    index++;
+                }
+
+            },
+            "show_spare": function (data, t) {
+                var spares = JSON.parse(data.detail), s = '';
+                for (var i = 0; i < spares.length; i++) {
+
+                    s+=' <div class="row">\n' +
+                        '                            <div class="col-md-3"><h5>'+spares[i].kind+'</h5></div>\n' +
+                        '                            <div class="col-md-3"><span>'+spares[i].value+'</span></div>\n' +
+                        '                        </div>'
+                }
+                t.append(s)
+
+            },
+            "clear_product": function () {
+                $(".spare_list").html("")
+
+            }
+
+        }
+
+
+
+
+
+        _w['make_for']=function(a,b,f,sid) {
+            var sf = parseInt(f)
+            b = b || 0.00;
+            a = a || 0.00;
+            switch (sf) {
+                case 0:
+                    $("#all_price_" + sid).val(a);
+                    break;
+                case 1:
+                    var nv = mul(a,b);
+                    $("#all_price_" + sid).val(nv.toFixed(4));
+                    break;
+                case 2:
+
+                    var nv = mul(mul(b, b), a) / 10000;
+
+                    $("#all_price_" + sid).val(nv.toFixed(4));
+
+                    break;
+                case 6:
+
+                    var nv = mul(a, b);
+
+                    $("#all_price_" + sid).val(nv.toFixed(4));
+
+                    break;
+                case 3:
+                case 4:
+                    v = mul(atts[0].num, atts[0].price);
+
+                    var nv = mul(a, b);
+                    v = div(v, 10000);
+
+                    $("#all_price_" + sid).val(nv.toFixed(4));
+
+                    break;
+                case 7:
+
+
+                    var nv = div(a, b)
+
+
+                    $("#all_price_" + sid).val(nv.toFixed(4));
+
+                    break;
+                case 8:
+
+
+                    break;
+                case 9:
+
+                    break;
+            }
+        }
+
+        _w['switch_pro'] = function (pos) {
+            if (pos == index) return;
+            else {
+
+                $(".btn_pro_list").find("button").removeClass("btn-primary")
+                Offer.clear_product();
+                index = pos;
+                $("#pro_btn_" + pos).addClass("btn-primary")
+                Offer.show_spare(products[index],$(".spare_list"))
+
+                make_price();
+                //
+            }
+        }
+
+
+        _w['make_price'] = function () {
+            var pro = products[index];
+           $(".h_num").html(pro.pro_num);
+           $(".h_price").html(pro.per_price);
+
+            $(".h_ll").html(pro.profit);
+
+            $(".cbm").html(pro.cbm);
+
+$(".h_rate").html(pro.rate)
+
+            $(".c_price").html(pro.c_price)
+        }
+
+
+    })(window, jQuery)
+
+
+
+
+
+
+
+
+
+
+    $(function () {
+
+
+            initProducts()
+
+
+
+
+
+    })
+
+
+
+
+</script>
+
+</body>
+</html>
