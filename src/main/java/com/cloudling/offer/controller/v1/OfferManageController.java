@@ -222,6 +222,7 @@ public class OfferManageController extends AdminController {
                 String rate=product.get("rate").toString();
                 String profit=product.get("profit").toString();
                 String cbm=product.get("cbm").toString();
+                String pic_url = product.get("pic_url").toString();
                 proData.put("quote_id",id+"");
                 proData.put("pro_name",pro_name);
                 proData.put("pro_num",pro_num);
@@ -230,6 +231,7 @@ public class OfferManageController extends AdminController {
                 proData.put("rate",rate);
                 proData.put("profit",profit);
                 proData.put("cbm",cbm);
+                proData.put("pic_url",pic_url);
                 long pro_id=M("quote_pro").add(proData);
                 HashMap<String, String> res = new HashMap<>();
                 HashMap<String, String> data = JSON.parseObject(product.get("data").toString(), new HashMap<String, Object>().getClass());

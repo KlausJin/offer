@@ -130,7 +130,11 @@ public class ExcelExprtAdapter implements OnGetExcelKey {
                 }
 
             } else {
-                kv = product_attr.containsKey(k) ? product_attr.get(k) : k;
+                if(product_attr.containsKey(k)){
+                    kv =  product_attr.get(k);
+                }else{
+                    kv = k;
+                }
             }
 
 
@@ -215,6 +219,7 @@ public class ExcelExprtAdapter implements OnGetExcelKey {
 
     @Override
     public String getPictures(int pos) {
-        return products.get(pos).get("pic_url");
+
+        return "assets/"+products.get(pos).get("pic_url");
     }
 }
