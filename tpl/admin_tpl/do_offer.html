@@ -456,7 +456,7 @@
 
                     s+='单价：'
 
-                    s+='<span id="price_'+data['id']+'">'+atts[0].price+'</label>'
+                    s+='<span class="per_price" id="price_'+data['id']+'">'+atts[0].price+'</label>'
 
 
                     s+='</div>'
@@ -470,7 +470,7 @@
                         s += ''
 
 
-                        s += '<span id="price_' + data['id'] + '">' + atts[0].price + '</label>'
+                        s += '<span class="per_price" id="price_' + data['id'] + '">' + atts[0].price + '</label>'
                     }
 
 
@@ -480,7 +480,7 @@
 
 
                 if(num>0){
-                    s+='<div class="col-md-2"><label class="control-label">数量：<span id="num_'+data['id']+'">'+num+'</span></label></div>'
+                    s+='<div class="col-md-2"><label class="control-label">数量：<span class="d_num" id="num_'+data['id']+'">'+num+'</span></label></div>'
                 }else{
                     s+='<div class="col-md-2"><label class="control-label"></label></div>'
                 }
@@ -718,9 +718,15 @@
                         }else{
                             value = ele.html();
                         }
+                        var per_price = ttt.find(".per_price").html() || 0;
+                        var num = ttt.find(".d_num").html() || 0;
+                        var price = ttt.find(".all_price").val() || 0;
                         data.push( {
                             "key":key,
-                            "value":value
+                            "value":value,
+                            "per_price":per_price,
+                            "num":num,
+                            "price":price
                         });
 
                     })

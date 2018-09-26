@@ -240,6 +240,9 @@ public class OfferManageController extends AdminController {
                 for(int k=0;k<data.size();k++){
                     res.put("kind",data.get(k).get("key"));
                     res.put("value",data.get(k).get("value"));
+                    res.put("num",String.valueOf(data.get(k).get("num")));
+                    res.put("price",String.valueOf(data.get(k).get("price")));
+                    res.put("per_price",String.valueOf(data.get(k).get("per_price")));
                     res.put("pro_id",pro_id+"");
                     long t=M("quote_detail").add(res);
                 }

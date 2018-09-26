@@ -62,11 +62,17 @@
                     </div>
 
                     <style type="text/css">
-                        .spare_list .row{ border-bottom: 1px dashed #dedede}
-                        .spare_list .row span{ line-height: 35px}
+                      .row{ border-bottom: 1px dashed #dedede}
+                    .row span{ line-height: 35px}
                     </style>
 
-
+                    <div class="row" style="background-color: #dedede">
+                    <div class="col-md-2"><h5>属性</h5></div>
+                    <div class="col-md-2"><span>选项</span></div>
+                        <div class="col-md-2"><span>单价</span></div>
+                        <div class="col-md-2"><span>数量</span></div>
+                        <div class="col-md-2"><span>总价</span></div>
+                    </div>
                     <div class="spare_list s_list">
 
                     </div>
@@ -200,9 +206,21 @@
                 for (var i = 0; i < spares.length; i++) {
 
                     s+=' <div class="row">\n' +
-                        '                            <div class="col-md-3"><h5>'+spares[i].kind+'</h5></div>\n' +
-                        '                            <div class="col-md-3"><span>'+spares[i].value+'</span></div>\n' +
-                        '                        </div>'
+                        '                            <div class="col-md-2"><h5>'+spares[i].kind+'</h5></div>\n' +
+                        '                            <div class="col-md-2"><span>'+spares[i].value+'</span></div>\n';
+                    var per_price = spares[i].per_price || "";
+                    per_price = per_price==0?"":per_price;
+                    s+=' <div class="col-md-2"><span>'+per_price+'</span></div>'
+
+                    var num = spares[i].num || "";
+                    num = num==0?"":num;
+                    s+=' <div class="col-md-2"><span>'+num+'</span></div>'
+
+                    var price = spares[i].price || "";
+                    price = price==0?"":price;
+                    s+=' <div class="col-md-2"><span>'+price+'</span></div>'
+
+                     s+=   '                        </div>'
                 }
                 t.append(s)
 
