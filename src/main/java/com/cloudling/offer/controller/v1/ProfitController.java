@@ -87,7 +87,7 @@ public class ProfitController extends AdminController {
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.mul(DoubleUtil.mul(unit,1+Double.parseDouble(profit)),(1+tax)),Double.parseDouble(num)),2);
-                        Double pro_price=DoubleUtil.round(DoubleUtil.div(DoubleUtil.mul(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(profit)),2);
+                        Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(profit)),2);
                         Double unit_price=DoubleUtil.round(unit,2);
                         pro.put("unit_price",unit_price+"");
                         pro.put("pro_price",pro_price+"");
