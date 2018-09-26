@@ -33,7 +33,7 @@ public class ProfitController extends AdminController {
         HashMap<String,String> pro=new HashMap<>();
         if (data.get("cat_id").equals("22")){
             if (Integer.parseInt(num)<=5000){
-                pro.put("profit",res.get("watchle5k"));
+
                 if (is_tax.equals("03")){
                     Double unit=DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num));
                     if (profit.equals("0")){
@@ -44,6 +44,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","$");
+                        pro.put("profit",res.get("watchle5k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.div( DoubleUtil.mul(unit,1+Double.parseDouble(profit)),dollar),Double.parseDouble(num)),2);
@@ -53,6 +54,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","$");
+                        pro.put("profit",profit);
                     }
 
 
@@ -67,15 +69,17 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",res.get("watchle5k"));
                     }
                     else {
-                        Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.mul(unit,1+Double.parseDouble(res.get("watchle5k"))),Double.parseDouble(num)),2);
-                        Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("watchle5k"))) ,2);
+                        Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.mul(DoubleUtil.mul(unit,1+Double.parseDouble(profit)),(1+tax)),Double.parseDouble(num)),2);
+                        Double pro_price=DoubleUtil.round(DoubleUtil.div(DoubleUtil.mul(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(profit)),2);
                         Double unit_price=DoubleUtil.round(unit,2);
                         pro.put("unit_price",unit_price+"");
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",profit);
                     }
 
                 }
@@ -89,6 +93,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",res.get("watchle5k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.mul(DoubleUtil.mul(unit,1+Double.parseDouble(profit)),(1+tax)),Double.parseDouble(num)),2);
@@ -98,13 +103,13 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",profit);
                     }
 
                 }
 
             }
             if ( Integer.parseInt(num)>5000 && Integer.parseInt(num)<=10000 ){
-                pro.put("profit",res.get("watch5k_10k"));
                 if (is_tax.equals("03")){
                     Double unit=DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num));
                     if (profit.equals("0")){
@@ -115,6 +120,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","$");
+                        pro.put("profit",res.get("watch5k_10k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.div( DoubleUtil.mul(unit,1+Double.parseDouble(profit)),dollar),Double.parseDouble(num)),2);
@@ -124,6 +130,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","$");
+                        pro.put("profit",profit);
                     }
 
                 }
@@ -137,6 +144,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",res.get("watch5k_10k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul( DoubleUtil.mul(unit,1+Double.parseDouble(profit)),Double.parseDouble(num)),2);
@@ -146,6 +154,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",profit);
                     }
 
                 }
@@ -159,6 +168,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",res.get("watch5k_10k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.mul(DoubleUtil.mul(unit,1+Double.parseDouble(profit)),(1+tax)),Double.parseDouble(num)),2);
@@ -168,12 +178,12 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",profit);
                     }
 
                 }
             }
             if ( Integer.parseInt(num)>10000 && Integer.parseInt(num)<=50000 ){
-                pro.put("profit",res.get("watch10k_50k"));
                 if (is_tax.equals("03")){
                     Double unit=DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num));
                     if (profit.equals("0")){
@@ -184,6 +194,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","$");
+                        pro.put("profit",res.get("watch10k_50k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.div( DoubleUtil.mul(unit,1+Double.parseDouble(profit)),dollar),Double.parseDouble(num)),2);
@@ -193,6 +204,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","$");
+                        pro.put("profit",profit);
                     }
 
                 }
@@ -206,6 +218,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",res.get("watch10k_50k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.mul(unit,1+Double.parseDouble(profit)),Double.parseDouble(num)),2);
@@ -215,6 +228,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",profit);
                     }
 
                 }
@@ -228,6 +242,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",res.get("watch10k_50k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.mul(DoubleUtil.mul(unit,1+Double.parseDouble(profit)),(1+tax)),Double.parseDouble(num)),2);
@@ -237,12 +252,12 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",profit);
                     }
 
                 }
             }
             if ( Integer.parseInt(num)>50000 && Integer.parseInt(num)<=100000 ){
-                pro.put("profit",res.get("watch50k_100k"));
                 if (is_tax.equals("03")){
                     Double unit=DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num));
                     if (profit.equals("0")){
@@ -253,6 +268,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","$");
+                        pro.put("profit",res.get("watch50k_100k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.div( DoubleUtil.mul(unit,1+Double.parseDouble(profit)),dollar),Double.parseDouble(num)),2);
@@ -261,7 +277,8 @@ public class ProfitController extends AdminController {
                         pro.put("unit_price",unit_price+"");
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
-                        pro.put("rate","$");
+                        pro.put("rate","$");pro.put("profit",profit);
+
                     }
 
                 }
@@ -275,6 +292,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",res.get("watch50k_100k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.mul(unit,1+Double.parseDouble(profit)),Double.parseDouble(num)),2);
@@ -284,6 +302,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",profit);
                     }
 
                 }
@@ -297,6 +316,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",res.get("watch50k_100k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.mul(DoubleUtil.mul(unit,1+Double.parseDouble(profit)),(1+tax)),Double.parseDouble(num)),2);
@@ -306,6 +326,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",profit);
                     }
 
                 }
@@ -314,7 +335,6 @@ public class ProfitController extends AdminController {
         }
         else{
             if (Integer.parseInt(num)<=500){
-                pro.put("profit",res.get("clockle500"));
                 if (is_tax.equals("03")){
                     Double unit=DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num));
                     if (profit.equals("0")){
@@ -325,6 +345,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","$");
+                        pro.put("profit",res.get("clockle500"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.div( DoubleUtil.mul(unit,1+Double.parseDouble(profit)),dollar),Double.parseDouble(num)),2);
@@ -334,6 +355,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","$");
+                        pro.put("profit",profit);
                     }
 
                 }
@@ -347,6 +369,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",res.get("clockle500"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.mul(unit,1+Double.parseDouble(profit)),Double.parseDouble(num)),2);
@@ -356,6 +379,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",profit);
                     }
 
                 }
@@ -369,6 +393,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",res.get("clockle500"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.mul(DoubleUtil.mul(unit,1+Double.parseDouble(profit)),(1+tax)),Double.parseDouble(num)),2);
@@ -378,12 +403,12 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",profit);
                     }
 
                 }
             }
             if ( Integer.parseInt(num)>500 && Integer.parseInt(num)<=1000 ){
-                pro.put("profit",res.get("clock500_1k"));
                 if (is_tax.equals("03")){
                     Double unit=DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num));
                     if (profit.equals("0")){
@@ -394,6 +419,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","$");
+                        pro.put("profit",res.get("clock500_1k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.div( DoubleUtil.mul(unit,1+Double.parseDouble(profit)),dollar),Double.parseDouble(num)),2);
@@ -403,6 +429,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","$");
+                        pro.put("profit",profit);
                     }
 
                 }
@@ -416,6 +443,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",res.get("clock500_1k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.mul(unit,1+Double.parseDouble(profit)),Double.parseDouble(num)),2);
@@ -425,6 +453,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",profit);
                     }
 
                 }
@@ -438,6 +467,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",res.get("clock500_1k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.mul(DoubleUtil.mul(unit,1+Double.parseDouble(profit)),(1+tax)),Double.parseDouble(num)),2);
@@ -447,12 +477,13 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",profit);
+
                     }
 
                 }
             }
             if ( Integer.parseInt(num)>1000 && Integer.parseInt(num)<=3000 ){
-                pro.put("profit",res.get("clock1k_3k"));
                 if (is_tax.equals("03")){
                     Double unit=DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num));
                     if (profit.equals("0")){
@@ -463,6 +494,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","$");
+                        pro.put("profit",res.get("clock1k_3k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.div( DoubleUtil.mul(unit,1+Double.parseDouble(profit)),dollar),Double.parseDouble(num)),2);
@@ -472,6 +504,8 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","$");
+                        pro.put("profit",profit);
+
                     }
 
                 }
@@ -485,6 +519,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",res.get("clock1k_3k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.mul(unit,1+Double.parseDouble(profit)),Double.parseDouble(num)),2);
@@ -494,6 +529,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",profit);
                     }
 
                 }
@@ -507,6 +543,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",res.get("clock1k_3k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.mul(DoubleUtil.mul(unit,1+Double.parseDouble(profit)),(1+tax)),Double.parseDouble(num)),2);
@@ -516,12 +553,12 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",profit);
                     }
 
                 }
             }
             if ( Integer.parseInt(num)>3000 && Integer.parseInt(num)<=5000 ){
-                pro.put("profit",res.get("clock3k_5k"));
                 if (is_tax.equals("03")){
                     Double unit=DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num));
                     if (profit.equals("0")){
@@ -532,6 +569,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","$");
+                        pro.put("profit",res.get("clock3k_5k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.div( DoubleUtil.mul(unit,1+Double.parseDouble(profit)),dollar),Double.parseDouble(num)),2);
@@ -541,6 +579,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","$");
+                        pro.put("profit",profit);
                     }
 
                 }
@@ -554,6 +593,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",res.get("clock3k_5k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.mul(unit,1+Double.parseDouble(profit)),Double.parseDouble(num)),2);
@@ -563,6 +603,8 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",profit);
+
                     }
 
                 }
@@ -576,6 +618,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",res.get("clock3k_5k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.mul(DoubleUtil.mul(unit,1+Double.parseDouble(profit)),(1+tax)),Double.parseDouble(num)),2);
@@ -585,12 +628,12 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",profit);
                     }
 
                 }
             }
             if ( Integer.parseInt(num)>5000 && Integer.parseInt(num)<=10000 ){
-                pro.put("profit",res.get("clock5k_10k"));
                 if (is_tax.equals("03")){
                     Double unit=DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num));
                     if (profit.equals("0")){
@@ -601,6 +644,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","$");
+                        pro.put("profit",res.get("clock5k_10k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.div( DoubleUtil.mul(unit,1+Double.parseDouble(profit)),dollar),Double.parseDouble(num)),2);
@@ -610,6 +654,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","$");
+                        pro.put("profit",profit);
                     }
 
                 }
@@ -623,6 +668,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",res.get("clock5k_10k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.mul(unit,1+Double.parseDouble(profit)),Double.parseDouble(num)),2);
@@ -632,6 +678,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",profit);
                     }
 
                 }
@@ -645,6 +692,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",res.get("clock5k_10k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.mul(DoubleUtil.mul(unit,1+Double.parseDouble(profit)),(1+tax)),Double.parseDouble(num)),2);
@@ -654,12 +702,12 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",profit);
                     }
 
                 }
             }
             if ( Integer.parseInt(num)>10000 && Integer.parseInt(num)<=20000 ){
-                pro.put("profit",res.get("clock10k_20k"));
                 if (is_tax.equals("03")){
                     Double unit=DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num));
                     if (profit.equals("0")){
@@ -670,6 +718,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","$");
+                        pro.put("profit",res.get("clock10k_20k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.div( DoubleUtil.mul(unit,1+Double.parseDouble(profit)),dollar),Double.parseDouble(num)),2);
@@ -679,6 +728,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","$");
+                        pro.put("profit",profit);
                     }
 
                 }
@@ -692,6 +742,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",res.get("clock10k_20k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.mul(unit,1+Double.parseDouble(profit)),Double.parseDouble(num)),2);
@@ -701,6 +752,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",profit);
                     }
 
                 }
@@ -714,6 +766,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",res.get("clock10k_20k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.mul(DoubleUtil.mul(unit,1+Double.parseDouble(profit)),(1+tax)),Double.parseDouble(num)),2);
@@ -723,12 +776,12 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",profit);
                     }
 
                 }
             }
             if ( Integer.parseInt(num)>20000){
-                pro.put("profit",res.get("clockme20k"));
                 if (is_tax.equals("03")){
                     Double unit=DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num));
                     if (profit.equals("0")){
@@ -739,6 +792,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","$");
+                        pro.put("profit",res.get("clockme20k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.div( DoubleUtil.mul(unit,1+Double.parseDouble(profit)),dollar),Double.parseDouble(num)),2);
@@ -748,6 +802,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","$");
+                        pro.put("profit",profit);
                     }
 
                 }
@@ -761,6 +816,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",res.get("clockme20k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.mul(unit,1+Double.parseDouble(profit)),Double.parseDouble(num)),2);
@@ -770,6 +826,7 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",profit);
                     }
 
                 }
@@ -783,14 +840,17 @@ public class ProfitController extends AdminController {
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",res.get("clockme20k"));
                     }
                     else {
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.mul(DoubleUtil.mul(unit,1+Double.parseDouble(profit)),(1+tax)),Double.parseDouble(num)),2);
                         Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(profit)),2);
                         Double unit_price=DoubleUtil.round(unit,2);
+                        pro.put("unit_price",unit_price+"");
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
+                        pro.put("profit",profit);
                     }
 
                 }
