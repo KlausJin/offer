@@ -29,6 +29,10 @@
                                placeholder="按客户名称"/>
                     </div>
                     <div class="col-sm-2">
+                        <input value="" type="text" class="form-control" id="sale_name" name="name"
+                               placeholder="按业务员姓名"/>
+                    </div>
+                    <div class="col-sm-2">
                         <select id="status" class="form-control">
                             <option value="2">按报价状态</option>
                             <option value="0">待报价</option>
@@ -49,7 +53,7 @@
                             <th>id</th>
                             <th>产品类型</th>
                             <th>客户</th>
-                            <th>报价时间</th>
+                            <th>提交报价时间</th>
                             <th>业务员</th>
                             <th>状态</th>
                             <th>操作</th>
@@ -144,12 +148,14 @@
 
 
     function tohtml() {
-        var search_name,search_status;
+        var search_name,search_status,search_sale_name;
         search_name=$("#name").val();
         search_status=$("#status option:selected").val();
+        search_sale_name=$("#sale_name").val();
         var d = {"page": current_page}
         d['search_name'] = search_name;
         d['search_status'] = search_status;
+        d['search_sale_name'] = search_sale_name;
         $.getJSON("getManageOfferList", d, function (res) {
             if (res.code == "success") {
                 var da = res.data, s = '', data = da['list'], num = da['num'], pi = "";

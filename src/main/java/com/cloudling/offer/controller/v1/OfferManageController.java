@@ -42,6 +42,7 @@ public class OfferManageController extends AdminController {
         String limit = Integer.parseInt(page) * 10 + ",10";
         String search_name=I("search_name")==""?"":I("search_name").toString();
         String search_status=I("search_status").equals("2")?"":I("search_status").toString();
+        String search_sale_name=I("search_sale_name")==""?"":I("search_sale_name").toString();
         HashMap<String, Object> res = new HashMap<>();
         HashMap<Integer, String> statusTypes = new HashMap<Integer, String>() {
             /**
@@ -75,6 +76,10 @@ public class OfferManageController extends AdminController {
         if (search_status.length()>0){
             sb.append(" and a.status="+search_status);
             snum.append(" and a.status="+search_status);
+        }
+        if (search_sale_name.length()>0){
+            sb.append(" and c.name like '%"+search_sale_name+"%'");
+            snum.append(" and c.name like '%"+search_sale_name+"%'");
         }
         sb.append(" order by id desc ");
         sb.append(" limit "+limit);
