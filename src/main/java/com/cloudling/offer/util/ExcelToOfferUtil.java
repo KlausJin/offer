@@ -255,7 +255,13 @@ public class ExcelToOfferUtil {
                 newRegion.setFirstColumn(region.getFirstColumn());
                 newRegion.setLastRow(targetRowTo);
                 newRegion.setLastColumn(region.getLastColumn());
-                currentSheet.addMergedRegion(newRegion);
+                try {
+                    currentSheet.addMergedRegion(newRegion);
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+
             }
         }
         for (i = pStartRow; i <= pEndRow; i++) {

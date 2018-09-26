@@ -35,10 +35,10 @@ public class IndexController extends AdminController {
                 redirect("/v1/offerManage/list");
                 break;
             case "3":
-                redirect("/v1/offerSale/list");
+                redirect("/v1/client/list");
                 break;
             case "4":
-                redirect("/v1/offerSale/list");
+                redirect("/v1/client/list");
                 break;
             default:
                 break;

@@ -705,7 +705,7 @@
 
         _w['save_product']=function () {
             save_data[index] = {};
-            var data = {};
+            var data = [];
             $(".s_list").each(function () {
                 var t = $(this);
                 t.find("h5").each(function () {
@@ -718,7 +718,11 @@
                         }else{
                             value = ele.html();
                         }
-                        data[key]=value;
+                        data.push( {
+                            "key":key,
+                            "value":value
+                        });
+
                     })
                 })
             })

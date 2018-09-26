@@ -11,9 +11,7 @@ import com.cloudling.offer.server.ControllerContext;
 import com.cloudling.offer.util.TimeUtil;
 
 import java.sql.Time;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * @Description TODO
@@ -201,7 +199,7 @@ public class OfferManageController extends AdminController {
     public void do_edit(){
         try{
             String quote_info=I("data").toString();
-            HashMap<String, Object> d = JSON.parseObject(quote_info, new HashMap<String, Object>().getClass());
+            HashMap<String, String> d = JSON.parseObject(quote_info, new HashMap<String, String>().getClass());
             String offer_id=d.get("offer_id").toString();
             String manage_id = d.get("manage_id").toString();
             HashMap<String, String> quoteData = new HashMap<>();
@@ -210,11 +208,13 @@ public class OfferManageController extends AdminController {
             quoteData.put("manage_id",manage_id);
             quoteData.put("create_time",TimeUtil.getShortTimeStamp()+"");
             long id=M("quote").add(quoteData);
-            List<HashMap<String, Object>> products =
-                    (List<HashMap<String, Object>>) JSON.parseArray(d.get("products").toString(), new HashMap<String, Object>().getClass());
+            String ps = d.get("products");
+            List<LinkedHashMap<String, Object>> products =
+                    (List<LinkedHashMap <String, Object>>) JSON.parseArray(ps, new LinkedHashMap <String, String>().getClass());
             HashMap<String, String> proData = new HashMap<>();
             for (int i = 0; i < products.size(); i++) {
-                HashMap<String, Object> product = products.get(i);
+                LinkedHashMap<String, Object> product = products.get(i);
+
                 String pro_name=product.get("product").toString();
                 String pro_num=product.get("num").toString();
                 String per_price=product.get("per_price").toString();
@@ -234,13 +234,16 @@ public class OfferManageController extends AdminController {
                 proData.put("pic_url",pic_url);
                 long pro_id=M("quote_pro").add(proData);
                 HashMap<String, String> res = new HashMap<>();
-                HashMap<String, String> data = JSON.parseObject(product.get("data").toString(), new HashMap<String, Object>().getClass());
-                for (String key:data.keySet()) {
-                    res.put("kind",key);
-                    res.put("value",data.get(key));
+
+                List<HashMap<String,String>> data = (List<HashMap<String,String>>)JSON.parseArray( product.get("data").toString(),new HashMap<String,String>().getClass());
+
+                for(int k=0;k<data.size();k++){
+                    res.put("kind",data.get(k).get("key"));
+                    res.put("value",data.get(k).get("value"));
                     res.put("pro_id",pro_id+"");
                     long t=M("quote_detail").add(res);
                 }
+
             }
             offerData.put("status",Dictionary.ISOFFER+"");
             offerData.put("m_id",manage_id);
