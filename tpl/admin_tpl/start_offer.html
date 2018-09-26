@@ -437,7 +437,7 @@
             Offer.add_pro_btn(data);
             Offer.clear_product();
             Offer.show_spare(data, $(".spare_list"));
-            // Offer.clear_common_spare();
+          Offer.clear_common_spare();
             hide_pic();
         }
 
@@ -465,6 +465,7 @@
                 Offer.clear_common_spare();
                 $(".btn_pro_list").find("button").removeClass("btn-primary")
                 Offer.clear_product();
+                hide_pic();
                 index = pos + 1;
 
                 Offer.show_spare(list[pos], $(".spare_list"));

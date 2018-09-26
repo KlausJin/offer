@@ -105,7 +105,7 @@
                     </div>
                     <div class="form-group" style=" font-size: 13px; background-color: #dedede; padding-bottom: 10px">
                         <label class="col-md-2 control-label" >数量：<span class="h_num"></span></label>
-                        <label class="col-md-2 control-label" >单价：<span class="h_price"></span></label>
+                        <label class="col-md-2 control-label" >成本价：<span class="h_price"></span></label>
                         <label class="col-md-2 control-label" >利润：<span class="h_pro"></span></label>
                         <label class="col-md-2 control-label" >CBM：<span class="cbm"></span></label>
                         <label class="col-md-2 control-label" >客户价：<span class="c_price"></span></label>
@@ -666,6 +666,7 @@
                 save_attr()
                 $(".btn_pro_list").find("button").removeClass("btn-primary")
                 Offer.clear_product();
+
                 index = pos;
                 $("#pro_btn_" + pos).addClass("btn-primary")
                 Offer.show_spare(products[index],$(".spare_list"))
@@ -705,10 +706,12 @@
 
             $.getdata("/v1/profit/getProfit",{"product_id":products[index]['id'],"num":num,"offer_id":${offer_id},"price":all_price.toFixed(2),"is_tax":is_tax,"profit":profit},function (data) {
                 $(".h_sale").html(data.rate+data.total)
+                if(profit==0)
                 $(".h_ll").val(data.profit)
                 $(".h_pro").html(data.rate+data.pro_price);
                 $(".cbm").html(data.cbm);
-                $(".h_rate").html(data.rate)
+                $(".h_rate").html(data.rate);
+                $(".h_price").html(data.rate+data.unit_price)
                 $(".c_price").html(data.rate+data.total)
             })
 
@@ -760,6 +763,7 @@
                 "per_price":$(".h_price").html(),
                 "profit":$(".h_ll").val(),
                 "data":data,
+                "rate":$(".h_rate").html(),
                 "cbm":$(".cbm").html(),
                 "c_price":$(".c_price").html(),
                 "rate":$(".h_rate").html(),
