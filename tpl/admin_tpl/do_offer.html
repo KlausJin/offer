@@ -79,9 +79,14 @@
 
                     <legend>客户备注</legend>
                     <div class="row" id="note" style="margin-bottom: 20px">
-                        <div class="col-md-8" style="font-size: 16px">
-                        ${note}
-                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label d_spare" >客户备注</label>
+
+                            <div class="col-md-6" style="line-height: 34px">
+                                ${note}
+                            </div>
+                            <div class="col-md-2"><input id="client_note" oninput="make_price()" type="text" value="0" class="form-control all_price"></div>                </div>
+
                     </div>
 
                     <legend>产品图片</legend>
@@ -94,10 +99,13 @@
 
 
                     <legend>汇总</legend>
-                    <div class="form-group" style=" font-size: 14px; background-color: #ccc; padding-bottom: 10px">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" ><label>利润率：</label></label>
+                        <div class="col-md-2"><input oninput="changeProfit($(this))" class="h_ll form-control"></div>
+                    </div>
+                    <div class="form-group" style=" font-size: 13px; background-color: #dedede; padding-bottom: 10px">
                         <label class="col-md-2 control-label" >数量：<span class="h_num"></span></label>
                         <label class="col-md-2 control-label" >单价：<span class="h_price"></span></label>
-                        <label class="col-md-2 control-label" >利润率：<span class="h_ll"></span></label>
                         <label class="col-md-2 control-label" >利润：<span class="h_pro"></span></label>
                         <label class="col-md-2 control-label" >CBM：<span class="cbm"></span></label>
                         <label class="col-md-2 control-label" >客户价：<span class="c_price"></span></label>
@@ -130,13 +138,19 @@
 
 <script>
     var photos = ${photos};
-
+    var profit = 0;
     var list = [];
     var index = 0;
     var custom_id = 0;
     var product={},products = [],oids={},rids={},common_spares=[],save_data=[],attrs=[];
     cb = {};
     var lls = {},is_tax;
+
+    function changeProfit(t) {
+        profit = t.val();
+        make_price()
+    }
+
     (function (_w, $) {
 
 
@@ -689,13 +703,13 @@
             $(".h_all").html(all_price.toFixed(2));
 
 
-            $.getdata("/v1/profit/getProfit",{"product_id":products[index]['id'],"num":num,"offer_id":${offer_id},"price":all_price.toFixed(2),"is_tax":is_tax},function (data) {
-                $(".h_sale").html(data.total)
-                $(".h_ll").html(data.profit)
-                $(".h_pro").html(data.pro_price);
+            $.getdata("/v1/profit/getProfit",{"product_id":products[index]['id'],"num":num,"offer_id":${offer_id},"price":all_price.toFixed(2),"is_tax":is_tax,"profit":profit},function (data) {
+                $(".h_sale").html(data.rate+data.total)
+                $(".h_ll").val(data.profit)
+                $(".h_pro").html(data.rate+data.pro_price);
                 $(".cbm").html(data.cbm);
                 $(".h_rate").html(data.rate)
-                $(".c_price").html(data.total)
+                $(".c_price").html(data.rate+data.total)
             })
 
 
@@ -731,19 +745,31 @@
 
                     })
                 })
+
+                data.push({
+                    "key":"客户备注",
+                    "value":"${note}",
+                    "price":$("#client_note").val(),
+                    "per_price":"0",
+                    "num":"0"
+                })
             })
             var sa = {
                 "product":products[index]['code'],
                 "num":$(".h_num").html(),
                 "per_price":$(".h_price").html(),
-                "profit":$(".h_ll").html(),
-                "sale":$(".h_sale").html(),
+                "profit":$(".h_ll").val(),
                 "data":data,
                 "cbm":$(".cbm").html(),
                 "c_price":$(".c_price").html(),
                 "rate":$(".h_rate").html(),
                 "pic_url":$("#photo").attr('src')
             }
+            sa['per_price'] = sa['per_price'].replace(sa.rate,"")
+            sa['c_price'] = sa['c_price'].replace(sa.rate,"")
+
+
+
             save_data[index] = sa;
             console.log(save_data);
         }

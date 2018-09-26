@@ -310,15 +310,15 @@
         _w['make_price'] = function () {
             var pro = products[index];
            $(".h_num").html(pro.pro_num);
-           $(".h_price").html(pro.per_price);
+           $(".h_price").html(pro.rate+pro.per_price);
 
             $(".h_ll").html(pro.profit);
 
             $(".cbm").html(pro.cbm);
 
-$(".h_rate").html(pro.rate)
 
-            $(".c_price").html(pro.c_price)
+
+            $(".c_price").html(pro.rate+pro.c_price)
         }
 
 

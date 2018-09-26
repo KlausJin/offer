@@ -437,7 +437,7 @@
             Offer.add_pro_btn(data);
             Offer.clear_product();
             Offer.show_spare(data, $(".spare_list"));
-            Offer.clear_common_spare();
+            // Offer.clear_common_spare();
             hide_pic();
         }
 
@@ -716,7 +716,8 @@
 
 
 
-        console.log(JSON.stringify(data))
+        console.log(data)
+
 
 
         $("#sub").attr("disabled",true).html('正在提交，请稍后')
