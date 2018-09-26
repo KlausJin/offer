@@ -61,26 +61,16 @@ public class ProfitController extends AdminController {
                 }
                 if (is_tax.equals("01")){
                     Double unit=DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num));
-                    if (profit.equals("0")){
+                    Double p = profit.equals("0")?Double.parseDouble(res.get("watchle5k")):Double.parseDouble(profit);
+
                         Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.mul(unit,1+Double.parseDouble(res.get("watchle5k"))),Double.parseDouble(num)),2);
-                        Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(res.get("watchle5k"))) ,2);
+                        Double pro_price=DoubleUtil.round(DoubleUtil.mul(DoubleUtil.div(Double.parseDouble(price),Integer.parseInt(num)),p) ,2);
                         Double unit_price=DoubleUtil.round(unit,2);
                         pro.put("unit_price",unit_price+"");
                         pro.put("pro_price",pro_price+"");
                         pro.put("total",total+"");
                         pro.put("rate","￥");
-                        pro.put("profit",res.get("watchle5k"));
-                    }
-                    else {
-                        Double total= DoubleUtil.round( DoubleUtil.mul(DoubleUtil.mul(DoubleUtil.mul(unit,1+Double.parseDouble(profit)),(1+tax)),Double.parseDouble(num)),2);
-                        Double pro_price=DoubleUtil.round(DoubleUtil.div(DoubleUtil.mul(Double.parseDouble(price),Integer.parseInt(num)),Double.parseDouble(profit)),2);
-                        Double unit_price=DoubleUtil.round(unit,2);
-                        pro.put("unit_price",unit_price+"");
-                        pro.put("pro_price",pro_price+"");
-                        pro.put("total",total+"");
-                        pro.put("rate","￥");
-                        pro.put("profit",profit);
-                    }
+                        pro.put("profit",p+"");
 
                 }
                 if (is_tax.equals("02")){
