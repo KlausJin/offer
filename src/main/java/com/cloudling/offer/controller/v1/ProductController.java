@@ -158,7 +158,7 @@ public class ProductController extends AdminController {
     public void getClientInfo() {
         ClientModel cm = new ClientModel();
         String sale_id=admin_type==Dictionary.FOLLOW?M("person").where("id="+user.get("follow_id")).find().get("id"):user.get("id");
-        ArrayList<HashMap<String, String>> list = cm.field("id,name").where("sale_id=" + sale_id).select();
+        ArrayList<HashMap<String, String>> list = cm.field("id,name").where("sale_id=" + sale_id+" or sale_id=0").select();
         success(list);
     }
 

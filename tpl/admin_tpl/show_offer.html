@@ -92,6 +92,7 @@
                         <label class="col-md-2 control-label" >数量：<span class="h_num"></span></label>
                         <label class="col-md-2 control-label" >成本价：<span class="h_price"></span></label>
                         <label class="col-md-2 control-label" >利润率：<span class="h_ll"></span></label>
+                        <label class="col-md-2 control-label" >利润：<span class="h_pro"></span></label>
                         <label class="col-md-2 control-label" >CBM：<span class="cbm"></span></label>
                         <label class="col-md-2 control-label" >客户价：<span class="c_price"></span></label>
                         <label class="col-md-2 control-label" style="display: none">rate：<span class="h_rate"></span></label>
@@ -310,8 +311,8 @@
         _w['make_price'] = function () {
             var pro = products[index];
            $(".h_num").html(pro.pro_num);
-           $(".h_price").html(pro.rate+pro.per_price);
-
+           $(".h_price").html(pro.per_price);
+            $(".h_pro").html(mul(pro.per_price,pro.profit).toFixed(2));
             $(".h_ll").html(pro.profit);
 
             $(".cbm").html(pro.cbm);
@@ -324,6 +325,19 @@
 
     })(window, jQuery)
 
+    // 浮点数相乘
+    function mul(a, b) {
+        var c = 0,
+            d = a.toString(),
+            e = b.toString();
+        try {
+            c += d.split(".")[1].length;
+        } catch (f) {}
+        try {
+            c += e.split(".")[1].length;
+        } catch (f) {}
+        return Number(d.replace(".", "")) * Number(e.replace(".", "")) / Math.pow(10, c);
+    }
 
 
 

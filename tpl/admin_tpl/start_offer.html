@@ -416,6 +416,7 @@
                 $(".btn_cli").show();
             },
             "show_client": function (data) {
+
                 var s = '<span>' + data.name + '</span>';
                 $(".btn_cli").find(".btn_cli_list").append(s);
             },
@@ -437,7 +438,7 @@
             Offer.add_pro_btn(data);
             Offer.clear_product();
             Offer.show_spare(data, $(".spare_list"));
-          Offer.clear_common_spare();
+         // Offer.clear_common_spare();
             hide_pic();
         }
 
@@ -480,6 +481,7 @@
         }
 
         _w['search_cli'] = function (data) {
+
             Clienter.show_cli_btn();
             Clienter.show_client(data);
         }
@@ -495,6 +497,7 @@
         products = ${attrs};
         var client = ${client}
             search_cli(client);
+
         custom_id = client['id'];
 
         for(var i=0;i<ps.length;i++){
@@ -649,10 +652,7 @@
             add_common_spare(res);
             if (re_offer) {
                 getProduct()
-                $.getdata("/v1/product/getClient", {"id": id}, function (res) {
-                    search_cli(res);
-                    custom_id = id;
-                })
+
             }
         })
 
@@ -707,6 +707,7 @@
             $.warn("请先添加商品")
             return;
         }
+
         data['products'] = products;
         data['custom_id'] = custom_id;
         data['sale_id'] =${id};

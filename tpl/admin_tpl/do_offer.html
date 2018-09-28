@@ -138,7 +138,7 @@
 
 <script>
     var photos = ${photos};
-    var profit = 0;
+    var profit = [];
     var list = [];
     var index = 0;
     var custom_id = 0;
@@ -147,7 +147,7 @@
     var lls = {},is_tax;
 
     function changeProfit(t) {
-        profit = t.val();
+       profit[index] = t.val()
         make_price()
     }
 
@@ -399,6 +399,10 @@
 
                 var atts = this.data.f_attrBeans;
 
+                if(this.data.name.indexOf("数量")>-1){
+                    $(".h_num").html(atts[0].num);
+                }
+
                 if(this.data.name.indexOf("费用")>-1){
                     $(".h_num").html(atts[0].num);
                 }
@@ -573,7 +577,7 @@
 
                     }
 
-                    s+='<div class="col-md-2"><input oninput="make_price()" id="all_price_'+data['id']+'" type="text" value="'+v.toFixed(4)+'" ' +
+                    s+='<div class="col-md-2"><input readonly oninput="make_price()" id="all_price_'+data['id']+'" type="text" value="'+v.toFixed(4)+'" ' +
                         'class="form-control all_price"></div>'
                 }else{
                     var id = data['id'];
@@ -583,10 +587,10 @@
 
                     }
                     if(atts[0].price==-2 || atts[0].price==-3){
-                        s+='<div class="col-md-2"><input oninput="make_price()" id="all_price_'+data['id']+'" type="text" value="0" class="form-control all_price"></div>'
+                        s+='<div class="col-md-2"><input readonly oninput="make_price()" id="all_price_'+data['id']+'" type="text" value="0" class="form-control all_price"></div>'
                     }
 
-                    else s+='<div class="col-md-2"><input oninput="make_price()" id="all_price_'+data['id']+'"  type="text" value="'+atts[0].price.toFixed(4)+'" class="form-control all_price"></div>'
+                    else s+='<div class="col-md-2"><input readonly oninput="make_price()" id="all_price_'+data['id']+'"  type="text" value="'+atts[0].price.toFixed(4)+'" class="form-control all_price"></div>'
 
                 }
 
@@ -672,7 +676,22 @@
                 Offer.show_spare(products[index],$(".spare_list"))
                 Offer.show_spare(common_spares[index],$(".s_spare_list"))
                 Offer.show_photo(photos[index])
+
+
+                var has_save = save_data[index] || false;
+                if(has_save){
+                    var data = save_data[index]['data'];
+                    for(var i=0;i<data.length;i++){
+                        if(data[i]['key']=='客户备注'){
+                            $("#client_note").val(data[i]['price']);
+                        }
+                    }
+                }else{
+                    $("#client_note").val(0);
+                }
+
                 make_price();
+
                 //
                 var has_data = attrs[pos] || false;
                 if (has_data) {
@@ -703,15 +722,16 @@
 
             $(".h_all").html(all_price.toFixed(2));
 
-
-            $.getdata("/v1/profit/getProfit",{"product_id":products[index]['id'],"num":num,"offer_id":${offer_id},"price":all_price.toFixed(2),"is_tax":is_tax,"profit":profit},function (data) {
+            var p = profit[index] || 0;
+            $.getdata("/v1/profit/getProfit",{"product_id":products[index]['id'],"num":num,"offer_id":${offer_id},"price":all_price.toFixed(2),"is_tax":is_tax,"profit":p},function (data) {
                 $(".h_sale").html(data.rate+data.total)
-                if(profit==0)
+
                 $(".h_ll").val(data.profit)
-                $(".h_pro").html(data.rate+data.pro_price);
+                profit[index] = data.profit;
+                $(".h_pro").html(data.pro_price);
                 $(".cbm").html(data.cbm);
                 $(".h_rate").html(data.rate);
-                $(".h_price").html(data.rate+data.unit_price)
+                $(".h_price").html(data.unit_price)
                 $(".c_price").html(data.rate+data.total)
             })
 
@@ -721,6 +741,7 @@
         }
 
         _w['save_product']=function () {
+
             save_data[index] = {};
             var data = [];
             $(".s_list").each(function () {
@@ -761,7 +782,7 @@
                 "product":products[index]['code'],
                 "num":$(".h_num").html(),
                 "per_price":$(".h_price").html(),
-                "profit":$(".h_ll").val(),
+                "profit":profit[index],
                 "data":data,
                 "rate":$(".h_rate").html(),
                 "cbm":$(".cbm").html(),
@@ -874,6 +895,8 @@
 
 
     function tohtml(data) {
+
+
 
         $("select").each(function () {
 

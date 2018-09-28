@@ -156,7 +156,7 @@ public class OfferSaleController extends AdminController {
         //属性
         List<HashMap<String, Object>> attrs = new ArrayList<>();
         for (int i = 0; i < products.size(); i++) {
-            ArrayList<HashMap<String, String>> t = M("offer_attr").field("spare_id,attr_id,num").where("offer_id=" + id + " and product_id=" + products.get(i).get("product_id")).select();
+            ArrayList<HashMap<String, String>> t = M("offer_attr").field("spare_id,attr_id,num").where("offer_id=" + id + " and offer_product_id=" + products.get(i).get("id")).select();
             HashMap<String, Object> attr = new HashMap<>();
             attr.put("id", products.get(i).get("product_id"));
             HashMap<String, String> as = new HashMap<>();
@@ -226,7 +226,7 @@ public class OfferSaleController extends AdminController {
                 numdata.put("offer_id", offer_id + "");
                 numdata.put("product_id", product_id);
                 numdata.put("url",product.get("photo").toString());
-                M("offer_product").add(numdata);
+               long offer_product_id =  M("offer_product").add(numdata);
                 HashMap<String, String> res = new HashMap<>();
                 HashMap<String, String> attrs = JSON.parseObject(product.get("attrs").toString(), new HashMap<String, Object>().getClass());
                 HashMap<String, String> nums = new HashMap<>();
@@ -252,6 +252,7 @@ public class OfferSaleController extends AdminController {
                     res.put("num", num);
                     res.put("product_id", product_id);
                     res.put("offer_id", offer_id + "");
+                    res.put("offer_product_id",offer_product_id+"");
                     long t = M("offer_attr").add(res);
 
 
