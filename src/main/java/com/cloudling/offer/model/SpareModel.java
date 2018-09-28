@@ -97,7 +97,7 @@ public class SpareModel extends Model {
 
         List<SpareBean> list =new ArrayList<>();
         OfferAttrModel offerAttrModel = OfferAttrModel.getInstance(offer_id,offer_product_id);
-        ArrayList<HashMap<String, String>> map = offerAttrModel.getSpareByOn(product_id,offer_id);//查到选择的常用配件（attr_id=on）
+        ArrayList<HashMap<String, String>> map = offerAttrModel.getSpareByOn(offer_id,offer_product_id);//查到选择的常用配件（attr_id=on）
 
         for (int i=0;i<map.size();i++){
             HashMap<String,String> res=getSpare_real(map.get(i).get("spare_id")); //根据spareid（offerattr表）差 （spare表）id
