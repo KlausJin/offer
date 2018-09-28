@@ -64,16 +64,16 @@ public class AttrModel extends Model {
      * @return
      */
 
-    public List<AttrBean> getlistBySpareId1(String spare_id,String offer_id,String product_id,String cat_id){
+    public List<AttrBean> getlistBySpareId1(String spare_id,String offer_id,String product_id,String cat_id,String offer_product_id){
         List<AttrBean> list =new ArrayList<>();
         ArrayList<HashMap<String, String>> map =getspareId(spare_id);    // 根据传入的spareid 查attr表的父属性
-        OfferAttrModel offerAttrModel = OfferAttrModel.getInstance(offer_id);
+        OfferAttrModel offerAttrModel = OfferAttrModel.getInstance(offer_id,offer_product_id);
         for (int i=0;i<map.size();i++){
             HashMap<String,String> res= map.get(i);
-            HashMap<String, String> data= offerAttrModel.getMapBySpareId(res.get("id"), offer_id);
+            HashMap<String, String> data= offerAttrModel.getOfferAttrBySpareId(res.get("id"),offer_id,offer_product_id);
             if (data==null){                                     //查找对业务员隐藏的属性
                 AttrBean bean =new AttrBean(res);
-                bean.f_attrBeans=new AttrModel().getBeanByAttrId(bean.id,offer_id,product_id,cat_id);
+                bean.f_attrBeans=new AttrModel().getBeanByAttrId(bean.id,offer_id,product_id,cat_id,offer_product_id);
                 list.add(bean);
             }
             else{                                            //查找业务员选择的属性
@@ -87,7 +87,7 @@ public class AttrModel extends Model {
                     bean.f_attrBeans=new ArrayList<>();
                     bean.f_attrBeans.add(emptyBean);
                 }
-                else bean.f_attrBeans=new AttrModel().getBeanByAttrId(data.get("spare_id"),offer_id,product_id,cat_id);
+                else bean.f_attrBeans=new AttrModel().getBeanByAttrId(data.get("spare_id"),offer_id,product_id,cat_id,offer_product_id);
                 list.add(bean);
             }
         }
@@ -95,13 +95,12 @@ public class AttrModel extends Model {
     }
 
 
-    public List<AttrBean> getBeanByAttrId(String spare_id, String offer_id,String product_id,String cat_id) {
-        OfferProductModel offerProductModel = new OfferProductModel();
+    public List<AttrBean> getBeanByAttrId(String spare_id, String offer_id,String product_id,String cat_id,String offer_product_id) {
         ProductModel productModel = new ProductModel();
         MaterialModel materialModel = new MaterialModel();
-        OfferAttrModel offerAttrModel = OfferAttrModel.getInstance(offer_id);
+        OfferAttrModel offerAttrModel = OfferAttrModel.getInstance(offer_id,offer_product_id);
         HashMap<String, String> catid = productModel.getCatId(product_id);   //查找产品编号
-        HashMap<String, String> res = offerAttrModel.getMapBySpareId(spare_id, offer_id);//查找offerattr的父属性id
+        HashMap<String, String> res = offerAttrModel.getOfferAttrBySpareId(spare_id,offer_id,offer_product_id);//查找offerattr的父属性id
 
         List<AttrBean> list = new ArrayList<>();
         if (res==null|| res.get("attr_id").equals("-1")) {    //spareid为空的或者attrid为-1的进入循环
@@ -236,19 +235,19 @@ public class AttrModel extends Model {
      * @auther: CodyLongo
      * @modified:
      */
-    public List<AttrBean> getSpareId_real(String spare_id,String offer_id,String product_id){
+    public List<AttrBean> getSpareId_real(String spare_id,String offer_id,String product_id,String offer_product_id){
         ArrayList<HashMap<String,String>> map=getspareId(spare_id);
-        OfferAttrModel offerAttrModel = OfferAttrModel.getInstance(offer_id);
+        OfferAttrModel offerAttrModel = OfferAttrModel.getInstance(offer_id,offer_product_id);
         List<AttrBean> list =new ArrayList<>();
         for (int i=0;i<map.size();i++){
             HashMap<String,String> res= map.get(i);
-            HashMap<String ,String> data=offerAttrModel.getOfferAttrBySpareId(map.get(i).get("id"),offer_id,product_id);
+            HashMap<String ,String> data=offerAttrModel.getOfferAttrBySpareId(map.get(i).get("id"),offer_id,offer_product_id);
             if (data==null){
                 continue;
             }
             else{
                 AttrBean bean =new AttrBean(res);
-                bean.f_attrBeans=new AttrModel().getBeanByParentId_real(bean.id,offer_id,product_id);
+                bean.f_attrBeans=new AttrModel().getBeanByParentId_real(bean.id,offer_id,product_id,offer_product_id);
                 list.add(bean);
             }
 
@@ -256,10 +255,10 @@ public class AttrModel extends Model {
         return list;
 
     }
-    public List<AttrBean> getBeanByParentId_real(String spare_id,String offer_id,String product_id){
+    public List<AttrBean> getBeanByParentId_real(String spare_id,String offer_id,String product_id,String offer_product_id){
         OfferProductModel offerProductModel =new OfferProductModel();
-        OfferAttrModel offerAttrModel = OfferAttrModel.getInstance(offer_id);
-        HashMap<String ,String> map=offerAttrModel.getOfferAttrBySpareId(spare_id,offer_id,product_id);
+        OfferAttrModel offerAttrModel = OfferAttrModel.getInstance(offer_id,offer_product_id);
+        HashMap<String ,String> map=offerAttrModel.getOfferAttrBySpareId(spare_id,offer_id,offer_product_id);
         List<AttrBean> list =new ArrayList<>();
         HashMap<String,String>  res=getListByAttrId(map.get("attr_id"));
         if (res.get("formula").equals("8")|| res.get("formula").equals("9")){

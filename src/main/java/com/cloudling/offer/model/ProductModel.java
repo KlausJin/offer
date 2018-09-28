@@ -66,7 +66,7 @@ public class ProductModel extends Model {
         for (int i=0;i<res.size();i++){                                                         //遍历offer里的product
             HashMap<String, String> map= where("id="+res.get(i).get("product_id")).find();
             ProductBean bean = new ProductBean(map);                                            //product放入bean
-           bean.spareBeans = new SpareModel().getBeansByProductId1(bean.id,offer_id,map.get("cat_id"));// 传值
+           bean.spareBeans = new SpareModel().getBeansByProductId1(bean.id,offer_id,map.get("cat_id"),res.get(i).get("id"));// 传值
             list.add(bean);
 
         }
@@ -109,7 +109,7 @@ public class ProductModel extends Model {
         for (int i=0;i<res.size();i++){
             HashMap<String, String> map= where("id="+res.get(i).get("product_id")).find(); //遍历
             ProductBean bean = new ProductBean(map);//放入bean
-            bean.spareBeans = new SpareModel().getBeansByCat_id_real1(bean.id,offer_id);//传值到下一层
+            bean.spareBeans = new SpareModel().getBeansByCat_id_real1(bean.id,offer_id,res.get(i).get("id"));//传值到下一层
            list.add(bean);
 
        }
