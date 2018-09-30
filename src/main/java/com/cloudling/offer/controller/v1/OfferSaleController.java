@@ -259,7 +259,7 @@ public class OfferSaleController extends AdminController {
                 numdata.put("offer_id", offer_id + "");
                 numdata.put("product_id", product_id);
                 numdata.put("url",product.get("photo").toString());
-                M("offer_product").add(numdata);
+                long offer_product_id=M("offer_product").add(numdata);
                 HashMap<String, String> res = new HashMap<>();
                 HashMap<String, String> attrs = JSON.parseObject(product.get("attrs").toString(), new HashMap<String, Object>().getClass());
                 HashMap<String, String> nums = new HashMap<>();
@@ -285,6 +285,7 @@ public class OfferSaleController extends AdminController {
                     res.put("num", num);
                     res.put("product_id", product_id);
                     res.put("offer_id", offer_id + "");
+                    res.put("offer_product_id", offer_product_id + "");
                     long t = M("offer_attr").add(res);
 
 
