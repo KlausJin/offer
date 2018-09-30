@@ -119,10 +119,13 @@
                     <legend>汇总</legend>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><label>利润率：</label></label>
-                        <div class="col-md-2"><input type="text" id="h_ll" oninput="changeProfit($(this))" value=""
-                                                     class="form-control h_llk"></div>
+                        <div class="col-md-2">
+                            <input type="text" id="h_ll"  onchange="changeProfit($(this))"
+                                   class="form-control h_ll" >
+                        </div>
+
                         <label class="col-md-2 control-label"><label>经理改动备注：</label></label>
-                        <div class="col-md-6"><input id="manage_note" class="form-control" style="color: red"></div>
+                        <div class="col-md-6"><input id="manage_note" class="form-control manage_note" style="color: red"></div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><label>经理留言：</label></label>
