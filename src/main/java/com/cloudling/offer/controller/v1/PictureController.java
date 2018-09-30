@@ -134,6 +134,41 @@ public class PictureController extends AdminController {
             error("没有此产品");
         }
     }
+    /**
+     *选择附属图片
+     *
+     * @param
+     */
+    @action
+    public void select_picture_aff() {
+        String offer_product_id = I("offer_product_id") == null ? "" : I("offer_product_id").toString();
+        PictureModel pictureModel =new PictureModel();
+        ArrayList<HashMap<String, String>> res = pictureModel.getPictureByName(offer_product_id , user.get("id"));
+        assign("pic",JSON.toJSON(res));
+        assign("offer_product_id",offer_product_id);
+        toHtml("admin_tpl/picture_aff_sale");
+    }
+    /**
+     *附属图片存到
+     *
+     * @param
+     */
+    public void addProductPic_aff(){
+        String id = I("offer_product_id") == null ? "" : I("offer_product_id").toString();
+        String url = I("url") == null ? "" : I("url").toString();
+        HashMap<String, String> res = new HashMap<>();
+        res.put("url", url);
+        res.put("offer_product_id",id);
+        try {
+                M("offer_product_attach_pic").add(res);
+            success("数据库更新成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            // TODO: handle exception
+            error("数据加载到数据库失败");
+        }
+    }
+
 
     /**
      *选择的图片存到offer_product

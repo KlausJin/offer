@@ -640,7 +640,7 @@
             alert("请先添加产品")
             return
         }
-        $.open('/v1/picture/select_picture?code='+list[index-1]['code']+'',function (data) {
+                $.open('/v1/picture/select_picture?code='+list[index-1]['code']+'',function (data) {
             products[index-1]['photo'] = data;
             show_photo(data)
         })

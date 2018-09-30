@@ -95,7 +95,7 @@ public class Bean {
         return data;
 
     }
-    public static Map<String, String> objectToMap(Object object, FormatField format) {
+                public static Map<String, String> objectToMap(Object object, FormatField format) {
         if (object == null) {
             return null;
         }

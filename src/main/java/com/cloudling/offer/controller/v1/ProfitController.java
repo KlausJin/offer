@@ -18,7 +18,7 @@ public class ProfitController extends AdminController {
     @action
     public void getProfit(){
         OfferProductModel offerProductModel=new OfferProductModel();
-        String profit = I("profit") == null ? "" : I("profit").toString();
+       String profit = I("profit") == null ? "" : I("profit").toString();
         String offer_id = I("offer_id") == null ? "" : I("offer_id").toString();
         String product_id = I("product_id") == null ? "" : I("product_id").toString();
         String num = I("num") == null ? "" : I("num").toString();
