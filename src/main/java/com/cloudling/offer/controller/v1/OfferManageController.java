@@ -128,11 +128,7 @@ public class OfferManageController extends AdminController {
             products.get(i).put("detail",JSON.toJSONString(details));
         }
         assign("products",JSON.toJSONString(products));
-
-
         toHtml("admin_tpl/show_offer");
-
-
     }
 
     /**

@@ -26,6 +26,38 @@ public class OfferSaleController extends AdminController {
         toHtml("admin_tpl/offer_sale_list");
     }
 
+    /**
+     * @Description: 查看报价需求详情
+     * @param:
+     * @return:
+     * @auther: CodyLongo
+     * @modified:
+     */
+    @action
+    public void detail_offer(){
+        String offer_id=I("id").toString();
+        HashMap<String, String> offer = M("offer").where("id=" + offer_id).find();
+        if(offer==null){
+            error("不存在该报价");
+            return;
+        }
+        HashMap<String, String> client = M("client").where("id=" + offer.get("client_id")).find();
+        assign("client",JSON.toJSONString(client));
+
+//        HashMap<String, String> quote = M("quote").where("offer_id=" + offer_id).find();
+//        String qid = quote.get("id");
+//        assign("message",quote.get("message"));
+
+        OfferModel offerModel = new OfferModel();
+        Bean t=offerModel.getProductBean_sale(offer_id);
+        HashMap<String, Object> b =t.getData();
+
+
+        assign("products",b);
+        toHtml("admin_tpl/show_offer_sale");
+    }
+
+
     @action
     public void getSaleOfferList() {
         String page = I("get.page").toString();
