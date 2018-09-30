@@ -114,6 +114,10 @@
     }
 
     function del(id) {
+        if (${admin_type}>=3){
+            alert("您无权删除所属客户，如有错误操作需删除该客户，请联系经理进行删除")
+            return;
+        }
         if(window.confirm("确认要删除该客户吗？")){
             $.getJSON("remove?id=" + id, {}, function (res) {
                 if (res.code == "success") {

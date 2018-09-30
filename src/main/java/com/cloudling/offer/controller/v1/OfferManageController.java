@@ -119,6 +119,7 @@ public class OfferManageController extends AdminController {
 
         HashMap<String, String> quote = M("quote").where("offer_id=" + offer_id).find();
         String qid = quote.get("id");
+        assign("message",quote.get("message"));
 
         ArrayList<HashMap<String, String>> products = M("quote_pro").where("quote_id=" + qid).select();
 
@@ -207,11 +208,13 @@ public class OfferManageController extends AdminController {
             HashMap<String, String> d = JSON.parseObject(quote_info, new HashMap<String, String>().getClass());
             String offer_id=d.get("offer_id").toString();
             String manage_id = d.get("manage_id").toString();
+            String message=d.get("message").toString();
             HashMap<String, String> quoteData = new HashMap<>();
             HashMap<String, String> offerData = new HashMap<>();
             quoteData.put("offer_id",offer_id);
             quoteData.put("manage_id",manage_id);
             quoteData.put("create_time",TimeUtil.getShortTimeStamp()+"");
+            quoteData.put("message",message);
             long id=M("quote").add(quoteData);
             String ps = d.get("products");
             List<LinkedHashMap<String, Object>> products =

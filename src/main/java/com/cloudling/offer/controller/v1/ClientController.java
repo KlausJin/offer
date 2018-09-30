@@ -48,16 +48,17 @@ public class ClientController extends AdminController {
             sb.append(sql);
             sb1.append(sql1);
             if (admin_type == Dictionary.SALESMAN) {
-                sb.append(" where a.sale_id=" + user.get("id"));
-                sb1.append(" where a.sale_id=" + user.get("id"));
+                sb.append(" where a.sale_id=" + user.get("id")+" or a.sale_id=0");
+                sb1.append(" where a.sale_id=" + user.get("id")+" or a.sale_id=0");
             } else if (admin_type == Dictionary.FOLLOW) {
-                sb.append(" where a.sale_id=" + user.get("follow_id"));
-                sb1.append(" where a.sale_id=" + user.get("follow_id"));
+                sb.append(" where a.sale_id=" + user.get("follow_id")+" or a.sale_id=0");
+                sb1.append(" where a.sale_id=" + user.get("follow_id")+" or a.sale_id=0");
             }
             sb.append(" order by a.create_time desc limit " + limit);
             ArrayList<HashMap<String, String>> list = M("client").query(sb.toString());
             for (int i = 0; i < list.size(); i++) {
                 list.get(i).put("create_time", TimeUtil.stampToDate(list.get(i).get("create_time"), "yyyy-MM-dd HH:mm:ss"));
+                list.get(i).put("sale_name",list.get(i).get("sale_name")==null?"公司通用":list.get(i).get("sale_name"));
             }
             res.put("list", list);
             res.put("num", M("client").query(sb1.toString()).size());
@@ -67,16 +68,17 @@ public class ClientController extends AdminController {
             sb.append(sql);
             sb1.append(sql1);
             if (admin_type == Dictionary.SALESMAN) {
-                sb.append(" and a.sale_id=" + user.get("id"));
-                sb1.append(" and a.sale_id=" + user.get("id"));
+                sb.append(" and a.sale_id=" + user.get("id")+" or a.sale_id=0");
+                sb1.append(" and a.sale_id=" + user.get("id")+" or a.sale_id=0");
             } else if (admin_type == Dictionary.FOLLOW) {
-                sb.append(" and a.sale_id=" + user.get("follow_id"));
-                sb1.append(" and a.sale_id=" + user.get("follow_id"));
+                sb.append(" and a.sale_id=" + user.get("follow_id")+" or a.sale_id=0");
+                sb1.append(" and a.sale_id=" + user.get("follow_id")+" or a.sale_id=0");
             }
             sb.append(" order by a.create_time desc limit " + limit);
             ArrayList<HashMap<String, String>> list = M("client").query(sb.toString());
             for (int i = 0; i < list.size(); i++) {
                 list.get(i).put("create_time", TimeUtil.stampToDate(list.get(i).get("create_time"), "yyyy-MM-dd HH:mm:ss"));
+                list.get(i).put("sale_name",list.get(i).get("sale_name")==null?"公司通用":list.get(i).get("sale_name"));
             }
             res.put("list", list);
             res.put("num", M("client").query(sb1.toString()).size());
