@@ -33,19 +33,36 @@
     .btn_pro {
         padding-bottom: 20px
     }
-    .loading{ padding-left: 30px; position: relative; font-size: 14px; color: #999; margin-left: 40%; margin-top: 200px}
-    .loading:after{content: ''; left: 5px; position: absolute; background-image: url("/images/sloading.gif");
-        background-size: 20px 20px; width: 20px; height: 20px; top: 15px}
+
+    .loading {
+        padding-left: 30px;
+        position: relative;
+        font-size: 14px;
+        color: #999;
+        margin-left: 40%;
+        margin-top: 200px
+    }
+
+    .loading:after {
+        content: '';
+        left: 5px;
+        position: absolute;
+        background-image: url("/images/sloading.gif");
+        background-size: 20px 20px;
+        width: 20px;
+        height: 20px;
+        top: 15px
+    }
 
     /*.attr_diabled{ position: relative}*/
     /*.attr_diabled:after{ content: ''; position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 99; background-color: #dedede; opacity: 0.6}*/
 
 </style>
 <%include("head.html"){}%>
-<div class="page-content" >
+<div class="page-content">
     <div class="row">
         <%include("left.html"){}%>
-        <div class="col-md-10" >
+        <div class="col-md-10">
             <div class="content-box-large" style="min-height: 650px">
                 <div class="panel-heading">
                     <div class="panel-title">产品报价</div>
@@ -53,7 +70,7 @@
 
                 <div class="loading panel-body">正在加载数据请稍后</div>
 
-                <div style="display: none" class="panel-body data-content form-horizontal" >
+                <div style="display: none" class="panel-body data-content form-horizontal">
                     <div class="row btn_pro" style="display: none; ">
                         <div class="col-md-8">
                             <span class="btn_pro_list">
@@ -80,36 +97,46 @@
                     <legend>客户备注</legend>
                     <div class="row" id="note" style="margin-bottom: 20px">
                         <div class="form-group">
-                            <label class="col-md-2 control-label d_spare" >客户备注</label>
+                            <label class="col-md-2 control-label d_spare">客户备注</label>
 
                             <div class="col-md-6" style="line-height: 34px">
                                 ${note}
                             </div>
-                            <div class="col-md-2"><input id="client_note" oninput="make_price()" type="text" value="0" class="form-control all_price"></div>                </div>
+                            <div class="col-md-2"><input id="client_note" oninput="make_price()" type="text" value="0"
+                                                         class="form-control all_price"></div>
+                        </div>
 
                     </div>
 
                     <legend>产品图片</legend>
-                    <div class="row"style="margin-bottom: 20px">
-                        <div   class="col-md-8" style="font-size: 16px">
+                    <div class="row" style="margin-bottom: 20px">
+                        <div class="col-md-8" style="font-size: 16px">
                             <img id="photo" style="width: 100px;height: 100px">
                         </div>
                     </div>
 
 
-
                     <legend>汇总</legend>
                     <div class="form-group">
-                        <label class="col-md-2 control-label" ><label>利润率：</label></label>
-                        <div class="col-md-2"><input oninput="changeProfit($(this))" class="h_ll form-control"></div>
+                        <label class="col-md-2 control-label"><label>利润率：</label></label>
+                        <div class="col-md-2"><input type="text" id="h_ll" oninput="changeProfit($(this))" value=""
+                                                     class="form-control h_llk"></div>
+                        <label class="col-md-2 control-label"><label>经理改动备注：</label></label>
+                        <div class="col-md-6"><input id="manage_note" class="form-control" style="color: red"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><label>经理留言：</label></label>
+                        <div class="col-md-6"><textarea id="message" class="form-control" style="height:80px
+  "></textarea></div>
                     </div>
                     <div class="form-group" style=" font-size: 13px; background-color: #dedede; padding-bottom: 10px">
-                        <label class="col-md-2 control-label" >数量：<span class="h_num"></span></label>
-                        <label class="col-md-2 control-label" >成本价：<span class="h_price"></span></label>
-                        <label class="col-md-2 control-label" >利润：<span class="h_pro"></span></label>
-                        <label class="col-md-2 control-label" >CBM：<span class="cbm"></span></label>
-                        <label class="col-md-2 control-label" >客户价：<span class="c_price"></span></label>
-                        <label class="col-md-2 control-label" style="display: none">rate：<span class="h_rate"></span></label>
+                        <label class="col-md-2 control-label">数量：<span class="h_num"></span></label>
+                        <label class="col-md-2 control-label">成本价：<span class="h_price"></span></label>
+                        <label class="col-md-2 control-label">利润：<span class="h_pro"></span></label>
+                        <label class="col-md-2 control-label">CBM：<span class="cbm"></span></label>
+                        <label class="col-md-2 control-label">客户价：<span class="c_price"></span></label>
+                        <label class="col-md-2 control-label" style="display: none">rate：<span
+                                class="h_rate"></span></label>
                     </div>
 
 
@@ -142,12 +169,12 @@
     var list = [];
     var index = 0;
     var custom_id = 0;
-    var product={},products = [],oids={},rids={},common_spares=[],save_data=[],attrs=[];
+    var product = {}, products = [], oids = {}, rids = {}, common_spares = [], save_data = [], attrs = [];
     cb = {};
-    var lls = {},is_tax;
+    var lls = {}, is_tax;
 
     function changeProfit(t) {
-       profit[index] = t.val()
+        profit[index] = t.val()
         make_price()
     }
 
@@ -170,38 +197,37 @@
         })
 
 
-
         _w['formulas'] = {
-            1:function (a,data) {
-                return data['num']*data['price']/1000;
+            1: function (a, data) {
+                return data['num'] * data['price'] / 1000;
             }
 
 
         }
 
         //初始化产品
-        _w['initProducts']=function(data){
-            product =  data;
+        _w['initProducts'] = function (data) {
+            product = data;
             products = product.productBeans;
             initTab();
-            Offer.show_spare(products[0],$(".spare_list"))
+            Offer.show_spare(products[0], $(".spare_list"))
             Offer.show_photo(photos[0])
 
         }
         //初始化常用配件
-        _w['initCommonProducts']=function(data){
+        _w['initCommonProducts'] = function (data) {
             common_spares = data.productBeans;
-            Offer.show_spare(common_spares[0],$(".s_spare_list"))
+            Offer.show_spare(common_spares[0], $(".s_spare_list"))
             Offer.show_photo(photos[0])
             make_price();
         }
 
         //初始化导航
-        _w['initTab']=function(){
+        _w['initTab'] = function () {
             $(".btn_pro").show();
             var p = '';
 
-            for(var i=0;i<products.length;i++){
+            for (var i = 0; i < products.length; i++) {
                 p += '<button id="pro_btn_' + i + '" onclick="switch_pro(' + i + ')" class="btn-default form-control brs">' + products[i].code + '</button>';
             }
 
@@ -210,10 +236,6 @@
             $("#pro_btn_0").addClass("btn-primary")
 
         }
-
-
-
-
 
 
         _w['Offer'] = {
@@ -260,8 +282,8 @@
                 bindAttr();
 
             },
-            "show_photo":function (s) {
-                $("#photo").attr("src",s)
+            "show_photo": function (s) {
+                $("#photo").attr("src", s)
             },
             "show_common_spare": function (data, t) {
                 var spares = data.spareBeans, s = '';
@@ -315,7 +337,6 @@
         _w['bindAttr'] = function () {
 
 
-
             $("select").each(function () {
                 var t = $(this), id = t.attr("data-id"), v = $(this).find("option:selected").attr("data-code");
                 var child_ids = rids[id] || [];
@@ -348,14 +369,15 @@
 
             $("select").on("change", function () {
                 var t = $(this), id = t.attr("data-id"), v = $(this).find("option:selected").attr("data-code"),
-                    price = $(this).find("option:selected").attr("data-price"),num = $(this).find("option:selected").attr("data-num") || 0
+                    price = $(this).find("option:selected").attr("data-price"),
+                    num = $(this).find("option:selected").attr("data-num") || 0
 
 
-                $("#price_"+id).html(price)
-                $("#num_"+id).html(num)
-                var f =  t.find("option:selected").attr("data-for") || 0;
+                $("#price_" + id).html(price)
+                $("#num_" + id).html(num)
+                var f = t.find("option:selected").attr("data-for") || 0;
 
-                make_for(price,num,f,id)
+                make_for(price, num, f, id)
 
                 make_price();
 
@@ -387,7 +409,6 @@
                 }
 
 
-
             })
         }
 
@@ -396,18 +417,17 @@
             this.getHtml = function () {
 
 
-
                 var atts = this.data.f_attrBeans;
 
-                if(this.data.name.indexOf("数量")>-1){
+                if (this.data.name.indexOf("数量") > -1) {
                     $(".h_num").html(atts[0].num);
                 }
 
-                if(this.data.name.indexOf("费用")>-1){
+                if (this.data.name.indexOf("费用") > -1) {
                     $(".h_num").html(atts[0].num);
                 }
 
-                if(this.data.name.indexOf("是否含税")>-1){
+                if (this.data.name.indexOf("是否含税") > -1) {
                     is_tax = atts[0].code;
                 }
 
@@ -420,9 +440,9 @@
                     if (atts[0].num == -2) {
                         s += '<input placeholder="请输入' + name + '的数量" type="number" data-id="' + atts[0].id + '"  class="form-control input-num">'
                     } else {
-                        s += '<label class="col-md-10 control-label d_attr" style="text-align: left">' + name ;
+                        s += '<label class="col-md-10 control-label d_attr" style="text-align: left">' + name;
 
-                        s+='</label>';
+                        s += '</label>';
                     }
 
                 }
@@ -444,7 +464,7 @@
                     s += '<select data-or-id="' + or_id + '" data-relate-id="' + relate_id + '" data-id="' + data["id"] + '" class="form-control d_attr">'
                     for (var i = 0; i < atts.length; i++) {
                         var num = atts[i].num || 0;
-                        s += '<option data-for="'+atts[i].formula+'" data-num="'+num+'" data-price="'+atts[i].price+'" data-code="' + atts[i].code + '" value="' + atts[i].id + '">' + atts[i].name + '</option>'
+                        s += '<option data-for="' + atts[i].formula + '" data-num="' + num + '" data-price="' + atts[i].price + '" data-code="' + atts[i].code + '" value="' + atts[i].id + '">' + atts[i].name + '</option>'
                     }
                     s += '</select>'
                 }
@@ -454,8 +474,8 @@
                 var price = atts[0].price;
 
 
-                if(price==0){
-                    if(atts.length==1) {
+                if (price == 0) {
+                    if (atts.length == 1) {
                         s +=
                             '                </div>';
                         return s;
@@ -465,23 +485,23 @@
                 var num = atts[0].num || 0;
                 var formula = atts[0].formula || 0;
 
-                if(formula>0){
+                if (formula > 0) {
 
-                    s+='<div class="col-md-2">';
+                    s += '<div class="col-md-2">';
 
-                    s+='<label class="control-label">';
+                    s += '<label class="control-label">';
                     var is_m = atts[0].is_material || 0;
 
-                    s+='单价：'
+                    s += '单价：'
 
-                    s+='<span class="per_price" id="price_'+data['id']+'">'+atts[0].price+'</label>'
+                    s += '<span class="per_price" id="price_' + data['id'] + '">' + atts[0].price + '</label>'
 
 
-                    s+='</div>'
-                }else{
-                    s+='<div class="col-md-2">';
+                    s += '</div>'
+                } else {
+                    s += '<div class="col-md-2">';
 
-                    if(atts[0].price>=0) {
+                    if (atts[0].price >= 0) {
 
                         s += '<label class="control-label">';
 
@@ -492,111 +512,109 @@
                     }
 
 
-                    s+='</div>'
+                    s += '</div>'
                 }
 
 
-
-                if(num>0){
-                    s+='<div class="col-md-2"><label class="control-label">数量：<span class="d_num" id="num_'+data['id']+'">'+num+'</span></label></div>'
-                }else{
-                    s+='<div class="col-md-2"><label class="control-label"></label></div>'
+                if (num > 0) {
+                    s += '<div class="col-md-2"><label class="control-label">数量：<span class="d_num" id="num_' + data['id'] + '">' + num + '</span></label></div>'
+                } else {
+                    s += '<div class="col-md-2"><label class="control-label"></label></div>'
                 }
 
 
-                if(formula>0){
+                if (formula > 0) {
 
-                    switch (formula){
+                    switch (formula) {
                         case 0:
 
                             break;
                         case 1:
-                            v=mul(atts[0].num,atts[0].price);
+                            v = mul(atts[0].num, atts[0].price);
                             var id = data['id'];
 
-                            cb["cb_"+id]=function (a,b) {
-                                var nv = mul(a,b);
+                            cb["cb_" + id] = function (a, b) {
+                                var nv = mul(a, b);
 
-                                $("#all_price_"+id).val(nv.toFixed(4));
+                                $("#all_price_" + id).val(nv.toFixed(4));
                             }
                             break;
                         case 2:
-                            v=mul(mul(atts[0].num,atts[0].num),atts[0].price)/10000;
+                            v = mul(mul(atts[0].num, atts[0].num), atts[0].price) / 10000;
                             var id = data['id'];
 
-                            cb["cb_"+id]=function (a,b) {
-                                var nv = mul(mul(b,b),a)/10000;
+                            cb["cb_" + id] = function (a, b) {
+                                var nv = mul(mul(b, b), a) / 10000;
 
-                                $("#all_price_"+id).val(nv.toFixed(4));
+                                $("#all_price_" + id).val(nv.toFixed(4));
                             }
                             break;
                         case 6:
-                            v=mul(atts[0].num,atts[0].price);
+                            v = mul(atts[0].num, atts[0].price);
                             var id = data['id'];
 
-                            cb["cb_"+id]=function (a,b) {
-                                var nv = mul(a,b);
+                            cb["cb_" + id] = function (a, b) {
+                                var nv = mul(a, b);
 
-                                $("#all_price_"+id).val(nv.toFixed(4));
+                                $("#all_price_" + id).val(nv.toFixed(4));
                             }
                             break;
                         case 3:
                         case 4:
-                            v=mul(atts[0].num,atts[0].price);
-                            v = div(v,10000);
+                            v = mul(atts[0].num, atts[0].price);
+                            v = div(v, 10000);
                             var id = data['id'];
 
-                            cb["cb_"+id]=function (a,b) {
-                                var nv = mul(a,b);
-                                v = div(v,10000);
+                            cb["cb_" + id] = function (a, b) {
+                                var nv = mul(a, b);
+                                v = div(v, 10000);
 
-                                $("#all_price_"+id).val(nv.toFixed(4));
+                                $("#all_price_" + id).val(nv.toFixed(4));
                             }
                             break;
                         case 7:
 
-                            v=div(atts[0].price,atts[0].num);
+                            v = div(atts[0].price, atts[0].num);
 
                             var id = data['id'];
 
-                            cb["cb_"+id]=function (a,b) {
-                                var nv =div(a,b)
+                            cb["cb_" + id] = function (a, b) {
+                                var nv = div(a, b)
 
 
-                                $("#all_price_"+id).val(nv.toFixed(4));
+                                $("#all_price_" + id).val(nv.toFixed(4));
                             }
                             break;
                         case 8:
-                            v = div(3500,atts[0].num)+div(mul(atts[0].price,atts[0].CBM),atts[0].packing);
+                            v = div(3500, atts[0].num) + div(mul(atts[0].price, atts[0].CBM), atts[0].packing);
 
                             break;
                         case 9:
-                            v = div(mul(atts[0].price,atts[0].CBM),atts[0].packing)
+                            v = div(mul(atts[0].price, atts[0].CBM), atts[0].packing)
                             break;
 
 
                     }
 
-                    s+='<div class="col-md-2"><input readonly oninput="make_price()" id="all_price_'+data['id']+'" type="text" value="'+v.toFixed(4)+'" ' +
+                    s += '<div class="col-md-2"><input readonly oninput="make_price()" id="all_price_' + data['id'] + '" type="text" value="' + v.toFixed(4) + '" ' +
                         'class="form-control all_price"></div>'
-                }else{
+                } else {
                     var id = data['id'];
-                    cb["cb_"+id]=function (a) {
+                    cb["cb_" + id] = function (a) {
 
-                        $("#all_price_"+id).val(a);
+                        $("#all_price_" + id).val(a);
 
                     }
-                    if(atts[0].price==-2 || atts[0].price==-3){
-                        s+='<div class="col-md-2"><input readonly oninput="make_price()" id="all_price_'+data['id']+'" type="text" value="0" class="form-control all_price"></div>'
+                    if (atts[0].price == -2 || atts[0].price == -3) {
+                        s += '<div class="col-md-2"><input  oninput="make_price()" id="all_price_' + data['id'] + '" type="text" value="0" class="form-control all_price"></div>'
                     }
 
-                    else s+='<div class="col-md-2"><input readonly oninput="make_price()" id="all_price_'+data['id']+'"  type="text" value="'+atts[0].price.toFixed(4)+'" class="form-control all_price"></div>'
+                    else s += '<div class="col-md-2"><input readonly oninput="make_price()" id="all_price_' + data['id'] + '"  type="text" value="' + atts[0].price.toFixed(4) + '" class="form-control all_price"></div>'
 
                 }
 
 
-
-                s+=
+                s +=
                     '                </div>';
 
 
@@ -608,7 +626,7 @@
 
         }
 
-        _w['make_for']=function(a,b,f,sid) {
+        _w['make_for'] = function (a, b, f, sid) {
             var sf = parseInt(f)
             b = b || 0.00;
             a = a || 0.00;
@@ -617,7 +635,7 @@
                     $("#all_price_" + sid).val(a);
                     break;
                 case 1:
-                    var nv = mul(a,b);
+                    var nv = mul(a, b);
                     $("#all_price_" + sid).val(nv.toFixed(4));
                     break;
                 case 2:
@@ -673,20 +691,20 @@
 
                 index = pos;
                 $("#pro_btn_" + pos).addClass("btn-primary")
-                Offer.show_spare(products[index],$(".spare_list"))
-                Offer.show_spare(common_spares[index],$(".s_spare_list"))
+                Offer.show_spare(products[index], $(".spare_list"))
+                Offer.show_spare(common_spares[index], $(".s_spare_list"))
                 Offer.show_photo(photos[index])
 
 
                 var has_save = save_data[index] || false;
-                if(has_save){
+                if (has_save) {
                     var data = save_data[index]['data'];
-                    for(var i=0;i<data.length;i++){
-                        if(data[i]['key']=='客户备注'){
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i]['key'] == '客户备注') {
                             $("#client_note").val(data[i]['price']);
                         }
                     }
-                }else{
+                } else {
                     $("#client_note").val(0);
                 }
 
@@ -706,13 +724,13 @@
             $(".all_price").each(function () {
                 var t = $(this);
                 var v = t.val() || 0;
-                price = add(price,parseFloat(v))
+                price = add(price, parseFloat(v))
             })
 
             $(".h_price").html(price.toFixed(2));
             var num = $(".h_num").html();
 
-            if(num=="" || isNaN(num)){
+            if (num == "" || isNaN(num)) {
                 alert('该报价需求没有选择出货数量，无法报价')
                 $(".btn-sub").hide()
                 return;
@@ -723,8 +741,15 @@
             $(".h_all").html(all_price.toFixed(2));
 
             var p = profit[index] || 0;
-            $.getdata("/v1/profit/getProfit",{"product_id":products[index]['id'],"num":num,"offer_id":${offer_id},"price":all_price.toFixed(2),"is_tax":is_tax,"profit":p},function (data) {
-                $(".h_sale").html(data.rate+data.total)
+            $.getdata("/v1/profit/getProfit", {
+                "product_id": products[index]['id'],
+                "num": num,
+                "offer_id":${offer_id},
+                "price": all_price.toFixed(2),
+                "is_tax": is_tax,
+                "profit": p
+            }, function (data) {
+                $(".h_sale").html(data.rate + data.total)
 
                 $(".h_ll").val(data.profit)
                 profit[index] = data.profit;
@@ -732,74 +757,72 @@
                 $(".cbm").html(data.cbm);
                 $(".h_rate").html(data.rate);
                 $(".h_price").html(data.unit_price)
-                $(".c_price").html(data.rate+data.total)
+                $(".c_price").html(data.rate + data.total)
             })
-
-
 
 
         }
 
-        _w['save_product']=function () {
+        _w['save_product'] = function () {
 
             save_data[index] = {};
             var data = [];
             $(".s_list").each(function () {
                 var t = $(this);
                 t.find("h5").each(function () {
-                    var tt = $(this),spare_name=tt.html();
+                    var tt = $(this), spare_name = tt.html();
                     tt.next().find(".form-group").each(function () {
-                        var ttt = $(this),key = spare_name+"-"+ttt.find(".d_spare").html();
-                        var ele = ttt.find(".d_attr"),value;
-                        if(ele.get(0).tagName=="SELECT"){
+                        var ttt = $(this), key = spare_name + "-" + ttt.find(".d_spare").html();
+                        var ele = ttt.find(".d_attr"), value;
+                        if (ele.get(0).tagName == "SELECT") {
                             value = ele.find("option:selected").html();
-                        }else{
+                        } else {
                             value = ele.html();
                         }
                         var per_price = ttt.find(".per_price").html() || 0;
                         var num = ttt.find(".d_num").html() || 0;
                         var price = ttt.find(".all_price").val() || 0;
-                        data.push( {
-                            "key":key,
-                            "value":value,
-                            "per_price":per_price,
-                            "num":num,
-                            "price":price
+                        data.push({
+                            "key": key,
+                            "value": value,
+                            "per_price": per_price,
+                            "num": num,
+                            "price": price
                         });
 
                     })
                 })
 
                 data.push({
-                    "key":"客户备注",
-                    "value":"${note}",
-                    "price":$("#client_note").val(),
-                    "per_price":"0",
-                    "num":"0"
+                    "key": "客户备注",
+                    "value": "${note}",
+                    "price": $("#client_note").val(),
+                    "per_price": "0",
+                    "num": "0"
                 })
             })
             var sa = {
-                "product":products[index]['code'],
-                "num":$(".h_num").html(),
-                "per_price":$(".h_price").html(),
-                "profit":profit[index],
-                "data":data,
-                "rate":$(".h_rate").html(),
-                "cbm":$(".cbm").html(),
-                "c_price":$(".c_price").html(),
-                "rate":$(".h_rate").html(),
-                "pic_url":$("#photo").attr('src')
+                "product": products[index]['code'],
+                "num": $(".h_num").html(),
+                "per_price": $(".h_price").html(),
+                "profit": profit[index],
+                "data": data,
+                "rate": $(".h_rate").html(),
+                "cbm": $(".cbm").html(),
+                "c_price": $(".c_price").html(),
+                "rate": $(".h_rate").html(),
+                "pic_url": $("#photo").attr('src'),
+                //    "manage_note":$("#manage_note").val()
             }
-            sa['per_price'] = sa['per_price'].replace(sa.rate,"")
-            sa['c_price'] = sa['c_price'].replace(sa.rate,"")
-
+            sa['per_price'] = sa['per_price'].replace(sa.rate, "")
+            sa['c_price'] = sa['c_price'].replace(sa.rate, "")
 
 
             save_data[index] = sa;
             console.log(save_data);
         }
 
-        _w['save_attr'] = function(){
+        _w['save_attr'] = function () {
             $("select").each(function () {
                 attrs[index] = {};
                 var t = $(this), attr_id = t.attr("data-id"), v = t.val();
@@ -810,12 +833,12 @@
 
         _w['subProduct'] = function () {
             save_product();
-            if(save_data.length!=products.length){
+            if (save_data.length != products.length) {
                 alert('还有产品未完成报价，无法提交')
                 return;
             }
-            var d = {"offer_id":"${offer_id}","manage_id":"${id}","products":JSON.stringify(save_data)};
-
+            var message=$("#message").val();
+            var d = {"offer_id": "${offer_id}", "manage_id": "${id}","message":message, "products": JSON.stringify(save_data)};
 
             $.post("/v1/offerManage/do_edit", {"data": JSON.stringify(d)}, function (res) {
                 var ret = JSON.parse(res);
@@ -830,7 +853,6 @@
         }
 
     })(window, jQuery)
-
 
 
     // 浮点数求和
@@ -872,10 +894,12 @@
             e = b.toString();
         try {
             c += d.split(".")[1].length;
-        } catch (f) {}
+        } catch (f) {
+        }
         try {
             c += e.split(".")[1].length;
-        } catch (f) {}
+        } catch (f) {
+        }
         return Number(d.replace(".", "")) * Number(e.replace(".", "")) / Math.pow(10, c);
     }
 
@@ -885,17 +909,17 @@
             f = 0;
         try {
             e = a.toString().split(".")[1].length;
-        } catch (g) {}
+        } catch (g) {
+        }
         try {
             f = b.toString().split(".")[1].length;
-        } catch (g) {}
+        } catch (g) {
+        }
         return c = Number(a.toString().replace(".", "")), d = Number(b.toString().replace(".", "")), mul(c / d, Math.pow(10, f - e));
     }
 
 
-
     function tohtml(data) {
-
 
 
         $("select").each(function () {
@@ -905,13 +929,13 @@
             if (v) {
                 t.val(v)
                 var price = t.find("option:selected").attr("data-price");
-                $("#price_"+id).html(price)
+                $("#price_" + id).html(price)
                 var num = t.find("option:selected").attr("data-num") || 0;
 
-                $("#num_"+id).html(num)
-                var f =  t.find("option:selected").attr("data-for") || 0;
+                $("#num_" + id).html(num)
+                var f = t.find("option:selected").attr("data-for") || 0;
 
-                make_for(price,num,f,attr_id)
+                make_for(price, num, f, attr_id)
 
 
             }
@@ -924,7 +948,7 @@
 
         $.getdata("/v1/offerManage/getProduct", {"id":${offer_id}}, function (res) {
             initProducts(res)
-            $.getdata("/v1/offerManage/getProduct_real",{"id":${offer_id}},function (res) {
+            $.getdata("/v1/offerManage/getProduct_real", {"id":${offer_id}}, function (res) {
                 initCommonProducts(res);
                 $(".loading").hide();
                 $(".data-content").show();
@@ -932,12 +956,7 @@
         })
 
 
-
-
-
     })
-
-
 
 
 </script>

@@ -114,6 +114,13 @@
                             </div>
                             <img id="product_pic" style="width: 100px;height: 100px; display: none">
                         </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group btn-block add_attach_pic"
+                                 align="center" onclick="search_attach_picture()">+选择附属图片
+                            </div>
+                            <img id="product_attach_pic" style="width: 100px;height: 100px; display: none">
+                        </div>
                     </div>
                     <legend>客户资料</legend>
                     <div class="row client_choose_type">
@@ -616,6 +623,18 @@
     }
 
     function search_picture() {
+
+        if(list[index-1]==null){
+            alert("请先添加产品")
+            return
+        }
+        $.open('/v1/picture/select_picture?code='+list[index-1]['code']+'',function (data) {
+            products[index-1]['photo'] = data;
+            show_photo(data)
+        })
+    }
+
+    function search_attach_picture() {
 
         if(list[index-1]==null){
             alert("请先添加产品")

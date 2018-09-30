@@ -14,8 +14,8 @@ public class OfferSaleController extends AdminController {
 
     public OfferSaleController(ControllerContext context) {
         super(context);
-        if (admin_type<=MANAGER){
-            pri=false;
+        if (admin_type <= MANAGER) {
+            pri = false;
             return;
         }
     }
@@ -79,7 +79,7 @@ public class OfferSaleController extends AdminController {
             mp.put("cat_id", catTypes.get(Integer.parseInt(list.get(i).get("cat_id"))));
             mp.put("client_name", list.get(i).get("client_name"));
             mp.put("id", list.get(i).get("id"));
-            mp.put("quote_id",list.get(i).get("quote_id"));
+            mp.put("quote_id", list.get(i).get("quote_id"));
             ArrayList<HashMap<String, String>> subRes = M("offer").where("parent_id=" + list.get(i).get("id")).select();
             for (int j = 0; j < subRes.size(); j++) {
                 subRes.get(j).put("create_time", TimeUtil.stampToDate(subRes.get(j).get("create_time"), "yyyy-MM-dd HH:mm:ss"));
@@ -123,7 +123,7 @@ public class OfferSaleController extends AdminController {
         assign("products", "[]");
         assign("client", "[]");
         assign("attrs", "[]");
-        assign("note","");
+        assign("note", "");
         toHtml("admin_tpl/start_offer");
     }
 
@@ -139,7 +139,7 @@ public class OfferSaleController extends AdminController {
 
         HashMap<String, String> offer = M("offer").where("id=" + id).find();
 
-        assign("note",offer.get("note"));
+        assign("note", offer.get("note"));
 
         //客户
         HashMap<String, String> client = M("client").where("id=" + offer.get("client_id")).find();
@@ -167,14 +167,13 @@ public class OfferSaleController extends AdminController {
                 if (num > 0) {
                     //判断父属性是否有多个子属性
                     int count = M("attr").where("parent_id=" + t.get(j).get("spare_id")).count();
-                    if(count==1){
-                        as.put(t.get(j).get("spare_id")+"__"+t.get(j).get("attr_id"),num+"");
-                    }
-                    else {
+                    if (count == 1) {
+                        as.put(t.get(j).get("spare_id") + "__" + t.get(j).get("attr_id"), num + "");
+                    } else {
                         as.put("n_" + t.get(j).get("spare_id"), num + "");
                         as.put(t.get(j).get("spare_id"), t.get(j).get("attr_id"));
                     }
-                }else{
+                } else {
                     as.put(t.get(j).get("spare_id"), t.get(j).get("attr_id"));
                 }
 
@@ -214,7 +213,7 @@ public class OfferSaleController extends AdminController {
             data.put("create_time", create_time + "");
             data.put("parent_id", parent_id);
             data.put("cat_id", cat_id);
-            data.put("note",note);
+            data.put("note", note);
             OfferModel om = new OfferModel();
             long offer_id = om.add(data);
             List<HashMap<String, Object>> products =
@@ -225,8 +224,8 @@ public class OfferSaleController extends AdminController {
                 String product_id = product.get("id").toString();
                 numdata.put("offer_id", offer_id + "");
                 numdata.put("product_id", product_id);
-                numdata.put("url",product.get("photo").toString());
-               long offer_product_id =  M("offer_product").add(numdata);
+                numdata.put("url", product.get("photo").toString());
+                long offer_product_id = M("offer_product").add(numdata);
                 HashMap<String, String> res = new HashMap<>();
                 HashMap<String, String> attrs = JSON.parseObject(product.get("attrs").toString(), new HashMap<String, Object>().getClass());
                 HashMap<String, String> nums = new HashMap<>();
@@ -252,7 +251,7 @@ public class OfferSaleController extends AdminController {
                     res.put("num", num);
                     res.put("product_id", product_id);
                     res.put("offer_id", offer_id + "");
-                    res.put("offer_product_id",offer_product_id+"");
+                    res.put("offer_product_id", offer_product_id + "");
                     long t = M("offer_attr").add(res);
 
 
@@ -304,5 +303,41 @@ public class OfferSaleController extends AdminController {
         success(list);
     }
 
+    /**
+     * @Description: 业务员报价详情
+     * @param:
+     * @return:
+     * @auther: CodyLongo
+     * @modified:
+     */
+    @action
+    public void detail_offer() {
+        String offer_id=I("id").toString();
+        assign("offer_id",offer_id);
+        HashMap<String, String> offer = M("offer").where("id=" + offer_id).find();
+        if(offer==null){
+            error("不存在该报价");
+            return;
+        }
+        assign("note",offer.get("note"));
+
+        HashMap<String, String> client = M("client").where("id=" + offer.get("client_id")).find();
+        assign("client",JSON.toJSONString(client));
+
+        HashMap<String, String> quote = M("quote").where("offer_id=" + offer_id).find();
+        String qid = quote.get("id");
+
+        ArrayList<HashMap<String, String>> products = M("quote_pro").where("quote_id=" + qid).select();
+
+        for (int i=0;i<products.size();i++){
+            ArrayList<HashMap<String, String>> details = M("quote_detail").where("pro_id=" + products.get(i).get("id")).select();
+            products.get(i).put("detail",JSON.toJSONString(details));
+        }
+        assign("products",JSON.toJSONString(products));
+
+
+        toHtml("admin_tpl/show_offer");
+
+    }
 }
 

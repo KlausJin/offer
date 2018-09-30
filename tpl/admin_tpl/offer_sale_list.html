@@ -48,7 +48,12 @@
                             <th>id</th>
                             <th>产品类型</th>
                             <th>客户</th>
-                            <th width="50%"><dl><dd>提交报价时间</dd><dt>状态</dt></dl></th>
+                            <th width="50%">
+                                <dl>
+                                    <dd>提交报价时间</dd>
+                                    <dt>状态</dt>
+                                </dl>
+                            </th>
                             <th>操作</th>
                         </tr>
                         </thead>
@@ -118,21 +123,19 @@
     }
 
     function reoffer(id) {
-       window.location.href="/v1/offerSale/re_offer?id="+id;
+        window.location.href = "/v1/offerSale/re_offer?id=" + id;
     }
+
 
     function search() {
         tohtml();
     }
 
 
-
-
-
     function tohtml() {
-        var search_name,search_status;
-        search_name=$("#name").val();
-        search_status=$("#status option:selected").val();
+        var search_name, search_status;
+        search_name = $("#name").val();
+        search_status = $("#status option:selected").val();
         var d = {"page": current_page}
         d['search_name'] = search_name;
         d['search_status'] = search_status;
@@ -170,29 +173,31 @@
                         '\t\t\t\t\t\t\t  <td>' + data[i]['client_name'] + '</td>\n' +
                         '\t\t\t\t\t\t\t  <td>';
 
-                        s+='<dl><dd><a href="javascript:void()" onclick="show_offer('+data[i]['id']+')">'+data[i]['create_time']+'</a></dd><dt>'
-                    if(data[i]['status']=="已报价"){
+                    s += '<dl><dd>' + data[i]['create_time'] + '</dd><dt>'
+                    if (data[i]['status'] == "已报价") {
 
-                        s+='<a href="/v1/offerSale/offer_templet?quote_id=' + data[i]['quote_id'] + '">导出报价</a>'
-                    }else{
-                        s+=data[i]['status']
+                        s += '<a href="/v1/offerSale/offer_templet?quote_id=' + data[i]['quote_id'] + '">导出报价</a>'
+                    } else {
+                        s += data[i]['status']
                     }
-                            s+='</dt></dl>'
+                    s += '&nbsp;&nbsp;<a href="/v1/offerSale/detail_offer?id='+ data[i]['id'] +'">报价详情</a>'
+                    s += '</dt></dl>'
 
                     var subs = data[i]['sub'];
-                        for(var j=0;j<subs.length;j++){
-                            s+='<dl><dd><a onclick="show_offer('+subs[j]['id']+')" href="javascript:void()">'+subs[j]['create_time']+'(修改)</a></dd><dt>';
-                            if(subs[j]['status']=="已报价"){
-                                s+=subs[j]['status']='<a href="/v1/offerSale/offer_templet?quote_id='+subs[j]['quote_id']+'">导出报价</a>'
-                            }else{
-                                s+=subs[j]['status']
-                            }
-                             s+='</dt></dl>'
+                    for (var j = 0; j < subs.length; j++) {
+                        s += '<dl><dd>' + subs[j]['create_time'] + '(修改)</dd><dt>';
+                        if (subs[j]['status'] == "已报价") {
+                            s += subs[j]['status'] = '<a href="/v1/offerSale/offer_templet?quote_id=' + subs[j]['quote_id'] + '">导出报价</a>'
+                        } else {
+                            s += subs[j]['status']
                         }
+                        s += '&nbsp;&nbsp;<a href="/v1/offerSale/detail_offer?id=' + data[i]['id'] + '">报价详情</a>'
+                        s += '</dt></dl>'
+                    }
 
-                        s+= '</td>\n' +
-                        '\t\t\t\t\t\t\t  <td class="center">'+
-                        '									<button onclick="reoffer(' + data[i]['id'] + ')">修改报价需求</button></td>' +
+                    s += '</td>\n' +
+                        '\t\t\t\t\t\t\t  <td class="center">' +
+                        '<button onclick="reoffer(' + data[i]['id'] + ')">修改报价需求</button></td>' +
                         '\t\t\t\t\t\t  </tr>'
                 }
                 $("#tlist").html(s);
@@ -201,13 +206,35 @@
     }
 
     function show_offer(id) {
-        window.location.href="/v1/offerSale/re_offer?id="+id;
+        window.location.href = "/v1/offerSale/re_offer?id=" + id;
     }
 </script>
 <style type="text/css">
-    dl{ width: 100%; margin: 0px; padding: 0px; float: left; }
-    dd{ width: 60%; text-align: right;margin: 0px; padding: 0px; float: left;line-height: 26px!important;}
-    dt{ width: 30%; text-align: left;margin: 0px; padding: 0px; float: right;line-height: 26px!important; font-weight: normal}
+    dl {
+        width: 100%;
+        margin: 0px;
+        padding: 0px;
+        float: left;
+    }
+
+    dd {
+        width: 60%;
+        text-align: right;
+        margin: 0px;
+        padding: 0px;
+        float: left;
+        line-height: 26px !important;
+    }
+
+    dt {
+        width: 30%;
+        text-align: left;
+        margin: 0px;
+        padding: 0px;
+        float: right;
+        line-height: 26px !important;
+        font-weight: normal
+    }
 </style>
 </body>
 </html>
