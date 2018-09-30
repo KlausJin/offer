@@ -227,6 +227,7 @@ public class OfferManageController extends AdminController {
                 String profit=product.get("profit").toString();
                 String cbm=product.get("cbm").toString();
                 String pic_url = product.get("pic_url").toString();
+                String manage_note=product.get("manage_note").toString();
                 proData.put("quote_id",id+"");
                 proData.put("pro_name",pro_name);
                 proData.put("pro_num",pro_num);
@@ -236,11 +237,10 @@ public class OfferManageController extends AdminController {
                 proData.put("profit",profit);
                 proData.put("cbm",cbm);
                 proData.put("pic_url",pic_url);
+                proData.put("manage_note",manage_note);
                 long pro_id=M("quote_pro").add(proData);
                 HashMap<String, String> res = new HashMap<>();
-
                 List<HashMap<String,String>> data = (List<HashMap<String,String>>)JSON.parseArray( product.get("data").toString(),new HashMap<String,String>().getClass());
-
                 for(int k=0;k<data.size();k++){
                     res.put("kind",data.get(k).get("key"));
                     res.put("value",data.get(k).get("value"));
@@ -303,7 +303,6 @@ public class OfferManageController extends AdminController {
         Bean t=offerModel.getProductBean_real(id);
         HashMap<String, Object> b =t.getData();
         try {
-
             success(b);
         } catch (Exception e) {
             // TODO: handle exception

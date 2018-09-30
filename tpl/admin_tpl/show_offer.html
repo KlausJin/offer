@@ -77,6 +77,13 @@
 
                     </div>
 
+                    <legend style="margin-top: 20px">经理备注</legend>
+                    <div class="manage_note"  style="margin-bottom: 20px">
+
+                    </div>
+
+
+
 
                     <legend style="margin-top: 20px">客户备注</legend>
                     <div class="row" id="note" style="margin-bottom: 20px">
@@ -86,11 +93,13 @@
                     </div>
 
                     <legend style="margin-top: 20px">经理留言</legend>
-                    <div class="row" id="manage_note" style="margin-bottom: 20px">
+                    <div class="row" id="message" style="margin-bottom: 20px">
                         <div class="col-md-8" style="font-size: 16px">
                             ${message}
                         </div>
                     </div>
+
+
 
 
 
@@ -209,6 +218,12 @@
                 }
 
             },
+            "show_manage_note":function (data,t) {
+                var notes = data.manage_note, s = '';
+                    s+=' <div class="row">\n' +
+                    '<div class="col-md-2"><span>'+notes+'</span></div>\n';
+
+            },
             "show_spare": function (data, t) {
                 var spares = JSON.parse(data.detail), s = '';
                 for (var i = 0; i < spares.length; i++) {
@@ -308,6 +323,7 @@
                 index = pos;
                 $("#pro_btn_" + pos).addClass("btn-primary")
                 Offer.show_spare(products[index],$(".spare_list"))
+                Offer.show_manage_note(products[index],$(".manage_note"))
 
                 make_price();
                 //

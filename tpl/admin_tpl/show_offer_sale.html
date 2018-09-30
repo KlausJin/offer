@@ -33,43 +33,26 @@
     .btn_pro {
         padding-bottom: 20px
     }
-
-    .loading {
-        padding-left: 30px;
-        position: relative;
-        font-size: 14px;
-        color: #999;
-        margin-left: 40%;
-        margin-top: 200px
-    }
-
-    .loading:after {
-        content: '';
-        left: 5px;
-        position: absolute;
-        background-image: url("/images/sloading.gif");
-        background-size: 20px 20px;
-        width: 20px;
-        height: 20px;
-        top: 15px
-    }
+    .loading{ padding-left: 30px; position: relative; font-size: 14px; color: #999; margin-left: 40%; margin-top: 200px}
+    .loading:after{content: ''; left: 5px; position: absolute; background-image: url("/images/sloading.gif");
+        background-size: 20px 20px; width: 20px; height: 20px; top: 15px}
 
     /*.attr_diabled{ position: relative}*/
     /*.attr_diabled:after{ content: ''; position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 99; background-color: #dedede; opacity: 0.6}*/
 
 </style>
 <%include("head.html"){}%>
-<div class="page-content">
+<div class="page-content" >
     <div class="row">
         <%include("left.html"){}%>
-        <div class="col-md-10">
+        <div class="col-md-10" >
             <div class="content-box-large" style="min-height: 650px">
                 <div class="panel-heading">
                     <div class="panel-title">报价需求详情</div>
                 </div>
 
 
-                <div class="panel-body data-content form-horizontal">
+                <div  class="panel-body data-content form-horizontal" >
                     <div class="row btn_pro" style="display: none; ">
                         <div class="col-md-8">
                             <span class="btn_pro_list">
@@ -78,184 +61,263 @@
                     </div>
 
                     <style type="text/css">
-                        .row {
-                            border-bottom: 1px dashed #dedede
-                        }
-
-                        .row span {
-                            line-height: 35px
-                        }
+                        .row{ border-bottom: 1px dashed #dedede}
+                        .row span{ line-height: 35px}
                     </style>
 
-                    <div class="row" style="background-color: #dedede">
-                        <div class="col-md-2"><h5>属性</h5></div>
-                        <div class="col-md-2"><span>选项</span></div>
-                        <div class="col-md-2"><span>数量</span></div>
 
-                    </div>
-                    <div class="spare_list s_list">
-
-                    </div>
-
-
-                    <legend style="margin-top: 20px">客户备注</legend>
-                    <div class="row" id="note" style="margin-bottom: 20px">
-                        <div class="col-md-8" style="font-size: 16px">
-                            ${note}
-                        </div>
-                    </div>
-
-                    <legend style="margin-top: 20px">经理留言</legend>
-                    <div class="row" id="manage_note" style="margin-bottom: 20px">
-                        <div class="col-md-8" style="font-size: 16px">
-                            ${message}
-                        </div>
-                    </div>
+                <div class="row" style="background-color: #dedede">
+                    <div class="col-md-2"><h5>属性</h5></div>
+                    <div class="col-md-2"><span>选项</span></div>
+                    <div class="col-md-2"><span>数量</span></div>
                 </div>
+                <div class="spare_list s_list">
+
+                </div>
+
+
+
             </div>
         </div>
-    </div>
-</div>
 
-<footer>
-    <div class="container">
+        <footer>
+            <div class="container">
 
-        <!--<div class="copy text-center">-->
-        <!--Copyright 2014 <a href='#'>Website</a>-->
-        <!--</div>-->
+                <!--<div class="copy text-center">-->
+                <!--Copyright 2014 <a href='#'>Website</a>-->
+                <!--</div>-->
 
-    </div>
-</footer>
+            </div>
+        </footer>
 
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="/js/jquery.js"></script>
-<script src="/bootstrap/js/bootstrap.min.js"></script>
-<script src="/js/custom.js"></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="/js/jquery.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="/bootstrap/js/bootstrap.min.js"></script>
+        <script src="/js/custom.js"></script>
 
-
-<script>
-    var index = 0;
-    var products =${products};
-    (function (_w, $) {
+        <script>
+            var index = 0;
+            var products =${products};
+            (function (_w, $) {
 
 
-        $.extend({
-            "warn": function (msg) {
-                alert(msg)
-            },
-            "getdata": function (a, b, c) {
-                $.getJSON(a, b, function (res) {
-                    if (res.code == "success") {
-                        c(res.data)
-                    } else {
-                        $.warn(res.msg)
+                $.extend({
+                    "warn": function (msg) {
+                        alert(msg)
+                    },
+                    "getdata": function (a, b, c) {
+                        $.getJSON(a, b, function (res) {
+                            if (res.code == "success") {
+                                c(res.data)
+                            } else {
+                                $.warn(res.msg)
+                            }
+                        })
                     }
                 })
-            }
-        })
 
 
-        //初始化产品
-        _w['initProducts'] = function () {
+                //初始化产品
+                _w['initProducts'] = function () {
 
-            initTab();
-            Offer.show_spare(products[0], $(".spare_list"))
+                    initTab();
+                    // Offer.show_spare(products[0], $(".spare_list"))
+                    // make_price()
 
-
-        }
-
-
-        //初始化导航
-        _w['initTab'] = function () {
-            $(".btn_pro").show();
-            var p = '';
-
-            for (var i = 0; i < products.length; i++) {
-                p += '<button id="pro_btn_' + i + '" onclick="switch_pro(' + i + ')" class="btn-default form-control brs">' + products[i].pro_name + '</button>';
-            }
-
-            $(".btn_pro").find(".btn_pro_list").append(p)
-            $(".btn_pro").find(".btn_pro_list").find("button").removeClass("btn-primary")
-            $("#pro_btn_0").addClass("btn-primary")
-        }
+                }
 
 
-        _w['Offer'] = {
-            "show_pro_btn": function (data) {
-                $(".btn_pro").show();
-                var products = data.productBeans, p = '';
-                for (var i = 0; i < products.length; i++) {
-                    var p = '<button id="pro_btn_' + index + '" onclick="switch_pro(' + index + ')" class="btn-primary btn-default form-control brs">' + products[i].code + '</button>';
-                    $(".btn_pro").find(".btn_pro_list").find("button").removeClass("btn-primary")
-                    $(".btn_pro").find(".btn_pro_list").append(p)
+                //初始化导航
+                _w['initTab'] = function () {
+                    $(".btn_pro").show();
+                    var p = '';
 
-                    var spares = products[i].spareBeans, s = '';
-
-                    for (var j = 0; j < spares.length; j++) {
-                        s += '<h5>' + spares[j].name + '</h5>'
-                        s += '<div class="product_attr">';
-                        var attrBeans = spares[j].attrBeans;
-                        for (var z = 0; z < attrBeans.length; z++) {
-                            var attr = new Attr(attrBeans[z]);
-                            s += attr.getHtml();
-                        }
-                        s += '</div>'
+                    for (var i = 0; i < products.length; i++) {
+                        p += '<button id="pro_btn_' + i + '" onclick="switch_pro(' + i + ')" class="btn-default form-control brs">' + products[i].pro_name + '</button>';
                     }
-                    $(".spare_list").append(s)
-                    index++;
+
+                    $(".btn_pro").find(".btn_pro_list").append(p)
+                    $(".btn_pro").find(".btn_pro_list").find("button").removeClass("btn-primary")
+                    $("#pro_btn_0").addClass("btn-primary")
+
                 }
 
-            },
-            "show_spare": function (data, t) {
-                var spares = JSON.parse(data.detail), s = '';
-                for (var i = 0; i < spares.length; i++) {
 
-                    s += ' <div class="row">\n' +
-                        '                            <div class="col-md-2"><h5>' + spares[i].kind + '</h5></div>\n' +
-                        '                            <div class="col-md-2"><span>' + spares[i].value + '</span></div>\n';
-                    var num = spares[i].num || "";
-                    num = num == 0 ? "" : num;
-                    s += ' <div class="col-md-2"><span>' + num + '</span></div>'
-                    s += '                        </div>'
+                _w['Offer'] = {
+                    "show_pro_btn": function (data) {
+                        $(".btn_pro").show();
+                        var products = data.productBeans, p = '';
+                        for (var i = 0; i < products.length; i++) {
+                            var p = '<button id="pro_btn_' + index + '" onclick="switch_pro(' + index + ')" class="btn-primary btn-default form-control brs">' + products[i].code + '</button>';
+                            $(".btn_pro").find(".btn_pro_list").find("button").removeClass("btn-primary")
+                            $(".btn_pro").find(".btn_pro_list").append(p)
+
+                            var spares = products[i].spareBeans, s = '';
+
+                            for (var j = 0; j < spares.length; j++) {
+                                s += '<h5>' + spares[j].name + '</h5>'
+                                s += '<div class="product_attr">';
+                                var attrBeans = spares[j].attrBeans;
+                                for (var z = 0; z < attrBeans.length; z++) {
+                                    var attr = new Attr(attrBeans[z]);
+                                    s += attr.getHtml();
+                                }
+                                s += '</div>'
+                            }
+                            $(".spare_list").append(s)
+                            index++;
+                        }
+
+                    },
+                    "show_spare": function (data, t) {
+                        var spares = JSON.parse(data.detail), s = '';
+                        for (var i = 0; i < spares.length; i++) {
+
+                            s += ' <div class="row">\n' +
+                                '                            <div class="col-md-2"><h5>' + spares[i].kind + '</h5></div>\n' +
+                                '                            <div class="col-md-2"><span>' + spares[i].value + '</span></div>\n';
+                            var per_price = spares[i].per_price || "";
+                            per_price = per_price == 0 ? "" : per_price;
+                            s += ' <div class="col-md-2"><span>' + per_price + '</span></div>'
+
+                            var num = spares[i].num || "";
+                            num = num == 0 ? "" : num;
+                            s += ' <div class="col-md-2"><span>' + num + '</span></div>'
+
+                            var price = spares[i].price || "";
+                            price = price == 0 ? "" : price;
+                            s += ' <div class="col-md-2"><span>' + price + '</span></div>'
+
+                            s += '                        </div>'
+                        }
+                        t.append(s)
+
+                    },
+                    "clear_product": function () {
+                        $(".spare_list").html("")
+
+                    }
+
                 }
-                t.append(s)
 
-            },
-            "clear_product": function () {
-                $(".spare_list").html("")
 
+                _w['make_for'] = function (a, b, f, sid) {
+                    var sf = parseInt(f)
+                    b = b || 0.00;
+                    a = a || 0.00;
+                    switch (sf) {
+                        case 0:
+                            $("#all_price_" + sid).val(a);
+                            break;
+                        case 1:
+                            var nv = mul(a, b);
+                            $("#all_price_" + sid).val(nv.toFixed(4));
+                            break;
+                        case 2:
+
+                            var nv = mul(mul(b, b), a) / 10000;
+
+                            $("#all_price_" + sid).val(nv.toFixed(4));
+
+                            break;
+                        case 6:
+
+                            var nv = mul(a, b);
+
+                            $("#all_price_" + sid).val(nv.toFixed(4));
+
+                            break;
+                        case 3:
+                        case 4:
+                            v = mul(atts[0].num, atts[0].price);
+
+                            var nv = mul(a, b);
+                            v = div(v, 10000);
+
+                            $("#all_price_" + sid).val(nv.toFixed(4));
+
+                            break;
+                        case 7:
+
+
+                            var nv = div(a, b)
+
+
+                            $("#all_price_" + sid).val(nv.toFixed(4));
+
+                            break;
+                        case 8:
+
+
+                            break;
+                        case 9:
+
+                            break;
+                    }
+                }
+
+                _w['switch_pro'] = function (pos) {
+                    if (pos == index) return;
+                    else {
+
+                        $(".btn_pro_list").find("button").removeClass("btn-primary")
+                        Offer.clear_product();
+                        index = pos;
+                        $("#pro_btn_" + pos).addClass("btn-primary")
+                        Offer.show_spare(products[index], $(".spare_list"))
+
+                        make_price();
+                        //
+                    }
+                }
+
+
+                _w['make_price'] = function () {
+                    var pro = products[index];
+                    $(".h_num").html(pro.pro_num);
+                    $(".h_price").html(pro.per_price);
+                    $(".h_pro").html(mul(pro.per_price, pro.profit).toFixed(2));
+                    $(".h_ll").html(pro.profit);
+
+                    $(".cbm").html(pro.cbm);
+
+
+                    $(".c_price").html(pro.rate + pro.c_price)
+                }
+
+
+            })(window, jQuery)
+
+            // 浮点数相乘
+            function mul(a, b) {
+                var c = 0,
+                    d = a.toString(),
+                    e = b.toString();
+                try {
+                    c += d.split(".")[1].length;
+                } catch (f) {
+                }
+                try {
+                    c += e.split(".")[1].length;
+                } catch (f) {
+                }
+                return Number(d.replace(".", "")) * Number(e.replace(".", "")) / Math.pow(10, c);
             }
 
-        }
 
-        _w['switch_pro'] = function (pos) {
-            if (pos == index) return;
-            else {
-
-                $(".btn_pro_list").find("button").removeClass("btn-primary")
-                Offer.clear_product();
-                index = pos;
-                $("#pro_btn_" + pos).addClass("btn-primary")
-                Offer.show_spare(products[index], $(".spare_list"))
-
-                make_price();
-                //
-            }
-        }
-
-    })(window, jQuery)
-
-    $(function () {
-        console.log(products);
-        return;
-        initProducts()
+            $(function () {
 
 
-    })
+                initProducts()
 
 
-</script>
+            })
 
+
+        </script>
+    </div>
+</div>
 </body>
+
 </html>

@@ -125,7 +125,8 @@
                         </div>
 
                         <label class="col-md-2 control-label"><label>经理改动备注：</label></label>
-                        <div class="col-md-6"><input id="manage_note" class="form-control manage_note" style="color: red"></div>
+                        <div class="col-md-6"><input id="manage_note" class="form-control manage_note" style="color: red"
+                        oninput="change_manage_note($(this))"></div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><label>经理留言：</label></label>
@@ -169,6 +170,7 @@
 <script>
     var photos = ${photos};
     var profit = [];
+    var manage_note=[];
     var list = [];
     var index = 0;
     var custom_id = 0;
@@ -179,6 +181,10 @@
     function changeProfit(t) {
         profit[index] = t.val()
         make_price()
+    }
+
+    function change_manage_note(t) {
+        manage_note[index] = t.val();
     }
 
     (function (_w, $) {
@@ -611,7 +617,7 @@
                         s += '<div class="col-md-2"><input  oninput="make_price()" id="all_price_' + data['id'] + '" type="text" value="0" class="form-control all_price"></div>'
                     }
 
-                    else s += '<div class="col-md-2"><input readonly oninput="make_price()" id="all_price_' + data['id'] + '"  type="text" value="' + atts[0].price.toFixed(4) + '" class="form-control all_price"></div>'
+                    else s += '<div class="col-md-2"><input  oninput="make_price()" id="all_price_' + data['id'] + '"  type="text" value="' + atts[0].price.toFixed(4) + '" class="form-control all_price"></div>'
 
                 }
 
@@ -696,6 +702,13 @@
                 Offer.show_spare(products[index], $(".spare_list"))
                 Offer.show_spare(common_spares[index], $(".s_spare_list"))
                 Offer.show_photo(photos[index])
+
+                var has_note=manage_note[index] || false;
+                if(has_note){
+                        $(".manage_note").val(manage_note[index])
+                }else{
+                        $(".manage_note").val("")
+                    }
 
 
                 var has_save = save_data[index] || false;
@@ -800,7 +813,7 @@
                     "value": "${note}",
                     "price": $("#client_note").val(),
                     "per_price": "0",
-                    "num": "0"
+                    "num": "0",
                 })
             })
             var sa = {
@@ -814,10 +827,11 @@
                 "c_price": $(".c_price").html(),
                 "rate": $(".h_rate").html(),
                 "pic_url": $("#photo").attr('src'),
-                //    "manage_note":$("#manage_note").val()
+                "manage_note":manage_note[index]
             }
             sa['per_price'] = sa['per_price'].replace(sa.rate, "")
             sa['c_price'] = sa['c_price'].replace(sa.rate, "")
+
 
 
             save_data[index] = sa;
@@ -841,6 +855,7 @@
             }
             var message=$("#message").val();
             var d = {"offer_id": "${offer_id}", "manage_id": "${id}","message":message, "products": JSON.stringify(save_data)};
+
 
             $.post("/v1/offerManage/do_edit", {"data": JSON.stringify(d)}, function (res) {
                 var ret = JSON.parse(res);
