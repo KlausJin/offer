@@ -10,6 +10,7 @@ import java.util.List;
         }
         public String id,sale_id,m_id,client_id,status;
         public List<ProductBean> productBeans;
+        public List<OfferProductBean> offerproductBeans;
         public String profit;
 
 }

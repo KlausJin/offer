@@ -41,4 +41,33 @@ public class OfferAttrModel extends  Model {
         return where("offer_id="+offer_id+" and attr_id="+"'on'"+" and offer_product_id="+offer_product_id).select();
 
     }
+
+    public ArrayList<HashMap<String, String>> getSelect_sale(String offer_product_id){
+        ArrayList<HashMap<String, String>> list = where("offer_product_id=" + offer_product_id +" and attr_id != -1 and attr_id != 'on'").select();
+        ArrayList<HashMap<String,String>> c_data =new ArrayList<>();
+        for (int i=0;i<list.size();i++){
+            HashMap<String,String> res = getPut(i,offer_product_id);
+            c_data.add(res);
+
+
+        }
+        return c_data;
+    }
+public HashMap<String,String> getPut(int i,String offer_product_id){
+       AttrModel attrModel=new AttrModel();
+       SpareModel spareModel=new SpareModel();
+       ArrayList<HashMap<String, String>> list = where("offer_product_id=" + offer_product_id +" and attr_id != -1 and attr_id != 'on'").select();
+        HashMap<String, String> map_attr = attrModel.getAttr_sale(list.get(i).get("attr_id"));
+        HashMap<String, String> map_parent = attrModel.getParent_sale(list.get(i).get("spare_id"));
+        HashMap<String, String> map_spare = spareModel.getSpare_real(map_parent.get("spare_id"));
+        HashMap<String,String> res =new HashMap<>();
+        res.put("attr_name",map_attr.get("name"));
+        res.put("parent_name",map_parent.get("name"));
+        res.put("spare_name",map_spare.get("name"));
+        res.put("num",list.get(i).get("num"));
+        return  res;
+
+
+    }
 }
+

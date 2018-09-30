@@ -565,6 +565,13 @@ public class AttrModel extends Model {
 
 
     }
+    public HashMap<String, String> getAttr_sale(String attr_id){
+        HashMap<String, String> res = where("id=" + attr_id).find();
+        return res;
+    }
 
-
+    public HashMap<String, String> getParent_sale(String parent_id){
+        HashMap<String, String> res = where("id=" + parent_id).find();
+        return res;
+    }
 }

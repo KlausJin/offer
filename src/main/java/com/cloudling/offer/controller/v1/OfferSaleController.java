@@ -2,6 +2,7 @@ package com.cloudling.offer.controller.v1;
 
 import com.alibaba.fastjson.JSON;
 import com.cloudling.offer.annotation.action;
+import com.cloudling.offer.bean.Bean;
 import com.cloudling.offer.config.Dictionary;
 import com.cloudling.offer.model.*;
 import com.cloudling.offer.server.ControllerContext;
@@ -302,6 +303,25 @@ public class OfferSaleController extends AdminController {
         ArrayList<HashMap<String, String>> list = M("offer_templet").query("SELECT id,name from (select * from offer_templet where cat_id=" + cat_id + ") a   where  sale_id=0 or sale_id=" + sale_id);
         success(list);
     }
+    @action
+    public void getSelectAll_sale() {
+        long s =TimeUtil.getLongTimeStamp();
+        String id = I("id") == null ? "" : I("id").toString();
+        OfferModel offerModel = new OfferModel();
+        Bean t=offerModel.getProductBean_sale(id);
+        HashMap<String, Object> b =t.getData();
+        try {
 
+            success(b);
+        } catch (Exception e) {
+            // TODO: handle exception
+            error("报价参数有误");
+        }
+
+
+        long ms =TimeUtil.getLongTimeStamp()-s;
+        System.out.println("-------------------"+ms+"ms");
+
+    }
 }
 
