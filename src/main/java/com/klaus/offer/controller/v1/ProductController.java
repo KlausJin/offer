@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.klaus.offer.annotation.action;
 import com.klaus.offer.bean.ProductBean;
 import com.klaus.offer.config.Dictionary;
-import com.cloudling.offer.model.*;
+import com.klaus.offer.model.*;
 import com.klaus.offer.server.ControllerContext;
 import com.klaus.offer.util.ExcelUtil;
 import com.klaus.offer.util.TimeUtil;

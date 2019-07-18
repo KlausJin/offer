@@ -1,6 +1,5 @@
 package com.klaus.offer.model;
 
-import com.cloudling.offer.bean.*;
 import com.klaus.offer.bean.ProductBean;
 
 import java.util.ArrayList;
